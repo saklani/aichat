@@ -6,6 +6,7 @@ import { encodeBase32LowerCase } from '@oslojs/encoding';
 import { eq } from "drizzle-orm";
 import { redirect, RedirectType } from "next/navigation";
 import { formSchema, type FormSchema } from "./form-schema";
+import { revalidatePath } from "next/cache";
 
 function generateUserId() {
     // ID with 120 bits of entropy, or about the same as UUID v4.
@@ -55,5 +56,6 @@ export async function register(data: FormSchema) {
     const sessionToken = auth.generateSessionToken();
     const session = await auth.createSession(sessionToken, userId);
     auth.setSessionTokenCookie(sessionToken, session.expiresAt);
+      revalidatePath("/")
     return redirect('/', RedirectType.replace);
 }

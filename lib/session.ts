@@ -1,5 +1,3 @@
-"use server"
-
 import * as auth from "@/lib/auth";
 
 export async function getSession(): Promise<{id:string; email: string} | null> {

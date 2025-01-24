@@ -3,10 +3,11 @@
 import { db, schema } from "@/lib/db";
 import { formSchema } from "./form-schema"
 import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { z } from "zod";
 import { verify } from '@node-rs/argon2';
 import * as auth from "@/lib/auth"
+import { revalidatePath } from "next/cache";
 
 type LoginResponse = { error: string; status: number }
 
@@ -45,5 +46,6 @@ export async function login(data: z.infer<typeof formSchema>): Promise<LoginResp
   const sessionToken = auth.generateSessionToken();
   const session = await auth.createSession(sessionToken, user.id);
   auth.setSessionTokenCookie(sessionToken, session.expiresAt);
-  return redirect("/")
+  revalidatePath("/")
+  return redirect("/", RedirectType.replace);
 }

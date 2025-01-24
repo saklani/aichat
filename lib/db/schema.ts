@@ -13,13 +13,16 @@ export const session = sqliteTable("session", {
 });
 
 export const passwordReset = sqliteTable("password_reset", {
-    id: integer('id').primaryKey({autoIncrement: true}),
+    id: integer('id').primaryKey({ autoIncrement: true }),
     userId: text('user_id').notNull().references(() => user.id),
     code: text('code').notNull(),
 });
 
-export const file = sqliteTable("file", {
-    id: integer('id').primaryKey({autoIncrement: true}),
+export const data = sqliteTable("data", {
+    id: text('id').primaryKey(),
+    name: text("name"),
+    url: text("url"),
+    raw: text("raw"),
     userId: text('user_id').notNull().references(() => user.id),
 });
 

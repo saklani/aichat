@@ -1,5 +1,6 @@
 "use server"
 import * as auth from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 type LogoutResponse = { error: string }
@@ -11,9 +12,10 @@ export async function logout(): Promise<LogoutResponse> {
         if (session) {
             await auth.invalidateSession(session.id);
             auth.deleteSessionTokenCookie();
+            revalidatePath("/")
             return redirect("/login")
         }
     }
 
-    return {error: "failed"}
+    return { error: "failed" }
 }

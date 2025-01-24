@@ -34,7 +34,6 @@ export async function validateSessionToken(token: string) {
     const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
     const [result] = await db
         .select({
-            // Adjust user schema here to tweak returned data
             user: { id: schema.user.id, email: schema.user.email },
             session: schema.session
         })
@@ -73,7 +72,8 @@ export async function setSessionTokenCookie(token: string, expiresAt: Date) {
     const cookieStore = await cookies()
     cookieStore.set(sessionCookieName, token, {
         expires: expiresAt,
-        path: '/'
+        path: '/',
+        secure: process.env.NODE_ENV === "production",
     });
 }
 

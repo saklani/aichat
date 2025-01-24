@@ -1,9 +1,7 @@
-import { Header } from "@/components/header/component";
 
-export default function Home() {
+export default function Page() {
   return (
-    <div className="w-full min-h-[100vh]">
-      <Header></Header>
+    <div className="flex flex-col w-full">
 
     </div>
   );
