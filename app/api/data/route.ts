@@ -1,14 +1,14 @@
 import { db, schema } from "@/lib/db";
-import { getSession } from "@/lib/session";
+import { getSessionFromRequest } from "@/lib/session";
 import { randomUUID } from "crypto";
 import { and, eq } from "drizzle-orm";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 export async function GET(request: NextRequest) {
-    const session = await getSession()
+    const session = await getSessionFromRequest(request)
     if (!session) {
-        return new Response("Unauthorized", {
+        return NextResponse.json("Unauthorized", {
             status: 401,
         });
     }
@@ -24,9 +24,9 @@ const postValidate = z.object({
 });
 
 export async function POST(request: NextRequest) {
-    const session = await getSession()
+    const session = await getSessionFromRequest(request)
     if (!session) {
-        return new Response("Unauthorized", {
+        return NextResponse.json("Unauthorized", {
             status: 401,
         });
     }
@@ -34,13 +34,13 @@ export async function POST(request: NextRequest) {
     const res = postValidate.safeParse(request.body)
 
     if (!res.success) {
-        return new Response("Bad request", {
+        return NextResponse.json("Bad request", {
             status: 400,
         });
     }
     const id = randomUUID()
     await db.insert(schema.data).values({ ...res.data, id, userId })
-    return { id }
+    return NextResponse.json({ id }, { status: 201 })
 }
 
 
@@ -52,9 +52,9 @@ const putValidate = z.object({
 });
 
 export async function PUT(request: NextRequest) {
-    const session = await getSession()
+    const session = await getSessionFromRequest(request)
     if (!session) {
-        return new Response("Unauthorized", {
+        return NextResponse.json("Unauthorized", {
             status: 401,
         });
     }
@@ -62,14 +62,14 @@ export async function PUT(request: NextRequest) {
     const res = putValidate.safeParse(request.body)
 
     if (!res.success) {
-        return new Response("Bad request", {
+        return NextResponse.json("Bad request", {
             status: 400,
         });
     }
     const { id } = res.data
 
     await db.update(schema.data).set({ ...res.data }).where(and(eq(schema.data.id, id), eq(schema.data.userId, userId)))
-    return new Response(JSON.stringify({ id }), { status: 200 })
+    return NextResponse.json({ id }, { status: 200 })
 }
 
 // export async function DELETE(request: NextRequest) {

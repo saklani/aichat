@@ -1,23 +1,23 @@
 import { db, schema } from "@/lib/db";
-import { getSession } from "@/lib/session";
+import {  getSessionFromRequest } from "@/lib/session";
 import { eq } from "drizzle-orm";
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-    const session = await getSession()
+    const session = await getSessionFromRequest(request)
     if (!session) {
-        return new Response("Unauthorized", {
+        return NextResponse.json("Unauthorized", {
             status: 401,
         });
     }
     const { id } = session
     const user = await db.query.user.findFirst({ where: eq(schema.user.id, id) })
     if (!user) {
-        return new Response("Not found", {
+        return NextResponse.json("Not found", {
             status: 404,
         });
     }
-    return user
+    return NextResponse.json(user)
 }
 
 // export async function POST(request: NextRequest) {
