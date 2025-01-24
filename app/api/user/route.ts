@@ -1,5 +1,5 @@
 import { db, schema } from "@/lib/db";
-import {  getSessionFromRequest } from "@/lib/session";
+import { getSessionFromRequest } from "@/lib/session";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 

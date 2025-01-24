@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     }
     const { id } = session
     const data = await db.query.data.findMany({ where: eq(schema.data.userId, id) })
-    return data
+    return NextResponse.json(data, {status: 200})
 }
 
 const postValidate = z.object({
