@@ -5,7 +5,7 @@ import { and, eq } from "drizzle-orm";
 import { NextRequest } from "next/server";
 import { z } from "zod";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     const session = await getSession()
     if (!session) {
         return new Response("Unauthorized", {

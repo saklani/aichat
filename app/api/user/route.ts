@@ -1,8 +1,9 @@
 import { db, schema } from "@/lib/db";
 import { getSession } from "@/lib/session";
 import { eq } from "drizzle-orm";
+import { NextRequest } from "next/server";
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     const session = await getSession()
     if (!session) {
         return new Response("Unauthorized", {
