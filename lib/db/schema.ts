@@ -18,7 +18,7 @@ export const passwordReset = sqliteTable("password_reset", {
     code: text('code').notNull(),
 });
 
-export const data = sqliteTable("data", {
+export const object = sqliteTable("object", {
     id: text('id').primaryKey(),
     name: text("name"),
     url: text("url"),
@@ -30,3 +30,5 @@ export const data = sqliteTable("data", {
 export type Session = typeof session.$inferSelect;
 
 export type User = typeof user.$inferSelect;
+
+export type Object =  typeof object.$inferSelect;
