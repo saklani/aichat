@@ -4,6 +4,7 @@ import { NextResponse } from 'next/server'
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
+    console.log(request.nextUrl.pathname)
     const sessionToken = await auth.getSession()
     switch (request.nextUrl.pathname) {
         case "/login":
@@ -18,14 +19,15 @@ export async function middleware(request: NextRequest) {
                         auth.deleteSessionTokenCookie()
                     }
                 }
+                return NextResponse.next();
             }
         case "/": {
             if (!sessionToken) {
-                return NextResponse.rewrite(new URL("/login", request.nextUrl))
+                return NextResponse.redirect(new URL("/login", request.nextUrl))
             }
         }
     }
-    return NextResponse.next()
+    return NextResponse.next();
 }
 
 

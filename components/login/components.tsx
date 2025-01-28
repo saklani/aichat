@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input"
 import { formSchema } from "./form-schema"
 import { login } from "./_action"
 import { toast } from "sonner"
+import Link from "next/link"
 
 
 
@@ -41,7 +42,8 @@ export function LoginForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-[12px] w-full max-w-md">
+        <h1 className="title">Login</h1>
         <FormField
           control={form.control}
           name="email"
@@ -68,7 +70,8 @@ export function LoginForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Login</Button>
+        <Button className="mt-[20px]" type="submit">Login</Button>
+        <p className="subtext">Don't have an account? <Link href="/register">Register</Link></p>
       </form>
     </Form>
   )

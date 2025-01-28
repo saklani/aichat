@@ -16,6 +16,7 @@ import { z } from "zod"
 import { formSchema } from "./form-schema"
 import { register } from "./_action"
 import { toast } from "sonner"
+import Link from "next/link"
 
 export function RegisterForm() {
   // 1. Define your form.
@@ -36,7 +37,8 @@ export function RegisterForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-[12px] w-full max-w-md">
+       <h1 className="title">Register</h1>
         <FormField
           control={form.control}
           name="email"
@@ -63,7 +65,8 @@ export function RegisterForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Register</Button>
+        <Button className="mt-[20px]" type="submit">Register</Button>
+        <p className="subtext">Already have an account? <Link href="/login" >Login</Link></p>
       </form>
     </Form>
   )

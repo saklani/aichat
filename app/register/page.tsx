@@ -1,4 +1,4 @@
-import { RegisterForm } from '@/components/register/client-component';
+import { RegisterForm } from '@/components/register/components';
 import { Suspense } from 'react';
 
 export default async function RegisterPage() {
