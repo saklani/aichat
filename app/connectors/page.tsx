@@ -1,10 +1,11 @@
-import { Chat } from "@/components/chat/component";
 import { FileUpload } from "@/components/file-upload/component";
 import { Files } from "@/components/files/components";
 import { Sidebar } from "@/components/sidebar/component";
 
 export default function Page() {
   return (
-    <Chat />
+    <div className="flex flex-col w-full">
+
+    </div>
   );
 }

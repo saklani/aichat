@@ -1,0 +1,1 @@
+ALTER TABLE `object` RENAME COLUMN "location" TO "source";
