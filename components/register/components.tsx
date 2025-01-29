@@ -66,7 +66,7 @@ export function RegisterForm() {
           )}
         />
         <Button className="mt-[20px]" type="submit">Register</Button>
-        <p className="subtext">Already have an account? <Link href="/login" >Login</Link></p>
+        <p className="subtext">Already have an account? <Link className="text-blue-700 hover:underline" href="/login" >Login</Link></p>
       </form>
     </Form>
   )

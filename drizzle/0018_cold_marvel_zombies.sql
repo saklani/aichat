@@ -1,0 +1,2 @@
+ALTER TABLE `messages` RENAME COLUMN "chatId" TO "agentId";--> statement-breakpoint
+ALTER TABLE `messages` ALTER COLUMN "agentId" TO "agentId" text NOT NULL REFERENCES agent(id) ON DELETE no action ON UPDATE no action;

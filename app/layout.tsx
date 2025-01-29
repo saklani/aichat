@@ -6,6 +6,7 @@ import { Header } from "@/components/header/component";
 import { Sidebar } from "@/components/sidebar/component";
 import { use } from "react";
 import { getSession } from "@/lib/session";
+import { Layout } from "@/components/layout";
 
 const sourceCodePro = Source_Code_Pro({
   variable: "--font-source-code-pro",
@@ -27,25 +28,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const userData = use(getSession())
-
   return (
     <html lang="en">
       <body
         className={`flex flex-col bg-background h-[100vh] ${sourceCodePro.variable} ${geistMono.variable} antialiased`}
       >
-        {userData ? <div className="flex w-full p-[4px]">
-          <Sidebar />
-          <div className="border rounded-[3px] flex flex-col w-full h-[calc(100vh-8px)] overflow-y-scroll">
-            {children}
-          </div>
-        </div> :
-          <div
-            className={`flex flex-col bg-background min-h-[100vh] items-center justify-center`}
-          >
-            {children}
-          </div>
-        }
+        <Layout>
+          {children}
+        </Layout>
         <Toaster />
       </body>
     </html>

@@ -2,13 +2,13 @@ import { sql } from 'drizzle-orm/sql';
 import { customType, integer, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 
 export const user = sqliteTable('user', {
-    id: text('id').primaryKey(),
+    id: text('id').notNull().primaryKey(),
     email: text('email').notNull().unique(),
     passwordHash: text('password_hash').notNull()
 });
 
 export const session = sqliteTable("session", {
-    id: text('id').primaryKey(),
+    id: text('id').notNull().primaryKey(),
     userId: text('user_id').notNull().references(() => user.id),
     expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull()
 });
@@ -29,21 +29,32 @@ export const object = sqliteTable("object", {
     status: text("status").default("not-indexed").notNull(),
 });
 
-export const chat = sqliteTable("chat", {
-    id: text("id").primaryKey(),
-    title: text("title"),
-    fileIds: text("file_ids", { mode: "json" }).default([]),
-    userId: text('user_id').notNull().references(() => user.id),
-    createdAt: integer("created_at", { mode: "timestamp" })
+export const model = sqliteTable("model", {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    name: text("name"),
 })
 
-export const message = sqliteTable('messages', {
-    id: text('id').primaryKey(),
-    chatId: text('chatId')
+export const agent = sqliteTable("agent", {
+    id: text("id").primaryKey(),
+    name: text("name"),
+    fileIds: text("file_ids", { mode: "json" }).default([]),
+    userId: text('user_id').notNull().references(() => user.id),
+    modelId: integer('modelId')
         .notNull()
-        .references(() => chat.id),
-    content: text('content', { mode: "json" }).notNull(),
-    createdAt: integer('createdAt', { mode: "timestamp" }).notNull(),
+        .references(() => model.id),
+    createdAt: integer("created_at", { mode: "timestamp" }).notNull().default(sql`(unixepoch())`)
+});
+
+type Role = 'system' | 'user' | 'assistant' | 'data'
+
+export const message = sqliteTable('messages', {
+    id: integer('id').notNull().primaryKey({autoIncrement: true}),
+    agentId: text('agentId')
+        .notNull()
+        .references(() => agent.id),
+    content: text('content').notNull(),
+    role: text("role").notNull().default("user").$type<Role>(),
+    createdAt: integer('createdAt', { mode: "timestamp" }).notNull().default(sql`(unixepoch())`),
 });
 
 const float32Array = customType<{
@@ -76,3 +87,7 @@ export type User = typeof user.$inferSelect;
 export type Object = typeof object.$inferSelect;
 
 export type Message = typeof message.$inferSelect
+
+export type Agent = typeof agent.$inferSelect
+
+export type Model = typeof model.$inferSelect

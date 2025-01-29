@@ -1,15 +1,24 @@
+import { search } from '@/lib/pinecone';
+import { getSession } from '@/lib/session';
+import { openai } from '@ai-sdk/openai';
 import {
     streamText,
     tool
 } from 'ai';
-import { openai } from '@ai-sdk/openai';
 import { z } from 'zod';
-import { search, vectorStore } from '@/lib/pinecone';
+import * as db from "@/lib/db/queries"
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
-    const { messages } = await req.json();
+    const session = await getSession()
+    if (!session) {
+        return []
+    }
+    const { id: _ } = session
+    const { id, messages } = await req.json()
+
+    await db.saveMessage({ message: messages[messages.length - 1], agentId: id })
 
     const result = streamText({
         model: openai('gpt-4o-mini'),
@@ -25,8 +34,11 @@ export async function POST(req: Request) {
                 }),
                 execute: async ({ content }) => search({ content }),
             }),
+        },
+        onFinish: ({ text }) => {
+            db.saveMessage({ message: { content: text, role: "assistant" }, agentId: id })
         }
-    });
+    })
 
-    return result.toDataStreamResponse();
+    return result.toDataStreamResponse()
 }

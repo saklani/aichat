@@ -1,0 +1,1 @@
+ALTER TABLE `agent` RENAME COLUMN "title" TO "name";

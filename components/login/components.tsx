@@ -71,7 +71,7 @@ export function LoginForm() {
           )}
         />
         <Button className="mt-[20px]" type="submit">Login</Button>
-        <p className="subtext">Don't have an account? <Link href="/register">Register</Link></p>
+        <p className="subtext">Don't have an account? <Link className="text-blue-700 hover:underline" href="/register">Register</Link></p>
       </form>
     </Form>
   )

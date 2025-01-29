@@ -6,6 +6,5 @@ export const formSchema = z.object({
 
 export const createChatFormSchema = z.object({
     name: z.string().min(1),
-    description: z.string(),
     fileIds: z.array(z.string()),
 });
