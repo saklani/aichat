@@ -1,22 +1,13 @@
-import type { Metadata } from "next";
-import { Source_Code_Pro, Geist_Mono } from "next/font/google";
-import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
-import { Header } from "@/components/header/component";
-import { Sidebar } from "@/components/sidebar/component";
-import { use } from "react";
-import { getSession } from "@/lib/session";
-import { Layout } from "@/components/layout";
+import type { Metadata } from "next";
+import "./globals.css";
 
-const sourceCodePro = Source_Code_Pro({
-  variable: "--font-source-code-pro",
-  subsets: ["latin"],
-});
+import { Inter } from 'next/font/google';
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+})
 
 export const metadata: Metadata = {
   title: "AI Search",
@@ -31,11 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`flex flex-col bg-background h-[100vh] ${sourceCodePro.variable} ${geistMono.variable} antialiased`}
+        className={`flex flex-col bg-background h-[100vh] ${inter.variable}  antialiased`}
       >
-        <Layout>
-          {children}
-        </Layout>
+        {children}
         <Toaster />
       </body>
     </html>

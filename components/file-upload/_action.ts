@@ -37,7 +37,7 @@ export async function upload(file: File) {
 
     await s3.send(command)
     const documentIds = await parse(file);
-    await db.insert(schema.object).values({ id, userId, name: file.name, url: `https://aisearch2.s3.us-east-1.amazonaws.com/${id}`, vectorStoreId: documentIds[0] })
+    await db.insert(schema.object).values({ id, userId, name: file.name, url: `https://aisearch2.s3.us-east-1.amazonaws.com/${id}` })
 
     revalidatePath("/")
     return { id }

@@ -1,10 +1,9 @@
-import { LoginForm } from '@/components/login/components';
-import { Suspense } from 'react';
+import { LoginCard } from './_components/login-card';
 
 export default async function LoginPage() {
     return (
-        <Suspense fallback={<>Loading...</>}>
-            <LoginForm />
-        </Suspense>
+        <div className="flex w-full h-screen justify-end items-center">
+            <LoginCard />
+        </div>
     );
 }

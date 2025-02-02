@@ -1,3 +1,4 @@
+import { queries, schema } from '@/lib/db';
 import { search } from '@/lib/pinecone';
 import { getSession } from '@/lib/session';
 import { openai } from '@ai-sdk/openai';
@@ -5,20 +6,28 @@ import {
     streamText,
     tool
 } from 'ai';
+import { randomUUID } from 'crypto';
 import { z } from 'zod';
-import * as db from "@/lib/db/queries"
 
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
     const session = await getSession()
     if (!session) {
-        return []
+        return new Response("Unauthorized", { status: 401 })
     }
-    const { id: _ } = session
-    const { id, messages } = await req.json()
+    const { id: userId } = session
+    const { id, messages }: { id: string, messages: Omit<schema.Message, "id">[] } = await req.json()
 
-    await db.saveMessage({ message: messages[messages.length - 1], agentId: id })
+    const getChatResult = await queries.upsertChat({ id, name: "", userId })
+    if (getChatResult.error) {
+        return new Response("Internal server error", { status: 500 })
+    }
+
+    const createMessageResult = await queries.createMessage({ ...messages[messages.length - 1], chatId: id, id: randomUUID() })
+    if (createMessageResult.error) {
+        return new Response("Internal server error", { status: 500 })
+    }
 
     const result = streamText({
         model: openai('gpt-4o-mini'),
@@ -36,7 +45,7 @@ export async function POST(req: Request) {
             }),
         },
         onFinish: ({ text }) => {
-            db.saveMessage({ message: { content: text, role: "assistant" }, agentId: id })
+            queries.createMessage({  content: text, role: "assistant" , chatId: id, id: randomUUID() })
         }
     })
 

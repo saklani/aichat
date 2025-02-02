@@ -1,0 +1,2 @@
+ALTER TABLE `chat` RENAME COLUMN "modelId" TO "model_id";--> statement-breakpoint
+ALTER TABLE `chat` ALTER COLUMN "model_id" TO "model_id" integer NOT NULL REFERENCES model(id) ON DELETE no action ON UPDATE no action;

@@ -1,10 +1,10 @@
-import { RegisterForm } from '@/components/register/components';
+import { RegisterCard } from './_components/register-card';
 import { Suspense } from 'react';
 
 export default async function RegisterPage() {
     return (
-        <Suspense fallback={<>Loading...</>}>
-            <RegisterForm />
-        </Suspense>
+        <div className="flex w-full h-screen justify-end items-center">
+            <RegisterCard />
+        </div>
     );
 }

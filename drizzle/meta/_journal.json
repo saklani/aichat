@@ -162,6 +162,83 @@
       "when": 1738119946217,
       "tag": "0022_violet_layla_miller",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "6",
+      "when": 1738252590029,
+      "tag": "0023_nice_vivisector",
+      "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "6",
+      "when": 1738443045467,
+      "tag": "0024_tricky_the_twelve",
+      "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "6",
+      "when": 1738444129708,
+      "tag": "0025_thin_arachne",
+      "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "6",
+      "when": 1738444156540,
+      "tag": "0026_wandering_blue_blade",
+      "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "6",
+      "when": 1738444295057,
+      "tag": "0027_thin_texas_twister",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "6",
+      "when": 1738444848022,
+      "tag": "0028_perpetual_sinister_six",
+      "breakpoints": true
+    },
+    {
+      "idx": 29,
+      "version": "6",
+      "when": 1738444875619,
+      "tag": "0029_spooky_tyrannus",
+      "breakpoints": true
+    },
+    {
+      "idx": 30,
+      "version": "6",
+      "when": 1738445217601,
+      "tag": "0030_wooden_marvel_boy",
+      "breakpoints": true
+    },
+    {
+      "idx": 31,
+      "version": "6",
+      "when": 1738445235816,
+      "tag": "0031_dear_ben_parker",
+      "breakpoints": true
+    },
+    {
+      "idx": 32,
+      "version": "6",
+      "when": 1738445415668,
+      "tag": "0032_orange_captain_universe",
+      "breakpoints": true
+    },
+    {
+      "idx": 33,
+      "version": "6",
+      "when": 1738446375851,
+      "tag": "0033_watery_cobalt_man",
+      "breakpoints": true
     }
   ]
 }
