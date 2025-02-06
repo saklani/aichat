@@ -10,13 +10,13 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useAsyncAction } from "@/hooks/use-async-function"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
-import { register } from "../actions"
-import { formSchema } from "../form-schema"
-import { useAsyncAction } from "@/hooks/use-async-function"
+import { register } from "./actions"
+import { formSchema } from "./form-schema"
 
 export function RegisterForm() {
   const { state, handleAction } = useAsyncAction(register, {

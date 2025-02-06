@@ -21,8 +21,7 @@ import { formSchema } from "./form-schema"
 
 export function LoginForm() {
   const { state, handleAction } = useAsyncAction(login, {
-    onResult: ({ error }) => toast(error),
-    onError: ({ error }) => toast(error)
+ onError: ({ error }) => toast(error)
   });
 
   const form = useForm<z.infer<typeof formSchema>>({

@@ -2,7 +2,7 @@
 import { checkSession } from "@/lib/server/auth";
 import * as auth from "@/lib/server/auth"
 import { queries } from "@/lib/db";
-import { revalidatePath, revalidateTag } from "next/cache";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function getChats() {
@@ -33,7 +33,9 @@ export async function getUserEmail() {
     return response.email
 }
 
-export async function deleteChat({ id }: { id: string }) {
+type ActionResponse = Promise<{ error?: string }>
+
+export async function deleteChat({ id }: { id: string }): ActionResponse {
     const session = await checkSession()
     if (!session) {
         return { error: "Unauthorized" }
@@ -44,11 +46,10 @@ export async function deleteChat({ id }: { id: string }) {
         console.error(error)
         return { error: "Internal server error" }
     }
-    return
+    return { }
 }
 
 
-type ActionResponse = Promise<{ error: string }>
 
 export async function logout(): ActionResponse {
     const sessionToken = await auth.getSession()

@@ -1,5 +1,4 @@
 import { RegisterCard } from './_components/register-card';
-import { Suspense } from 'react';
 
 export default async function RegisterPage() {
     return (

@@ -1,11 +1,12 @@
 "use client"
 import { Textarea } from "@/components/ui/textarea"
 import { schema } from "@/lib/db"
+import { useQueryClient } from "@tanstack/react-query"
 import { useChat } from "ai/react"
 import { Sparkles } from "lucide-react"
 import { usePathname } from "next/navigation"
+import { ChatHeader } from "./chat-header"
 import { Markdown } from "./markdown"
-import { useQueryClient } from "@tanstack/react-query"
 
 function UserMessage({ content }: { content: string }) {
     return (
@@ -46,8 +47,9 @@ export function Chat({ id, initialMessages }: { id: string, initialMessages?: sc
     });
 
     return (
-        <div className="flex flex-col w-full p-[8px]">
-            <div className="flex flex-col p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-90px)]">
+        <div className="flex flex-col w-full">
+            <ChatHeader />
+            <div className="flex flex-col px-[16px] md:px-[48px] p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-130px)]">
                 {messages.length === 0 ?
                     <h1 className="text-2xl">What can I help with?</h1> :
                     messages.map(m => (
@@ -65,7 +67,7 @@ export function Chat({ id, initialMessages }: { id: string, initialMessages?: sc
                     onKeyDown={(e) => {
                         if (e.key === "Enter" && e.shiftKey == false) {
                             e.preventDefault();
-                            //@ts-expect-error
+                            //@ts-expect-error comvert to form element
                             (e.target.form as HTMLFormElement).requestSubmit();
                         }
                     }}

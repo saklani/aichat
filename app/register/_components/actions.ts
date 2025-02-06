@@ -1,5 +1,5 @@
 "use server"
-import * as auth from "@/lib/auth";
+import * as auth from "@/lib/server/auth";
 import { db, queries, schema } from "@/lib/db";
 import { hash } from '@node-rs/argon2';
 import { eq } from "drizzle-orm";
