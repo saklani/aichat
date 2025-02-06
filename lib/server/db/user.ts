@@ -1,8 +1,8 @@
 import { encodeBase32LowerCase } from '@oslojs/encoding';
 import { eq } from 'drizzle-orm';
-import { schema } from '..';
-import { db } from "../db";
-import { executeDbOperation } from "./utils";
+import { schema } from '../../db';
+import { db } from "../../db/db";
+import { execute } from "./utils";
 
 
 function generateUserId() {
@@ -14,28 +14,34 @@ function generateUserId() {
 
 export async function createUser(data: Omit<schema.User, "id">) {
     const id = generateUserId()
-    return executeDbOperation('Failed to insert user', async () => {
+    return execute('insert user', async () => {
         await db.insert(schema.user).values({ ...data, id })
         return id
     })
 }
 
 export async function updateUser({ id, ...rest }: schema.User) {
-    return executeDbOperation(`Failed to update user ${id}`, async () => {
+    return execute(`update user ${id}`, async () => {
         await db.update(schema.user).set(rest).where(eq(schema.user.id, id))
         return id
     })
 }
 
 export async function deleteUser({ id }: Pick<schema.User, "id">) {
-    return executeDbOperation(`Failed to delete user ${id}`, async () => {
+    return execute(`delete user ${id}`, async () => {
         await db.delete(schema.user).where(eq(schema.user.id, id))
     })
 }
 
 
+export async function getUser({ id }: Pick<schema.User, "id">) {
+    return execute(`get user ${id}`, async () => {
+        return await db.query.user.findFirst({ where: eq(schema.user.id, id) })
+    })
+}
+
 export async function getUserByEmail({ email }: Pick<schema.User, "email">) {
-    return executeDbOperation(`Failed to get user ${email}`, async () => {
+    return execute(`get user ${email}`, async () => {
         return await db.query.user.findFirst({ where: eq(schema.user.email, email) })
     })
 }

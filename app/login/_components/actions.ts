@@ -1,6 +1,6 @@
 "use server"
 
-import * as auth from "@/lib/auth";
+import * as auth from "@/lib/server/auth";
 import { queries } from "@/lib/db";
 import { verify } from '@node-rs/argon2';
 import { revalidatePath } from "next/cache";

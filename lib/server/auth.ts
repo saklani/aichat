@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
-import { db, schema } from './db';
+import { db, schema } from '../db';
 import { cookies } from 'next/headers'
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
@@ -84,3 +84,14 @@ export async function deleteSessionTokenCookie() {
 
 
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
+
+
+
+export async function checkSession(): Promise<{ id: string; email: string } | null> {
+    const sessionCookie = await getSession()
+    if (sessionCookie) {
+        const { user } = await validateSessionToken(sessionCookie.value)
+        return user
+    }
+    return null
+}

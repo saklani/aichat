@@ -1,12 +1,12 @@
 import { eq } from "drizzle-orm";
-import { db } from "../db";
-import * as schema from "../schema";
-import { executeDbOperation } from "./utils";
+import { db } from "../../db/db";
+import * as schema from "../../db/schema";
+import { execute } from "./utils";
 
 
 
 export async function createSession({ id, ...rest }: schema.Session) {
-    return executeDbOperation('Failed to create session', async () => {
+    return execute('create session', async () => {
         await db.insert(schema.session).values({ id, ...rest })
         return id
     })
@@ -14,7 +14,7 @@ export async function createSession({ id, ...rest }: schema.Session) {
 
 
 export async function updateSession({ id, ...rest }: schema.Session) {
-    return executeDbOperation(`Failed to update session ${id}`, async () => {
+    return execute(`update session ${id}`, async () => {
         await db.update(schema.session).set(rest).where(eq(schema.session.id, id))
         return id
     })
@@ -22,7 +22,7 @@ export async function updateSession({ id, ...rest }: schema.Session) {
 
 
 export async function deleteSession({ id }: Pick<schema.Session, "id">) {
-    return executeDbOperation(`Failed to delete session ${id}`, async () => {
+    return execute(`delete session ${id}`, async () => {
         await db.delete(schema.session).where(eq(schema.session.id, id))
     })
 }

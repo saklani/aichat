@@ -1,10 +1,9 @@
-import * as auth from "@/lib/auth"
+import * as auth from "@/lib/server/auth"
 import { NextRequest } from 'next/server'
 import { NextResponse } from 'next/server'
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(request: NextRequest) {
-    console.log(request.nextUrl.pathname)
     const sessionToken = await auth.getSession()
     switch (request.nextUrl.pathname) {
         case "/login":
@@ -24,10 +23,13 @@ export async function middleware(request: NextRequest) {
         case "/": {
             if (!sessionToken) {
                 return NextResponse.redirect(new URL("/login", request.nextUrl))
+            } else {
+                return NextResponse.redirect(new URL("/chat", request.nextUrl))
             }
         }
+        default:
+            return NextResponse.next();
     }
-    return NextResponse.next();
 }
 
 

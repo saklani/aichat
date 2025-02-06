@@ -1,5 +1,6 @@
-import { Chat } from "../../_components/chat";
-import { getChat } from "../../actions";
+import { Chat } from "./_components/chat";
+import { getChat } from "./actions";
+
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params
