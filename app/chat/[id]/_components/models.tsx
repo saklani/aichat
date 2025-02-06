@@ -19,18 +19,14 @@ import { cn } from "@/lib/utils"
 
 const models = [
   {
-    value: "o3",
-    label: "ChatGPT o3",
-  },
-  {
-    value: "o1",
-    label: "ChatGPT o1",
+    value: "o1-mini",
+    label: "ChatGPT o1-mini",
   },
 ]
 
 export function ComboboxDemo() {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("o3")
+  const [value, setValue] = React.useState("o1-mini")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

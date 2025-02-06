@@ -11,7 +11,7 @@ import { Markdown } from "./markdown"
 function UserMessage({ content }: { content: string }) {
     return (
         <div className="flex justify-end w-full">
-            <div className="max-w-[500px] border py-[4px] px-[12px] rounded">
+            <div className="text-sm max-w-[500px] border py-[4px] px-[12px] rounded">
                 <p>{content}</p>
             </div>
         </div>
@@ -19,12 +19,11 @@ function UserMessage({ content }: { content: string }) {
 }
 
 
-function AIMessage({ action, content }: { action?: string; content: string; }) {
+function AIMessage({ content }: { action?: string; content: string; }) {
     return (
         <div className="flex w-full py-[24px] gap-[8px]">
-            <div className="flex border p-[8px] h-[40px] w-[40px] rounded-[99px] items-center"><Sparkles size={24} /></div>
-            <div className="flex flex-col">
-                <p className="h-[36px]">{action}</p>
+            <div className="flex border p-[8px] h-[40px] w-[40px] rounded-[99px] items-center"><Sparkles size={24} strokeWidth={0.5} /></div>
+            <div className="flex flex-col w-full p-[4px]">
                 <Markdown>{content}</Markdown>
             </div>
         </div>
@@ -47,9 +46,9 @@ export function Chat({ id, initialMessages }: { id: string, initialMessages?: sc
     });
 
     return (
-        <div className="flex flex-col w-full">
+        <div className="flex flex-col w-full h-screen">
             <ChatHeader />
-            <div className="flex flex-col px-[16px] md:px-[48px] p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-130px)]">
+            <div className="flex flex-col px-[16px] md:px-[48px] p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-128px)]">
                 {messages.length === 0 ?
                     <h1 className="text-2xl">What can I help with?</h1> :
                     messages.map(m => (
@@ -58,21 +57,23 @@ export function Chat({ id, initialMessages }: { id: string, initialMessages?: sc
                         </div>
                     ))}
             </div>
-            <form onSubmit={handleSubmit}>
-                <Textarea
-                    className="h-[72px] w-full resize-none"
-                    value={input}
-                    placeholder="Ask anything"
-                    onChange={handleInputChange}
-                    onKeyDown={(e) => {
-                        if (e.key === "Enter" && e.shiftKey == false) {
-                            e.preventDefault();
-                            //@ts-expect-error comvert to form element
-                            (e.target.form as HTMLFormElement).requestSubmit();
-                        }
-                    }}
-                />
-            </form>
+            <div className="w-full px-[16px] md:px-[24px] h-[77px]">
+                <form onSubmit={handleSubmit}>
+                    <Textarea
+                        className="w-full resize-none"
+                        value={input}
+                        placeholder="Ask anything"
+                        onChange={handleInputChange}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && e.shiftKey == false) {
+                                e.preventDefault();
+                                //@ts-expect-error comvert to form element
+                                (e.target.form as HTMLFormElement).requestSubmit();
+                            }
+                        }}
+                    />
+                </form>
+            </div>
         </div>
     )
 }

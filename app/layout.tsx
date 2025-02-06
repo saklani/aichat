@@ -22,7 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`flex flex-col bg-background h-[100vh] ${inter.variable}  antialiased`}
+        className={`flex flex-col bg-background h-[100vh] ${inter.variable} antialiased`}
       >
         <Providers>{children}</Providers>
         <Toaster />
