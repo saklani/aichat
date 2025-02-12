@@ -10,18 +10,19 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useAsyncAction } from "@/hooks/use-async-function"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useMutation } from "@tanstack/react-query"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import { z } from "zod"
 import { forgotPassword } from "../actions"
 import { formSchema } from "../form-schema"
-import { toast } from "sonner"
 
 
 export function ForgotPasswordForm() {
-  const { state, handleAction } = useAsyncAction(forgotPassword, {
-   onError: ({ error }) => { console.log(error); toast(error);}
+  const { mutate, status } = useMutation({
+    mutationFn: forgotPassword,
+    onError: (error) => toast(error.message)
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -30,7 +31,7 @@ export function ForgotPasswordForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    handleAction(values);
+    mutate(values);
   }
 
   return (
@@ -51,7 +52,7 @@ export function ForgotPasswordForm() {
             )}
           />
         </div>
-        <Button state={state} type="submit">Send Reset Link</Button>
+        <Button status={status} type="submit">Send Reset Link</Button>
       </form>
     </Form>
   )

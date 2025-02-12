@@ -1,32 +1,30 @@
 import * as auth from "@/lib/server/auth"
-import { NextRequest } from 'next/server'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
-// This function can be marked `async` if using `await` inside
+
 export async function middleware(request: NextRequest) {
     const sessionToken = await auth.getSession()
     switch (request.nextUrl.pathname) {
         case "/login":
         case "/register":
+        case "/forgot-password":
             {
                 if (sessionToken) {
                     const { session } = await auth.validateSessionToken(sessionToken.value)
                     if (session) {
-                        auth.setSessionTokenCookie(sessionToken.value, session.expiresAt)
-                        return NextResponse.redirect(new URL('/', request.url))
-                    } else {
-                        auth.deleteSessionTokenCookie()
+                        return NextResponse.redirect(new URL('/chat', request.nextUrl))
                     }
                 }
                 return NextResponse.next();
             }
-        case "/": {
-            if (!sessionToken) {
-                return NextResponse.redirect(new URL("/login", request.nextUrl))
-            } else {
-                return NextResponse.redirect(new URL("/chat", request.nextUrl))
+        case "/chat":
+        case "/settings":
+            {
+                if (!sessionToken) {
+                    return NextResponse.redirect(new URL("/login", request.nextUrl))
+                }
+                return NextResponse.next();
             }
-        }
         default:
             return NextResponse.next();
     }

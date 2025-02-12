@@ -1,12 +1,13 @@
 "use client"
 import { Textarea } from "@/components/ui/textarea"
-import { schema } from "@/lib/db"
+import { schema } from "@/lib/server/db"
 import { useQueryClient } from "@tanstack/react-query"
 import { useChat } from "ai/react"
 import { Sparkles } from "lucide-react"
 import { usePathname } from "next/navigation"
-import { ChatHeader } from "./chat-header"
 import { Markdown } from "./markdown"
+import { FileDropdown } from "./store-dropdown"
+import { ComboboxDemo } from "./models"
 
 function UserMessage({ content }: { content: string }) {
     return (
@@ -47,8 +48,7 @@ export function Chat({ id, initialMessages }: { id: string, initialMessages?: sc
 
     return (
         <div className="flex flex-col w-full h-screen">
-            <ChatHeader />
-            <div className="flex flex-col px-[16px] md:px-[48px] p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-128px)]">
+            <div className="flex flex-col px-[16px] md:px-[48px] p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-108px)]">
                 {messages.length === 0 ?
                     <h1 className="text-2xl">What can I help with?</h1> :
                     messages.map(m => (
@@ -57,22 +57,28 @@ export function Chat({ id, initialMessages }: { id: string, initialMessages?: sc
                         </div>
                     ))}
             </div>
-            <div className="w-full px-[16px] md:px-[24px] h-[77px]">
-                <form onSubmit={handleSubmit}>
-                    <Textarea
-                        className="w-full resize-none"
-                        value={input}
-                        placeholder="Ask anything"
-                        onChange={handleInputChange}
-                        onKeyDown={(e) => {
-                            if (e.key === "Enter" && e.shiftKey == false) {
-                                e.preventDefault();
-                                //@ts-expect-error comvert to form element
-                                (e.target.form as HTMLFormElement).requestSubmit();
-                            }
-                        }}
-                    />
-                </form>
+            <div className="px-[16px] md:px-[24px] h-[108px]">
+                <div className="border-t border-x border-input w-full p-[4px] pt-0 rounded-t-md">
+                    <form onSubmit={handleSubmit}>
+                        <Textarea
+                            className="w-full resize-none h-[72px]"
+                            value={input}
+                            placeholder="Ask anything"
+                            onChange={handleInputChange}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && e.shiftKey == false) {
+                                    e.preventDefault();
+                                    //@ts-expect-error comvert to form element
+                                    (e.target.form as HTMLFormElement).requestSubmit();
+                                }
+                            }}
+                        />
+                    </form>
+                    <div className="flex h-[32px] px-3 gap-[2px]">
+                        <ComboboxDemo />
+                        <FileDropdown />
+                    </div>
+                </div>
             </div>
         </div>
     )

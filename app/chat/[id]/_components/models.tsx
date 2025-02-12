@@ -2,7 +2,6 @@
 
 import { Check, ChevronsUpDown } from "lucide-react"
 import * as React from "react"
-
 import { Button } from "@/components/ui/button"
 import {
     Command,
@@ -20,7 +19,7 @@ import { cn } from "@/lib/utils"
 const models = [
   {
     value: "o1-mini",
-    label: "ChatGPT o1-mini",
+    label: "GPT-o1-mini",
   },
 ]
 
@@ -35,7 +34,7 @@ export function ComboboxDemo() {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-[150px] justify-between"
         >
           {value
             ? models.find((framework) => framework.value === value)?.label

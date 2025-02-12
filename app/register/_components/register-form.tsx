@@ -10,19 +10,24 @@ import {
   FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useAsyncAction } from "@/hooks/use-async-function"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
-import { register } from "./actions"
 import { formSchema } from "./form-schema"
+import { useMutation } from "@tanstack/react-query"
+import { register } from "@/lib/client/queries"
+import { useRouter } from "next/navigation"
 
 export function RegisterForm() {
-  const { state, handleAction } = useAsyncAction(register, {
-    onResult: ({ error }) => toast(error),
-    onError: ({ error }) => toast(error)
+  const router = useRouter()
+
+  const { mutate, status } = useMutation({
+    mutationFn: register,
+    onSuccess: () => router.refresh(),
+    onError: (error) => toast(error.message)
   });
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,7 +37,7 @@ export function RegisterForm() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    handleAction(values)
+    mutate(values)
   }
 
   return (
@@ -66,7 +71,7 @@ export function RegisterForm() {
             )}
           />
         </div>
-        <Button state={state} type="submit">Register</Button>
+        <Button status={status} type="submit">Register</Button>
       </form>
     </Form>
   )

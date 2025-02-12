@@ -22,12 +22,12 @@ body {
     --secondary-foreground: 240 5.9% 10%;
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-    --accent: 314 75% 26%%;
+    --accent: 205 23% 94%;
     --accent-foreground: 240 5.9% 10%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 247 18% 65%;
+    --border: 240 5.9% 85%;
+    --input: 247 18% 75%;
     --ring: 240 10% 60.9%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
@@ -36,8 +36,9 @@ body {
     --chart-5: 27 87% 67%;
     --radius: 4px;
 
-    --text: 250 50% 7%;
-    --textsecondary: 180 12% 55%;
+    --text-title: 250 50% 7%;
+    --text-subtitle: 180 12% 55%;
+    --text-info: 180 12% 45%;
 
     --zeus: 27 18% 10%;
     --mineral: 180 12% 55%;
@@ -67,24 +68,15 @@ body {
     @apply border-border;
   }
   body {
-    @apply bg-background text-text;
+    @apply bg-background text-foreground;
   }
   .title {
-    @apply text-text text-[32px] tracking-tight font-semibold;
+    @apply text-[28.43px] font-semibold tracking-tight text-text-title;
   }
   .subtitle {
-    @apply text-text/60 text-[15px];
+    @apply text-[12.003px] text-text-subtitle font-semibold;
   }
   .info {
-    @apply text-textsecondary text-[12px];
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
+    @apply text-[12.003px] text-text-info;
   }
 }

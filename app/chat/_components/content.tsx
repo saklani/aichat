@@ -16,18 +16,17 @@ import {
     SidebarMenuButton,
     SidebarMenuItem
 } from "@/components/ui/sidebar"
-import { useAsyncAction } from "@/hooks/use-async-function"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Delete, Ellipsis, Share } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { deleteChat, getChats } from "./actions"
+import { Chat } from "@/lib/client/types"
 
 export function Content() {
     const router = useRouter()
     const pathname = usePathname()
-    const { data: chats } = useQuery({
+    const { data: chats } = useQuery<Chat[]>({
         queryKey: ["chats"],
-        queryFn: getChats
+        queryFn: () => fetch("/api/chat").then(res => res.json())
     })
 
     return (
@@ -54,12 +53,9 @@ export function Content() {
 
 export function Options({ id }: { id: string }) {
     const queryClient = useQueryClient()
-
-    const { handleAction } = useAsyncAction(deleteChat, {
-        onResult: () => {
-            queryClient.invalidateQueries({ queryKey: ['chats'] })
-        },
-
+    const { mutate } = useMutation({
+        mutationFn: ({ id }: { id: string }) => fetch("/api/chat", { method: "DELETE", body: JSON.stringify({ id }) }),
+        onSuccess: () => queryClient.invalidateQueries({ queryKey: ['chats'] }),
     })
     return (
         <DropdownMenu>
@@ -71,7 +67,7 @@ export function Options({ id }: { id: string }) {
                     <p className="text-sm">Share</p>
                     <DropdownMenuShortcut><Share size={14} /></DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleAction({ id })}>
+                <DropdownMenuItem onClick={() => mutate({ id })}>
                     <p className="text-sm">Delete</p>
                     <DropdownMenuShortcut><Delete size={14} /></DropdownMenuShortcut>
                 </DropdownMenuItem>

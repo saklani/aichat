@@ -1,6 +1,6 @@
 "use server"
 
-import { queries } from "@/lib/db";
+import { queries } from "@/lib/server/db";
 import { z } from "zod";
 import { formSchema } from "./form-schema";
 
@@ -13,10 +13,7 @@ export async function forgotPassword(data: z.infer<typeof formSchema>): ActionRe
   }
 
   const { email } = result.data
-  const { response: user, error } = await queries.getUserByEmail({ email })
-  if (error) {
-    return { error: "Internal server error" }
-  }
+  const user = await queries.getUserByEmail({ email })
   if (user) {
     
   }

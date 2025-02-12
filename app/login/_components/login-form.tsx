@@ -10,18 +10,25 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useAsyncAction } from "@/hooks/use-async-function"
+import { login } from "@/lib/client/queries"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
+import { useMutation } from "@tanstack/react-query"
+import { useRouter } from "next/navigation"
+import { ControllerRenderProps, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
-import { login } from "./actions"
 import { formSchema } from "./form-schema"
+import { useCallback, useMemo } from "react"
 
+
+const FORGOT_PASSWORD_URL = "/forgot-password"
 
 export function LoginForm() {
-  const { state, handleAction } = useAsyncAction(login, {
- onError: ({ error }) => toast(error)
+  const router = useRouter()
+  const { mutate, status } = useMutation({
+    mutationFn: login,
+    onSuccess: () => router.refresh(),
+    onError: (error) => toast(error.message)
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -29,46 +36,52 @@ export function LoginForm() {
     defaultValues: { email: "", password: "" },
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    handleAction(values);
-  }
+  const memoizedFormState = useMemo(() => form.formState, [form.formState]);
+
+  const onSubmit = useCallback((values: z.infer<typeof formSchema>) => {
+    mutate(values);
+  }, [mutate]);
+
+  const renderEmailField = useCallback(({ field }: { field: ControllerRenderProps<{ email: string; password: string }, "email"> }) => (
+    <FormItem>
+      <FormLabel>Email</FormLabel>
+      <FormControl>
+        <Input type="email" {...field} />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  ), []);
+
+  const renderPasswordField = useCallback(({ field }: { field: ControllerRenderProps<{ email: string; password: string }, "password"> }) => (
+    <FormItem>
+      <FormLabel>Password</FormLabel>
+      <FormControl>
+        <Input type="password" {...field} />
+      </FormControl>
+      <FormMessage />
+    </FormItem>
+  ), []);
 
   return (
-    <Form {...form}>
+    <Form {...form} formState={memoizedFormState}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col w-full max-w-md">
         <div className="flex flex-col gap-[12px] h-[180px]">
           <FormField
             control={form.control}
             name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input type="email" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+            render={renderEmailField}
           />
           <div className="flex flex-col gap-[4px]">
             <FormField
               control={form.control}
               name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Password</FormLabel>
-                  <FormControl>
-                    <Input type="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
+              render={({ field }) => renderPasswordField({ field })}
             />
-            <a className="text-xs text-blue-500 hover:underline" href="/forgot-password">Forgot Password?</a>
+            <a className="text-xs text-blue-500 hover:underline" href={FORGOT_PASSWORD_URL}>Forgot Password?</a>
           </div>
         </div>
-        <Button state={state} type="submit">
-          Login 
+        <Button status={status} type="submit">
+          Login
         </Button>
       </form>
     </Form>

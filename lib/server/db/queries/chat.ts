@@ -1,6 +1,6 @@
 import { and, desc, eq } from "drizzle-orm";
-import { db } from "../../db/db";
-import * as schema from "../../db/schema";
+import { db } from "../db";
+import * as schema from "../schema";
 import { execute } from "./utils";
 
 
@@ -31,13 +31,15 @@ export async function deleteChat({ id, userId }: Pick<schema.Chat, "id" | "userI
 }
 
 export async function getChat({ id, userId }: Pick<schema.Chat, "id" | "userId">) {
-    return execute(`get chat ${id} of user ${userId}`, async () => {
-        return db.select().from(schema.chat).where(and(eq(schema.chat.id, id), eq(schema.chat.userId, userId)))
-    })
+    return execute(
+        `get chat ${id} of user ${userId}`,
+        () => db.query.chat.findFirst({ where: and(eq(schema.chat.id, id), eq(schema.chat.userId, userId)) })
+    )
 }
 
 export async function getChatsByUserId({ userId }: Pick<schema.Chat, "userId">) {
-    return execute(`get all chat of user ${userId}`, async () => {
-        return db.select().from(schema.chat).where(eq(schema.chat.userId, userId)).orderBy(desc(schema.chat.createdAt))
-    })
+    return execute(
+        `get all chat of user ${userId}`,
+        () => db.query.chat.findMany({ where: eq(schema.chat.userId, userId), orderBy: desc(schema.chat.createdAt) })
+    )
 }

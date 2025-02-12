@@ -1,9 +1,9 @@
 export async function execute<T>(
     description: string,
     fn: () => Promise<T>
-): Promise<{ response?: T, error?: string }> {
+): Promise<T> {
     try {
-        return { response: await fn() };
+        return await fn();
     } catch (error) {
         console.error(description, error);
         throw Error(`DATABASE ERROR: ${description}`);

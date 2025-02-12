@@ -1,7 +1,7 @@
 import { encodeBase32LowerCase } from '@oslojs/encoding';
 import { eq } from 'drizzle-orm';
-import { schema } from '../../db';
-import { db } from "../../db/db";
+import { schema } from '..';
+import { db } from "../db";
 import { execute } from "./utils";
 
 
@@ -36,7 +36,7 @@ export async function deleteUser({ id }: Pick<schema.User, "id">) {
 
 export async function getUser({ id }: Pick<schema.User, "id">) {
     return execute(`get user ${id}`, async () => {
-        return await db.query.user.findFirst({ where: eq(schema.user.id, id) })
+        return await db.query.user.findFirst({ where: eq(schema.user.id, id), columns: { id: true, email: true } })
     })
 }
 

@@ -1,8 +1,9 @@
 import { eq } from 'drizzle-orm';
 import { sha256 } from '@oslojs/crypto/sha2';
 import { encodeBase64url, encodeHexLowerCase } from '@oslojs/encoding';
-import { db, schema } from '../db';
+import { db, schema } from './db';
 import { cookies } from 'next/headers'
+import { NextRequest } from 'next/server';
 
 const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
@@ -68,27 +69,11 @@ export async function invalidateSession(sessionId: string) {
     await db.delete(schema.session).where(eq(schema.session.id, sessionId));
 }
 
-export async function setSessionTokenCookie(token: string, expiresAt: Date) {
-    const cookieStore = await cookies()
-    cookieStore.set(sessionCookieName, token, {
-        expires: expiresAt,
-        path: '/',
-        secure: process.env.NODE_ENV === "production",
-    });
-}
-
-export async function deleteSessionTokenCookie() {
-    const cookieStore = await cookies()
-    cookieStore.delete(sessionCookieName);
-}
-
-
 export type SessionValidationResult = Awaited<ReturnType<typeof validateSessionToken>>;
 
-
-
-export async function checkSession(): Promise<{ id: string; email: string } | null> {
-    const sessionCookie = await getSession()
+export async function checkSession(request: NextRequest): Promise<{ id: string; email: string } | null> {
+    const cookies = request.cookies
+    const sessionCookie = cookies.get(sessionCookieName)
     if (sessionCookie) {
         const { user } = await validateSessionToken(sessionCookie.value)
         return user
