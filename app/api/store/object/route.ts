@@ -6,7 +6,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED } from "../../next-response";
 
-export const formSchema = z.object({
+const formSchema = z.object({
     file: z.instanceof(File).refine((file) => file.size < 7000000, {
         message: 'Your file must be less than 7MB.',
     }),
