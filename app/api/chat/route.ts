@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
             };
         }
 
-        const { id, messages } = validatedInput.data;
+        const { id, messages, model } = validatedInput.data;
         const chat = await queries.getChat({ id, userId });
         const lastMessage = messages.at(-1);
 
@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
 
         // Stream AI response
         const result = streamText({
-            model: openai('gpt-4o-mini'),
+            model: openai(model),
             messages,
             onFinish: async ({ text }) => {
                 await queries.createMessage({

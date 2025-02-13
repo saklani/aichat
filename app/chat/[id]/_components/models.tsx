@@ -4,28 +4,54 @@ import { Check, ChevronsUpDown } from "lucide-react"
 import * as React from "react"
 import { Button } from "@/components/ui/button"
 import {
-    Command,
-    CommandGroup,
-    CommandItem,
-    CommandList
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList
 } from "@/components/ui/command"
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { GetUserPreferences } from "@/lib/client/types"
 
 const models = [
   {
-    value: "o1-mini",
+    value: "gpt-4o-mini",
+    label: "GPT-4o-mini",
+  },
+  {
+    value: "gpt-4o",
+    label: "GPT-4o",
+  },
+  {
+    value: "gpt-o1-mini",
     label: "GPT-o1-mini",
   },
 ]
 
-export function ComboboxDemo() {
+
+export function SwitchModels() {
+  const { data: response } = useQuery<GetUserPreferences>({ queryKey: ["preferences"], queryFn: () => fetch("/api/user/preferences").then(res => res.json()) })
+
+  if (!response?.data) {
+    return <></>
+  }
+
+  return <ModelComboBox defaultModel={response?.data.defaultModel} />
+}
+
+function ModelComboBox({ defaultModel }: { defaultModel: string }) {
+  const { mutate } = useMutation({
+    mutationKey: ["preference"],
+    mutationFn: (defaultModel: string) => fetch("/api/user/preferences", { method: "PUT", body: JSON.stringify({ defaultModel }) })
+  })
+
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("o1-mini")
+  const [value, setValue] = React.useState(defaultModel)
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -42,7 +68,7 @@ export function ComboboxDemo() {
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="w-[250px] p-0">
         <Command>
           <CommandList>
             <CommandGroup>
@@ -53,6 +79,7 @@ export function ComboboxDemo() {
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue)
                     setOpen(false)
+                    mutate(currentValue)
                   }}
                 >
                   {framework.label}

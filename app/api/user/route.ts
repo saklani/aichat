@@ -1,3 +1,4 @@
+import { signOut } from "@/auth";
 import { withAuth } from "@/lib/server/api/middleware";
 import { GetUserResponseSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
@@ -40,6 +41,7 @@ export async function GET() {
 export async function DELETE() {
     return withAuth(async (userId) => {
         await queries.deleteUser({ id: userId });
+        await signOut()
         return {
             data: { success: true },
             status: 200

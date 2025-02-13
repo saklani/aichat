@@ -1,10 +1,20 @@
 import { z } from "zod";
 
+const ModelNameEnum = z.enum(["gpt-4o-mini", "gpt-4o", "gpt-o1-mini"])
+
 export const GetUserResponseSchema = z.object({
     id: z.string(),
     email: z.string(),
 });
 
+export const GetUserPreferenceResponseSchema = z.object({
+    defaultModel: ModelNameEnum
+});
+
+// Move to ModelName type
+export const PutUserPreferenceRequestSchema = z.object({
+    defaultModel: ModelNameEnum
+});
 
 export const GetPlanResponseSchema = z.object({
     id: z.number(),
@@ -47,7 +57,8 @@ export const PostMessageRequestSchema =
 
 export const PostRequestSchema = z.object({
     id: z.string().uuid(),
-    messages: z.array(PostMessageRequestSchema)
+    messages: z.array(PostMessageRequestSchema),
+    model: ModelNameEnum
 });
 
 export const GetChatResponseSchema = z.object({

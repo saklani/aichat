@@ -2,7 +2,6 @@ import NextAuth from "next-auth";
 import "next-auth/jwt";
 import Google from "next-auth/providers/google";
 import { queries } from "./lib/server/db";
-import CredentialsProvider from "next-auth/providers/credentials";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
     debug: process.env.NODE_ENV !== "production",
@@ -23,6 +22,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 });
 
                 await queries.createPlan({userId: user.id})
+                await queries.createUserPreferences({userId: user.id})
             } else {
                 user.id = existingUser.id
             }

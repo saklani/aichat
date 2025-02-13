@@ -8,7 +8,7 @@ type ObjectStatus = 'created' | 'processing' | 'ready' | 'failed'
 type PlanType = 'free' | 'pro' | 'enterprise'
 type ModelProvider = 'anthropic' | 'openai' | 'google' | 'custom'
 type ModelStatus = 'active' | 'deprecated' | 'maintenance'
-
+type ModelName = "gpt-4o-mini" | "gpt-4o" | "gpt-o1-mini"
 
 export const user = sqliteTable('users', {
     id: text('id').notNull().primaryKey(),
@@ -21,6 +21,12 @@ export const user = sqliteTable('users', {
     updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 })
 
+export const userPreferences = sqliteTable('user_preferences', {
+    userId: text('user_id')
+        .notNull()
+        .references(() => user.id, { onDelete: 'cascade' }),
+    defaultModel: text('default_model').$type<ModelName>().notNull().default('gpt-4o-mini'),
+});
 
 // Chat and Messages
 export const chat = sqliteTable('chats', {
@@ -36,8 +42,9 @@ export const chat = sqliteTable('chats', {
     messageCount: integer('message_count').notNull().default(0),
     isArchived: integer('is_archived', { mode: 'boolean' }).notNull().default(false),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`).$onUpdate(() => new Date())},
-    (table) => 
+    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`).$onUpdate(() => new Date())
+},
+    (table) =>
         [
             index('chat_user_id_idx').on(table.userId),
             index('chat_last_message_idx').on(table.lastMessageAt),
@@ -63,7 +70,7 @@ export const message = sqliteTable('messages', {
 // Models and Configuration
 export const model = sqliteTable('model', {
     id: text('id').notNull().primaryKey(),
-    name: text('name').notNull(),
+    name: text('name').$type<ModelName>().notNull(),
     provider: text('provider').$type<ModelProvider>().notNull(),
     url: text('url'),
     key: text('key'),
@@ -114,6 +121,7 @@ export const plan = sqliteTable('plans', {
 
 // Type exports
 export type User = typeof user.$inferSelect
+export type UserPreferences = typeof userPreferences.$inferSelect 
 export type Chat = typeof chat.$inferSelect
 export type Message = typeof message.$inferSelect
 export type Model = typeof model.$inferSelect

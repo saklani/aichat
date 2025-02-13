@@ -5,7 +5,7 @@ import { Plan } from "./_components/plan";
 import { User } from "./_components/user";
 import { Payment } from "./_components/payment";
 import { History } from "./_components/history";
-import { DangerZone } from "./_components/danger-zone";
+import { DeleteAccount } from "./_components/delete-account";
 
 export default function Page() {
     return (
@@ -15,23 +15,27 @@ export default function Page() {
                     <Back />
                     <LogoutButton />
                 </header>
-                <div className="flex gap-[24px]">
-                    <div className="flex flex-col w-1/3 max-w-[300px]">
+                <div className="flex flex-col md:flex-row gap-[24px] w-full">
+                    <div className="flex flex-col md:w-1/4 w-full">
                         <User />
                         <Plan />
                     </div>
-                    <Tabs defaultValue="account" className="w-2/3">
-                        <TabsList>
+                    <Tabs defaultValue="account" className="md:w-3/4 w-full">
+                        <TabsList className="grid grid-cols-2 w-full max-w-[300px]">
                             <TabsTrigger value="account">Account</TabsTrigger>
                             <TabsTrigger value="history">History</TabsTrigger>
                         </TabsList>
                         <TabsContent value="account">
                             <div className="flex flex-col p-[24px] gap-[36px]">
                                 <Payment />
-                                <DangerZone/>
+                                <DeleteAccount />
                             </div>
                         </TabsContent>
-                        <TabsContent value="history"><History /></TabsContent>
+                        <TabsContent value="history">
+                            <div className="flex flex-col p-[24px] gap-[36px]">
+                                <History />
+                            </div>
+                        </TabsContent>
                     </Tabs>
                 </div>
             </div>

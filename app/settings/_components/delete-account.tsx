@@ -14,29 +14,31 @@ import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-export function DangerZone() {
+export function DeleteAccount() {
     return (
-        <div className="flex flex-col gap-[12px]">
-            <h1 className="heading">Danger Zone</h1>
-            <div className="flex flex-col border border-red-300 p-[24px] rounded-md gap-[24px] items-start max-w-[400px]">
+        <div className="flex flex-col gap-4">
+            <div className="flex flex-col rounded-md gap-2 items-start max-w-[400px]">
+                <h1 className="title">Danger Zone</h1>
                 <p className="text-sm">Delete account and all associated data</p>
-                <DeleteAccount />
             </div>
+            <DeleteAlert />
         </div>
     )
 }
 
-export function DeleteAccount() {
+export function DeleteAlert() {
     const router = useRouter()
     const { mutate } = useMutation({
         mutationFn: () => fetch("/api/user", { method: "DELETE" }),
-        onSuccess: () => router.refresh()
+        onSuccess: () => {
+            router.replace("/")
+        }
     })
 
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button variant={"destructive"}>Delete Account</Button>
+                <Button className="w-[128px]" variant={"destructive"}>Delete Account</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

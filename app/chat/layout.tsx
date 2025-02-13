@@ -1,13 +1,18 @@
 import React from "react";
 import { AppSidebar } from "./_components/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <SidebarProvider>
-            <div className="flex w-full">
+            <div className="flex gap-1 w-full">
                 <AppSidebar />
-                {children}
+                <div className="w-[1rem]">
+                    <SidebarTrigger className="mt-1" />
+                </div>
+                <div className="w-full">
+                    {children}
+                </div>
             </div>
         </SidebarProvider>
     )

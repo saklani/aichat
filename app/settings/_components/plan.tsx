@@ -21,7 +21,7 @@ export function Plan() {
             </CardHeader>
             <CardContent className="flex flex-col gap-[12px] items-start">
                 <Badge className="flex justify-center items-center h-[20px] w-[45px]" variant={"outline"}>{response?.data.type}</Badge>
-                <Progress value={usage / limit} />
+                <Progress value={(usage * 100 / limit) } />
                 <div className="flex w-full justify-end">
                     {
                         !response?.data?

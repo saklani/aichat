@@ -1,14 +1,12 @@
 "use client"
 import { Textarea } from "@/components/ui/textarea"
-import { schema } from "@/lib/server/db"
+import { GetMessages, GetMessagesResponse, GetUserPreferences } from "@/lib/client/types"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useChat } from "ai/react"
 import { Sparkles } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { Markdown } from "./markdown"
-import { FileDropdown } from "./store-dropdown"
-import { ComboboxDemo } from "./models"
-import { GetMessages, GetMessagesResponse } from "@/lib/client/types"
+import { SwitchModels } from "./models"
 
 function UserMessage({ content }: { content: string }) {
     return (
@@ -31,19 +29,19 @@ function AIMessage({ content }: { action?: string; content: string; }) {
     )
 }
 
-export function Chat({id} : {id: string}) {
-    const {data: response} = useQuery<GetMessagesResponse>({queryKey: [`chat-${id}`], queryFn: () => fetch(`/api/chat/${id}/messages`).then(res => res.json()) })
+export function Chat({ id }: { id: string }) {
+    const { data: response1 } = useQuery<GetMessagesResponse>({ queryKey: [`chat-${id}`], queryFn: () => fetch(`/api/chat/${id}/messages`).then(res => res.json()) })
+    const { data: response2 } = useQuery<GetUserPreferences>({ queryKey: ["preferences"], queryFn: () => fetch("/api/user/preferences").then(res => res.json()) })
 
-    if (!response?.data) {
+    if (!response1?.data || !response2?.data) {
         return <></>
     }
-    const m = response.data
 
-    return <UnmemoizedChat id={id} initialMessages={m ?? []}/> 
+    return <UnmemoizedChat id={id} initialMessages={response1.data ?? []} model={response2.data.defaultModel} />
 }
 
 
-export function UnmemoizedChat({ id, initialMessages }: { id: string, initialMessages: GetMessages }) {
+export function UnmemoizedChat({ id, initialMessages, model }: { id: string, initialMessages: GetMessages, model: string }) {
     const pathname = usePathname()
     const queryClient = useQueryClient()
 
@@ -55,12 +53,13 @@ export function UnmemoizedChat({ id, initialMessages }: { id: string, initialMes
                 window.history.replaceState(null, '', `/chat/${id}`);
                 queryClient.invalidateQueries({ queryKey: ["chats"] })
             }
-        }
+        },
+        body: { model }
     });
 
     return (
         <div className="flex flex-col w-full h-screen">
-            <div className="flex flex-col px-[16px] md:px-[48px] p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-108px)]">
+            <div className="flex flex-col px-[16px] md:px-[48px] p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-109px)]">
                 {messages.length === 0 ?
                     <h1 className="text-2xl">What can I help with?</h1> :
                     messages.map(m => (
@@ -87,8 +86,8 @@ export function UnmemoizedChat({ id, initialMessages }: { id: string, initialMes
                         />
                     </form>
                     <div className="flex h-[32px] px-3 gap-[2px]">
-                        <ComboboxDemo />
-                        <FileDropdown />
+                        <SwitchModels />
+                        {/* <FileDropdown /> */}
                     </div>
                 </div>
             </div>
