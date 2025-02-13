@@ -12,7 +12,7 @@ export function Header() {
             <SidebarGroup>
                 <SidebarGroupLabel>Sable</SidebarGroupLabel>
                 <SidebarGroupAction title="New Chat" onClick={() => {
-                    router.refresh()
+                    router.refresh() // next.js seems to not re-render unless refreshed in production
                     router.push("/chat")
                 }}>
                     <Plus />
