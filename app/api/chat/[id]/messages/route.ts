@@ -3,7 +3,7 @@ import { GetMessagesResponseSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     return withAuth(async (userId) => {
         const chatId = (await params).id
         if (!chatId) {
