@@ -11,7 +11,10 @@ export function Header() {
         <SidebarHeader>
             <SidebarGroup>
                 <SidebarGroupLabel>Sable</SidebarGroupLabel>
-                <SidebarGroupAction title="New Chat" onClick={() => router.push("/chat")}>
+                <SidebarGroupAction title="New Chat" onClick={() => {
+                    router.refresh()
+                    router.push("/chat")
+                }}>
                     <Plus />
                     <span className="sr-only">New Chat</span>
                 </SidebarGroupAction>

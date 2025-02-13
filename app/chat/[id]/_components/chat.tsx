@@ -46,7 +46,7 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
     const pathname = usePathname()
     const queryClient = useQueryClient()
 
-    const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
+    const { messages, input, handleInputChange, handleSubmit } = useChat({
         id,
         initialMessages,
         onResponse: () => {
