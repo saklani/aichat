@@ -1,13 +1,14 @@
 "use client"
 import { Textarea } from "@/components/ui/textarea"
 import { schema } from "@/lib/server/db"
-import { useQueryClient } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useChat } from "ai/react"
 import { Sparkles } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { Markdown } from "./markdown"
 import { FileDropdown } from "./store-dropdown"
 import { ComboboxDemo } from "./models"
+import { GetMessages, GetMessagesResponse } from "@/lib/client/types"
 
 function UserMessage({ content }: { content: string }) {
     return (
@@ -18,7 +19,6 @@ function UserMessage({ content }: { content: string }) {
         </div>
     )
 }
-
 
 function AIMessage({ content }: { action?: string; content: string; }) {
     return (
@@ -31,10 +31,22 @@ function AIMessage({ content }: { action?: string; content: string; }) {
     )
 }
 
+export function Chat({id} : {id: string}) {
+    const {data: response} = useQuery<GetMessagesResponse>({queryKey: [`chat-${id}`], queryFn: () => fetch(`/api/chat/${id}/messages`).then(res => res.json()) })
 
-export function Chat({ id, initialMessages }: { id: string, initialMessages?: schema.Message[] }) {
+    if (!response?.data) {
+        return <></>
+    }
+    const m = response.data
+
+    return <UnmemoizedChat id={id} initialMessages={m ?? []}/> 
+}
+
+
+export function UnmemoizedChat({ id, initialMessages }: { id: string, initialMessages: GetMessages }) {
     const pathname = usePathname()
     const queryClient = useQueryClient()
+
     const { messages, input, handleInputChange, handleSubmit } = useChat({
         id,
         initialMessages,

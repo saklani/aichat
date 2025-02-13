@@ -1,10 +1,10 @@
 import { s3 } from "@/lib/server";
-import { checkSession } from "@/lib/server/auth";
+import { checkSession } from "@/app/auth";
 import { queries } from "@/lib/server/db";
 import { randomUUID } from "crypto";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { BAD_REQUEST, INTERNAL_SERVER_ERROR, UNAUTHORIZED } from "../../next-response";
+import { ZOD_BAD_REQUEST, HTTP_500, HTTP_401  } from "../../../../lib/server/api/response";
 
 const formSchema = z.object({
     file: z.instanceof(File).refine((file) => file.size < 7000000, {
@@ -16,13 +16,13 @@ export async function POST(request: NextRequest) {
     try {
         const session = await checkSession(request)
         if (!session) {
-            return UNAUTHORIZED
+            return HTTP_401 
         }
         const { id: userId } = session
 
         const { data, error, success } = formSchema.safeParse(request)
         if (!success) {
-            return BAD_REQUEST(error)
+            return ZOD_BAD_REQUEST(error)
         }
         const { file } = data
         const id = randomUUID()
@@ -32,6 +32,6 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ url })
     } catch (error) {
         console.error(error)
-        return INTERNAL_SERVER_ERROR
+        return HTTP_500
     }
 }

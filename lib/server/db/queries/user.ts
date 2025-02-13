@@ -12,7 +12,7 @@ function generateUserId() {
     return id
 }
 
-export async function createUser(data: Omit<schema.User, "id">) {
+export async function createUser(data: Pick<schema.User, "googleId" | "email" | "passwordHash">) {
     const id = generateUserId()
     return execute('insert user', async () => {
         await db.insert(schema.user).values({ ...data, id })
@@ -37,6 +37,12 @@ export async function deleteUser({ id }: Pick<schema.User, "id">) {
 export async function getUser({ id }: Pick<schema.User, "id">) {
     return execute(`get user ${id}`, async () => {
         return await db.query.user.findFirst({ where: eq(schema.user.id, id), columns: { id: true, email: true } })
+    })
+}
+
+export async function getUserByGoogleId({ googleId }: Pick<schema.User, "googleId">) {
+    return execute(`get user ${googleId}`, async () => {
+        return await db.query.user.findFirst({ where: eq(schema.user.googleId, googleId!), columns: { id: true, email: true } })
     })
 }
 

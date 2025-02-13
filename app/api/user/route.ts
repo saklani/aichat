@@ -1,37 +1,48 @@
-import { checkSession } from "@/lib/server/auth";
-import { NextRequest, NextResponse } from "next/server";
-import { INTERNAL_SERVER_ERROR, NOT_FOUND, UNAUTHORIZED } from "../next-response";
+import { withAuth } from "@/lib/server/api/middleware";
+import { GetUserResponseSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 
-export async function GET(request: NextRequest) {
-    try {
-        const session = await checkSession(request)
-        if (!session) {
-            return UNAUTHORIZED
-        }
-        const { id: userId } = session
-        const user = await queries.getUser({ id: userId })
+/**
+ * GET /api/user
+ * Retrieves the current user's profile
+ */
+export async function GET() {
+    return withAuth(async (userId) => {
+        const user = await queries.getUser({ id: userId });
+
         if (!user) {
-            return NOT_FOUND
+            return {
+                error: "User not found",
+                status: 404
+            };
         }
-        return NextResponse.json(user, { status: 200 })
-    } catch (error) {
-        console.error(error)
-        return INTERNAL_SERVER_ERROR
-    }
+
+        // Validate user data against schema
+        const validatedUser = GetUserResponseSchema.safeParse(user);
+        if (!validatedUser.success) {
+            console.error("[Data Validation Error]", validatedUser.error);
+            return {
+                error: "Invalid user data format",
+                status: 500
+            };
+        }
+        return {
+            data: validatedUser.data,
+            status: 200
+        };
+    });
 }
 
-export async function DELETE(request: NextRequest) {
-    try {
-        const session = await checkSession(request)
-        if (!session) {
-            return UNAUTHORIZED
-        }
-        const { id: userId } = session
-        await queries.deleteUser({ id: userId })
-        return NextResponse.json({}, { status: 200 })
-    } catch (error) {
-        console.error(error)
-        return INTERNAL_SERVER_ERROR
-    }
+/**
+ * DELETE /api/user
+ * Deletes the current user's account
+ */
+export async function DELETE() {
+    return withAuth(async (userId) => {
+        await queries.deleteUser({ id: userId });
+        return {
+            data: { success: true },
+            status: 200
+        };
+    });
 }

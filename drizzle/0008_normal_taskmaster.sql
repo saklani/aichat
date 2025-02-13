@@ -1,1 +1,0 @@
-ALTER TABLE `object` ADD `status` text DEFAULT 'not-indexed' NOT NULL;

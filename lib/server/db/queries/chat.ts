@@ -4,7 +4,7 @@ import * as schema from "../schema";
 import { execute } from "./utils";
 
 
-export async function createChat({ id, ...rest }: Omit<schema.Chat, "createdAt">) {
+export async function createChat({ id, ...rest }: Pick<schema.Chat, "id" | "title" | "userId">) {
     return execute(`create chat: ${id}`, async () => {
         await db.insert(schema.chat).values({ id, ...rest })
         return id

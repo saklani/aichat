@@ -1,2 +1,0 @@
-ALTER TABLE `messages` RENAME COLUMN "chatId" TO "chat_id";--> statement-breakpoint
-ALTER TABLE `messages` ALTER COLUMN "chat_id" TO "chat_id" text NOT NULL REFERENCES chat(id) ON DELETE no action ON UPDATE no action;

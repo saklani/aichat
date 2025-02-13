@@ -21,3 +21,5 @@ export async function generateTitleFromUserMessage({ message }: { message: strin
 
   return title;
 }
+
+export type ComponentStatus = 'idle' | 'pending' | 'error' | 'success'

@@ -6,8 +6,9 @@ export function Payment() {
             <h1 className="title">Upgrade Plan</h1>
             <ul className="list-disc">
                 <li className="text-sm">Get 2000 messages per month</li>
-                <li className="text-sm">Access Premium AI models</li>
-                <li className="text-sm">Prioriy Support</li>
+                <li className="text-sm">Upto 5 GB data storage </li>
+                <li className="text-sm">Access premium AI models</li>
+                <li className="text-sm">Priority Support</li>
             </ul>
             <Button disabled={true}>Coming Soon</Button>
         </div>

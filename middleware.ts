@@ -1,45 +1,30 @@
-import * as auth from "@/lib/server/auth"
-import { NextRequest, NextResponse } from 'next/server'
+import { auth } from "@/auth"
+import { NextRequest, NextResponse } from "next/server"
 
 
-export async function middleware(request: NextRequest) {
-    const sessionToken = await auth.getSession()
-    switch (request.nextUrl.pathname) {
-        case "/login":
-        case "/register":
-        case "/forgot-password":
-            {
-                if (sessionToken) {
-                    const { session } = await auth.validateSessionToken(sessionToken.value)
-                    if (session) {
-                        return NextResponse.redirect(new URL('/chat', request.nextUrl))
-                    }
-                }
-                return NextResponse.next();
-            }
-        case "/chat":
-        case "/settings":
-            {
-                if (!sessionToken) {
-                    return NextResponse.redirect(new URL("/login", request.nextUrl))
-                }
-                return NextResponse.next();
-            }
-        default:
-            return NextResponse.next();
+function handleRedirection(req: NextRequest,
+    redirectTo: string,
+    condition: boolean) {
+    if (condition) {
+        return NextResponse.redirect(new URL(redirectTo, req.nextUrl.origin));
     }
+    return NextResponse.next()
 }
 
+export default auth((req) => {
+    if (req.nextUrl.pathname.startsWith("/chat")
+        || req.nextUrl.pathname.startsWith("/settings")
+    ) {
+        return handleRedirection(req, "/login", !req.auth);
+    }
+    if (req.nextUrl.pathname.startsWith("/login")
+        || req.nextUrl.pathname.startsWith("/register")
+    ) {
+        return handleRedirection(req, "/chat", !!req.auth);
+    }
+    return NextResponse.next()
+});
 
 export const config = {
-    matcher: [
-        /*
-         * Match all request paths except for the ones starting with:
-         * - api (API routes)
-         * - _next/static (static files)
-         * - _next/image (image optimization files)
-         * - favicon.ico (favicon file)
-         */
-        "/((?!api|_next/static|_next/image|favicon.ico).*)",
-    ],
-};
+    matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+}

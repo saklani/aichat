@@ -1,1 +1,0 @@
-ALTER TABLE `object` ADD `location` text NOT NULL;

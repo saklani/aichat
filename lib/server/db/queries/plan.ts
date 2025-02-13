@@ -4,13 +4,25 @@ import * as schema from "../schema";
 import { execute } from "./utils";
 
 
+/**
+ * Creates a default free plan for new users
+*/
 export async function createPlan({ userId }: Pick<schema.Plan, "userId">) {
     return execute(`create plan of user ${userId}`, async () => {
-        await db.insert(schema.plan).values({ userId })
+        await db.insert(schema.plan).values({
+            userId,
+            type: "free" as const,
+            messageUsage: 0,
+            messageLimit: 200,
+            storageUsage: 0,
+            storageLimit: 104857600, // 100MB
+            startDate: new Date(),
+            isActive: true
+        })
     })
 }
 
-export async function updatePlan({ userId, ...rest }: schema.Plan) {
+export async function updatePlan({ userId, ...rest }: Pick<schema.Plan, "userId" | "type" | "messageLimit" | "storageLimit">) {
     return execute(`update plan of user ${userId}`, async () => {
         await db.update(schema.plan).set(rest).where(eq(schema.user.id, userId))
     })

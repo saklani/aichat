@@ -1,16 +1,10 @@
-"use client"
+
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarFooter, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { User } from "@/lib/client/types";
-import { useQuery } from "@tanstack/react-query";
-import { ChevronUp, User2 } from "lucide-react";
-import { LogoutButton } from "./logout";
+import { Logout } from "./logout";
+import { UserMenu } from "./user-menu";
 
 export function Footer() {
-  const { data: user } = useQuery<User>({
-    queryKey: ["user"], 
-    queryFn: () => fetch("/api/user").then(res => res.json())
-  })
   return (
     <SidebarFooter>
       <SidebarMenu>
@@ -18,9 +12,7 @@ export function Footer() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <SidebarMenuButton>
-                <User2 />
-                {user?.email ?? ""}
-                <ChevronUp className="ml-auto" />
+                <UserMenu />
               </SidebarMenuButton>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -30,7 +22,7 @@ export function Footer() {
               <DropdownMenuItem asChild>
                 <a href="/settings"><span>Settings</span></a>
               </DropdownMenuItem>
-              <LogoutButton />
+              <Logout />
             </DropdownMenuContent>
           </DropdownMenu>
         </SidebarMenuItem>

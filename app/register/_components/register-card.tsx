@@ -1,19 +1,22 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import Link from "next/link"
-import { RegisterForm } from "./register-form"
+import { ProviderLogin } from "@/components/login-provider"
+import { ProviderDataGoogle } from "@/components/google-data"
 
 export function RegisterCard() {
     return (
-        <Card className="flex flex-col w-full h-[calc(100vh-128px)] py-[12px] max-w-md justify-between">
-            <CardHeader className="mt-[24px]">
+        <Card className="flex flex-col items-stretch w-full max-w-[360px] justify-between">
+            <CardHeader className="mt-[16px] items-center">
                 <h1 className="title">Register</h1>
-                <h2 className="subtitle mb-[24px]">Create your account</h2>
+                <h2 className="subtitle">Create your account</h2>
             </CardHeader>
-            <CardContent className="h-[350px]">
-                <RegisterForm />
+            <CardContent className="flex flex-col gap-6 items-stretch py-6">
+                <ProviderLogin provider="google">
+                    <ProviderDataGoogle />
+                </ProviderLogin>
             </CardContent>
-            <CardFooter>
-                <p className="info max-w-md w-full">Already have an account? <Link className="text-blue-700 hover:underline" href="/login">Login</Link></p>
+            <CardFooter className="justify-center">
+                <p className="info">Already have an account? <Link className="text-blue-700 hover:underline" href="/login">Login</Link></p>
             </CardFooter>
         </Card>
     )

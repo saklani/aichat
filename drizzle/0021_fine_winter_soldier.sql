@@ -1,1 +1,0 @@
-ALTER TABLE `messages` ADD `role` text DEFAULT 'user' NOT NULL;

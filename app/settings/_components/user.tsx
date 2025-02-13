@@ -1,22 +1,29 @@
-"use client"
+"use client";
 import {
     Avatar,
     AvatarFallback
-} from "@/components/ui/avatar"
-import type { User } from "@/lib/client/types"
-import { useQuery } from "@tanstack/react-query"
+} from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { GetUser } from "@/lib/client/types";
+import { useQuery } from "@tanstack/react-query";
 
 export function User() {
-    const { data: user } = useQuery<User>({
+    const {  data: response } = useQuery<GetUser>({
         queryKey: ["user"],
-        queryFn: () => fetch("/api/user").then(res => res.json())
-    })
+        queryFn: () => fetch("/api/user").then(res => res.json()),
+    });
+
     return (
-        <div className="flex flex-col items-center gap-[8px] py-[12px] w-full h-[150px]">
+        <div className="flex flex-col items-center gap-2 py-3 w-full">
             <Avatar className="w-[100px] h-[100px] border">
-                <AvatarFallback>{user?.email[0]}</AvatarFallback>
+                <AvatarFallback>
+                    {response?.data.email?.at(0) ?? ""}
+                </AvatarFallback>
             </Avatar>
-            <p className="text-xs">{user?.email}</p>
+            <div className="h-[25px] flex items-center">
+                {response && response.data ? <p className="text-xs">{response.data.email}</p> :
+                    <Skeleton className="w-full h-[20px]" />}
+            </div>
         </div>
-    )
+    );
 }
