@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { withAuth } from "@/lib/server/api/middleware";
-import { HTTP_400, HTTP_401, HTTP_500 } from "@/lib/server/api/response";
+import { createResponse, HTTP_400, HTTP_401, HTTP_429, HTTP_500 } from "@/lib/server/api/response";
 import { GetChatsResponseSchema, PostRequestSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import { generateTitleFromUserMessage } from '@/lib/utils';
@@ -37,6 +37,14 @@ export async function GET() {
     });
 }
 
+
+
+
+async function LimitReached({ userId }: { userId: string }) {
+    const plan = await queries.getPlan({ userId })
+    return (plan && plan.messageUsage >= plan.messageLimit)
+}
+
 /**
  * POST /api/chats
  * Creates a new chat or adds a message to an existing chat
@@ -46,9 +54,13 @@ export async function POST(request: NextRequest) {
     if (!session?.user?.id) {
         return HTTP_401;
     }
-
     try {
-        const userId = session.user.id
+        const userId = session.user.id        
+        const limit = await LimitReached({ userId })
+        if (limit) {
+            return createResponse({error: "Message limit reached", status: 429});
+        }
+
         const body = await request.json();
         const validatedInput = PostRequestSchema.safeParse(body);
 
@@ -78,6 +90,8 @@ export async function POST(request: NextRequest) {
 
         // Save user message
         const messageId = randomUUID();
+
+        await queries.IncrementUsage({ chatId: id, userId });
         await queries.createMessage({
             ...lastMessage,
             chatId: id,

@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 export function Back() {
     const router = useRouter()
     return (
-        <Button className="gap-[4px]" variant={"ghost"} onClick={() => router.back()}>
+        <Button className="flex gap-[4px] items-center" variant={"ghost"} onClick={() => router.back()}>
             <ArrowLeft />
-            Back
+            <p className="pt-[1px]">Back</p>
         </Button>
     )
 }

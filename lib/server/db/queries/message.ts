@@ -7,8 +7,6 @@ import { execute } from "./utils";
 export async function createMessage({chatId, ...rest}: Pick<schema.Message, "id" | "role" | "chatId" | "content">) {
     return execute('create message', async () => {
         const res = await db.insert(schema.message).values({chatId, ...rest}).returning()
-        await db.update(schema.chat).set({lastMessageAt: new Date()}).where(eq(schema.chat.id, chatId))
-        await db.update(schema.plan).set({messageUsage: sql`${schema.plan.messageUsage} + 1`})
         return res[0].id
     })
 }

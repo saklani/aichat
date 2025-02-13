@@ -42,12 +42,21 @@ export async function getPlan({ userId }: Pick<schema.Plan, "userId">) {
 }
 
 
+export async function IncrementUsage({ chatId, userId }: { chatId: string; userId: string }) {
+    return execute(
+        `check and increment`,
+        async () => {
+            await db.update(schema.chat).set({ lastMessageAt: new Date() }).where(eq(schema.chat.id, chatId))
+            await db.update(schema.plan).set({ messageUsage: sql`${schema.plan.messageUsage} + 1` })
+        });
+}
+
 export async function resetPlan() {
     return execute(
         `reseting plans`,
-         () =>  db.update(schema.plan).set({
+        () => db.update(schema.plan).set({
             startDate: sql`(unixepoch())`,
             endDate: sql`(unixepoch() + 28 * 24 * 60 * 60)`
-        }).where(lt(schema.plan.endDate,  sql`(unixepoch())`))
+        }).where(lt(schema.plan.endDate, sql`(unixepoch())`))
     )
 }

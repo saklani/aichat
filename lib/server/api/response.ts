@@ -19,5 +19,6 @@ export const ZOD_BAD_REQUEST = (error: Record<string, any>) => createResponse({ 
 export const HTTP_400 = createResponse({ error: 'Bad Request', status: 400 });
 export const HTTP_404 = createResponse({ error: 'Not Found', status: 404 });
 export const HTTP_409 = createResponse({ error: 'Conflict', status: 409 });
-export const HTTP_401  = createResponse({ error: 'Unauthorized', status: 401 });
+export const HTTP_401 = createResponse({ error: 'Unauthorized', status: 401 });
+export const HTTP_429 = createResponse({ error: 'Too many requests', status: 429 });
 export const HTTP_500 = createResponse({ error: "Internal server error", status: 500 });

@@ -63,7 +63,7 @@ body {
     @apply bg-background text-foreground;
   }
   .title {
-    @apply text-[28.43px] font-semibold tracking-tight text-text-title;
+    @apply text-[28.43px] font-semibold tracking-tight text-text-title mb-1;
   }
   .subtitle {
     @apply text-[12.003px] text-text-subtitle font-semibold;

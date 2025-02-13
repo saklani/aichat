@@ -7,6 +7,7 @@ import { Sparkles } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { Markdown } from "./markdown"
 import { SwitchModels } from "./models"
+import { toast } from "sonner"
 
 function UserMessage({ content }: { content: string }) {
     return (
@@ -53,6 +54,9 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
                 window.history.replaceState(null, '', `/chat/${id}`);
                 queryClient.invalidateQueries({ queryKey: ["chats"] })
             }
+        },
+        onError: (error) => {
+            toast(JSON.parse(error.message)["error"])
         },
         body: { model }
     });
