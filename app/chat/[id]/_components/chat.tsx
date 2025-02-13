@@ -74,7 +74,7 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
                         ))}
                 </div>
                 <div className="w-full h-[108px]">
-                    <div className="border-t border-x border-input w-full p-[4px] pt-0 rounded-t-md">
+                    <div className="border-t border-x border-input w-full p-[4px] pt-0 rounded-t-lg group">
                         <form onSubmit={handleSubmit}>
                             <Textarea
                                 className="w-full resize-none h-[72px]"
@@ -92,7 +92,6 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
                         </form>
                         <div className="flex h-[32px] px-3 gap-[2px]">
                             <SwitchModels />
-                            {/* <FileDropdown /> */}
                         </div>
                     </div>
                 </div>

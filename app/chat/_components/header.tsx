@@ -1,7 +1,7 @@
 "use client"
 
 import { SidebarHeader, SidebarGroup, SidebarGroupLabel, SidebarGroupAction } from "@/components/ui/sidebar";
-import { Plus } from "lucide-react";
+import { Plus  } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export function Header() {
@@ -15,8 +15,7 @@ export function Header() {
                     router.refresh() // next.js seems to not re-render unless refreshed in production
                     router.push("/chat")
                 }}>
-                    <Plus />
-                    <span className="sr-only">New Chat</span>
+                    <Plus color="black" strokeWidth={0.9} /> <span className="sr-only">New Chat</span>
                 </SidebarGroupAction>
             </SidebarGroup>
         </SidebarHeader>

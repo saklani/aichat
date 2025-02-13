@@ -37,12 +37,13 @@ export function Content() {
                         {
                             response && response.data && response.data.map((chat) => (
                                 <SidebarMenuItem key={chat.id} className={pathname.split('/').at(-1) === chat.id ? "bg-sidebar-select" : ""}>
-                                    <SidebarMenuButton onClick={() =>
+                                    <SidebarMenuButton 
+                                    onClick={() =>
                                         router.push(`/chat/${chat.id}`)
                                     }>
                                         <span>{chat.title}</span>
                                     </SidebarMenuButton>
-                                    <SidebarMenuAction>
+                                    <SidebarMenuAction showOnHover={true}>
                                         <Options id={chat.id} />
                                     </SidebarMenuAction>
                                 </SidebarMenuItem>
@@ -66,7 +67,7 @@ export function Options({ id }: { id: string }) {
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Ellipsis size={16} />
+                <Ellipsis size={14} />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuItem onClick={() => mutate({ id })}>

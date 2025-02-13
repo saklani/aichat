@@ -61,11 +61,17 @@ export const PostRequestSchema = z.object({
     model: ModelNameEnum
 });
 
+
+
 export const GetChatResponseSchema = z.object({
     id: z.string().uuid(),
     title: z.string(),
     userId: z.string(),
     createdAt: z.date(),
+});
+
+export const GetChatsRequestSchema = z.object({
+    cursor: z.string().uuid().optional(),
 });
 
 export const GetChatsResponseSchema = z.array(GetChatResponseSchema)

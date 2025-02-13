@@ -2,7 +2,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Back } from "./_components/back";
 import { Plan } from "./_components/plan";
 import { User } from "./_components/user";
-import { Payment } from "./_components/payment";
+// import { Payment } from "./_components/payment";
 import { History } from "./_components/history";
 import { DeleteAccount } from "./_components/delete-account";
 import { Logout } from "@/components/logout";
@@ -26,13 +26,13 @@ export default function Page() {
                             <TabsTrigger value="history">History</TabsTrigger>
                         </TabsList>
                         <TabsContent value="account">
-                            <div className="flex flex-col p-[24px] gap-[36px]">
-                                <Payment />
+                            <div className="flex flex-col p-[24px] gap-6">
+                                {/* <Payment /> */}
                                 <DeleteAccount />
                             </div>
                         </TabsContent>
                         <TabsContent value="history">
-                            <div className="flex flex-col p-[24px] gap-[36px]">
+                            <div className="flex flex-col p-[24px] gap-6">
                                 <History />
                             </div>
                         </TabsContent>

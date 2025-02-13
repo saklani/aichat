@@ -16,11 +16,9 @@ import { useRouter } from "next/navigation";
 
 export function DeleteAccount() {
     return (
-        <div className="flex flex-col gap-4">
-            <div className="flex flex-col rounded-md gap-2 items-start max-w-[400px]">
-                <h1 className="title">Danger Zone</h1>
-                <p className="text-sm">Delete account and all associated data</p>
-            </div>
+        <div className="flex flex-col gap-2">
+            <h1 className="title">Danger Zone</h1>
+            <p className="text-sm">Delete account and all associated data</p>
             <DeleteAlert />
         </div>
     )
@@ -38,7 +36,7 @@ export function DeleteAlert() {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button className="w-[200px]" variant={"destructive"}>Delete Account</Button>
+                <Button className="w-[200px] mt-4" variant={"destructive"}>Delete Account</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

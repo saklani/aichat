@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, gt } from "drizzle-orm";
 import { db } from "../db";
 import * as schema from "../schema";
 import { execute } from "./utils";
@@ -37,9 +37,9 @@ export async function getChat({ id, userId }: Pick<schema.Chat, "id" | "userId">
     )
 }
 
-export async function getChatsByUserId({ userId }: Pick<schema.Chat, "userId">) {
+export async function getChatsByUserId({ userId, cursor }: Pick<schema.Chat, "userId"> & {  cursor?: string }) {
     return execute(
         `get all chat of user ${userId}`,
-        () => db.query.chat.findMany({ where: eq(schema.chat.userId, userId), orderBy: desc(schema.chat.createdAt) })
+        () => db.query.chat.findMany({ where: and(eq(schema.chat.userId, userId), cursor ? gt(schema.chat.id, cursor) : undefined), orderBy: desc(schema.chat.lastMessageAt) })
     )
 }
