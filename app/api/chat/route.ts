@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { withAuth } from "@/lib/server/api/middleware";
-import { HTTP_401, HTTP_500 } from "@/lib/server/api/response";
+import { HTTP_400, HTTP_401, HTTP_500 } from "@/lib/server/api/response";
 import { GetChatsResponseSchema, PostRequestSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import { generateTitleFromUserMessage } from '@/lib/utils';
@@ -15,7 +15,7 @@ export const maxDuration = 60;
  * GET /api/chats
  * Retrieves all chats for the current user
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
     return withAuth(async (userId) => {
         const chats = await queries.getChatsByUserId({ userId });
         const validatedChats = GetChatsResponseSchema.safeParse(chats);
@@ -57,10 +57,7 @@ export async function POST(request: NextRequest) {
                 userId,
                 errors: validatedInput.error.flatten()
             });
-            return {
-                error: "Invalid request data",
-                status: 400
-            };
+            return HTTP_400
         }
 
         const { id, messages, model } = validatedInput.data;
@@ -68,10 +65,7 @@ export async function POST(request: NextRequest) {
         const lastMessage = messages.at(-1);
 
         if (!lastMessage) {
-            return {
-                error: "No message provided",
-                status: 400
-            };
+            return HTTP_400
         }
 
         // Create new chat if it doesn't exist

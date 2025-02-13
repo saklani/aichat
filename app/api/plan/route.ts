@@ -8,7 +8,7 @@ import { GetPlanResponseSchema, PutPlanResponseSchema } from "@/lib/server/api/s
  * GET /api/plan
  * Retrieves the current user's subscription plan
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
     return withAuth(async (userId) => {
         const userPlan = await queries.getPlan({ userId })
         const validatedPlan = GetPlanResponseSchema.safeParse(userPlan);
