@@ -14,22 +14,24 @@ export function Plan() {
 
     const usage = response?.data.messageUsage ?? 0
     const limit = response?.data.messageLimit ?? 0
+    const date = response?.data?.endDate ? new Date(response.data.endDate) : null
     return (
         <Card className="w-full">
-            <CardHeader className="gap-[12px] items-start">
+            <CardHeader className="flex-row justify-between">
                 <CardTitle>Usage</CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-[12px] items-start">
                 <Badge className="flex justify-center items-center h-[20px] w-[45px]" variant={"outline"}>{response?.data.type}</Badge>
-                <Progress value={(usage * 100 / limit) } />
+
+            </CardHeader>
+            <CardContent className="flex flex-col gap-2 items-start mt-2">
+                <Progress value={(usage * 100 / limit)} />
                 <div className="flex w-full justify-end">
                     {
-                        !response?.data?
-                        <p className="text-xs text-gray-500">-/-</p>:
-                        <p className="text-xs text-gray-500">{usage}/{limit}</p>
+                        !response?.data ?
+                            <p className="text-xs text-gray-500">-/-</p> :
+                            <p className="text-xs text-gray-500">{usage}/{limit}</p>
                     }
                 </div>
-                <CardDescription className="font-semibold">Resets on 28 February</CardDescription>
+                <CardDescription className="font-semibold">Resets on {date ? date.toLocaleDateString("en-us", {day: "numeric" , month: 'short', year: 'numeric' }): ""}</CardDescription>
             </CardContent>
         </Card>
     )

@@ -110,7 +110,7 @@ export const plan = sqliteTable('plans', {
     storageUsage: integer('storage_usage').notNull().default(0), // in bytes
     storageLimit: integer('storage_limit').notNull().default(104857600), // 100MB in bytes
     startDate: integer('start_date', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    endDate: integer('end_date', { mode: 'timestamp' }),
+    endDate: integer('end_date', { mode: 'timestamp' }).notNull().default(sql`(unixepoch() + 28 * 24 * 60 * 60)`),
     isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
     updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),

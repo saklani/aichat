@@ -39,9 +39,10 @@ export async function GET() {
  * Deletes the current user's account
  */
 export async function DELETE() {
+    await signOut()
     return withAuth(async (userId) => {
         await queries.deleteUser({ id: userId });
-        await signOut()
+  
         return {
             data: { success: true },
             status: 200

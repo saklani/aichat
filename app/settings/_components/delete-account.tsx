@@ -38,7 +38,7 @@ export function DeleteAlert() {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button className="w-[128px]" variant={"destructive"}>Delete Account</Button>
+                <Button className="w-[200px]" variant={"destructive"}>Delete Account</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>

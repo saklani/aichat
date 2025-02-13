@@ -21,8 +21,8 @@ export function User() {
                 </AvatarFallback>
             </Avatar>
             <div className="h-[25px] flex items-center">
-                {response && response.data ? <p className="text-xs">{response.data.email}</p> :
-                    <Skeleton className="w-full h-[20px]" />}
+                {response && response.data ? <p className="text-xs font-semibold">{response.data.email}</p> :
+                    <></>}
             </div>
         </div>
     );

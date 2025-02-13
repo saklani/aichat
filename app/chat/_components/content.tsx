@@ -36,7 +36,7 @@ export function Content() {
                     <SidebarMenu className="overflow-y-scroll">
                         {
                             response && response.data && response.data.map((chat) => (
-                                <SidebarMenuItem key={chat.id} className={pathname.split('/').at(-1) === chat.id ? "bg-slate-200" : ""}>
+                                <SidebarMenuItem key={chat.id} className={pathname.split('/').at(-1) === chat.id ? "bg-sidebar-select" : ""}>
                                     <SidebarMenuButton onClick={() =>
                                         router.push(`/chat/${chat.id}`)
                                     }>
@@ -70,8 +70,8 @@ export function Options({ id }: { id: string }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuItem onClick={() => mutate({ id })}>
-                    <p className="text-sm">Delete</p>
-                    <DropdownMenuShortcut><Delete size={14} /></DropdownMenuShortcut>
+                    <p className="text-2xs text-red-400">Delete</p>
+                    <DropdownMenuShortcut><Delete size={14} className="text-red-400"/></DropdownMenuShortcut>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

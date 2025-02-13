@@ -15,8 +15,8 @@ export default function Page() {
                     <Back />
                     <Logout />
                 </header>
-                <div className="flex flex-col md:flex-row gap-[24px] w-full">
-                    <div className="flex flex-col md:w-1/4 w-full">
+                <div className="flex flex-col md:flex-row gap-4 w-full">
+                    <div className="flex flex-col md:w-1/4 w-full gap-6">
                         <User />
                         <Plan />
                     </div>

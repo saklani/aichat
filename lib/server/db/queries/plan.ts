@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { eq, sql, lt } from "drizzle-orm";
 import { db } from "../db";
 import * as schema from "../schema";
 import { execute } from "./utils";
@@ -38,5 +38,16 @@ export async function getPlan({ userId }: Pick<schema.Plan, "userId">) {
     return execute(
         `get plan of user ${userId}`,
         async () => db.query.plan.findFirst({ where: eq(schema.plan.userId, userId) })
+    )
+}
+
+
+export async function resetPlan() {
+    return execute(
+        `reseting plans`,
+         () =>  db.update(schema.plan).set({
+            startDate: sql`(unixepoch())`,
+            endDate: sql`(unixepoch() + 28 * 24 * 60 * 60)`
+        }).where(lt(schema.plan.endDate,  sql`(unixepoch())`))
     )
 }
