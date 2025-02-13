@@ -8,15 +8,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     providers: [Google],
     session: { strategy: "jwt" },
     callbacks: {
-        async signIn({ user, account }) {
-            if (!user.email || !account?.providerAccountId) {
+        async signIn({ user, account, profile }) {
+            if (!profile?.email || !account?.providerAccountId) {
                 return false
             }
-            const existingUser = await queries.getUserByEmail({email: user.email});
+            const existingUser = await queries.getUserByEmail({email: profile.email});
             if (!existingUser) {
                 // If the user doesn't exist, create a new user
                 user.id = await queries.createUser({
-                    email: user.email,
+                    email: profile.email,
                     googleId: account.providerAccountId,
                     passwordHash: null,
                 });
