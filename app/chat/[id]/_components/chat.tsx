@@ -58,36 +58,38 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
     });
 
     return (
-        <div className="flex flex-col w-full h-screen">
-            <div className="flex flex-col px-[16px] md:px-[48px] p-[24px] overflow-y-scroll pb-[50px] h-[calc(100vh-109px)]">
-                {messages.length === 0 ?
-                    <h1 className="text-2xl">What can I help with?</h1> :
-                    messages.map(m => (
-                        <div key={m.id} className="whitespace-pre-wrap">
-                            {m.role === 'user' ? <UserMessage content={m.content} /> : <AIMessage content={m.content} />}
+        <div className="flex justify-center h-screen">
+            <div className="flex flex-col px-4 max-w-3xl items-stretch w-full">
+                <div className="flex flex-col overflow-y-scroll py-[50px] h-[calc(100vh-109px)]">
+                    {messages.length === 0 ?
+                        <h1 className="text-2xl">What can I help with?</h1> :
+                        messages.map(m => (
+                            <div key={m.id} className="whitespace-pre-wrap">
+                                {m.role === 'user' ? <UserMessage content={m.content} /> : <AIMessage content={m.content} />}
+                            </div>
+                        ))}
+                </div>
+                <div className="w-full h-[108px]">
+                    <div className="border-t border-x border-input w-full p-[4px] pt-0 rounded-t-md">
+                        <form onSubmit={handleSubmit}>
+                            <Textarea
+                                className="w-full resize-none h-[72px]"
+                                value={input}
+                                placeholder="Ask anything"
+                                onChange={handleInputChange}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" && e.shiftKey == false) {
+                                        e.preventDefault();
+                                        //@ts-expect-error comvert to form element
+                                        (e.target.form as HTMLFormElement).requestSubmit();
+                                    }
+                                }}
+                            />
+                        </form>
+                        <div className="flex h-[32px] px-3 gap-[2px]">
+                            <SwitchModels />
+                            {/* <FileDropdown /> */}
                         </div>
-                    ))}
-            </div>
-            <div className="px-[16px] md:px-[24px] h-[108px]">
-                <div className="border-t border-x border-input w-full p-[4px] pt-0 rounded-t-md">
-                    <form onSubmit={handleSubmit}>
-                        <Textarea
-                            className="w-full resize-none h-[72px]"
-                            value={input}
-                            placeholder="Ask anything"
-                            onChange={handleInputChange}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" && e.shiftKey == false) {
-                                    e.preventDefault();
-                                    //@ts-expect-error comvert to form element
-                                    (e.target.form as HTMLFormElement).requestSubmit();
-                                }
-                            }}
-                        />
-                    </form>
-                    <div className="flex h-[32px] px-3 gap-[2px]">
-                        <SwitchModels />
-                        {/* <FileDropdown /> */}
                     </div>
                 </div>
             </div>

@@ -5,12 +5,12 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
     return (
         <SidebarProvider>
-            <div className="flex gap-1 w-full">
+            <div className="flex gap-1 w-screen h-screen">
                 <AppSidebar />
                 <div className="w-[1rem]">
                     <SidebarTrigger className="mt-1" />
                 </div>
-                <div className="w-full">
+                <div className="flex flex-col w-full">
                     {children}
                 </div>
             </div>
