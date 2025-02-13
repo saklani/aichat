@@ -30,7 +30,7 @@ function AIMessage({ content }: { action?: string; content: string; }) {
 }
 
 export function Chat({ id }: { id: string }) {
-    const { data: response1 } = useQuery<GetMessagesResponse>({ queryKey: [`chat-${id}`], queryFn: () => fetch(`/api/chat/${id}/messages`).then(res => res.json()) })
+    const { data: response1 } = useQuery<GetMessagesResponse>({ queryKey: ["chat", id], queryFn: () => fetch(`/api/chat/${id}/messages`).then(res => res.json()) })
     const { data: response2 } = useQuery<GetUserPreferences>({ queryKey: ["preferences"], queryFn: () => fetch("/api/user/preferences").then(res => res.json()) })
 
     if (!response1?.data || !response2?.data) {
@@ -45,7 +45,7 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
     const pathname = usePathname()
     const queryClient = useQueryClient()
 
-    const { messages, input, handleInputChange, handleSubmit } = useChat({
+    const { messages, input, handleInputChange, handleSubmit, isLoading } = useChat({
         id,
         initialMessages,
         onResponse: () => {

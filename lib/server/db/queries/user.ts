@@ -47,7 +47,7 @@ export async function getUserByGoogleId({ googleId }: Pick<schema.User, "googleI
 }
 
 export async function getUserByEmail({ email }: Pick<schema.User, "email">) {
-    return execute(`get user ${email}`, async () => {
+    return execute(`get user by email ${email}`, async () => {
         return await db.query.user.findFirst({ where: eq(schema.user.email, email) })
     })
 }

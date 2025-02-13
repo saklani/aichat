@@ -9,24 +9,29 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     session: { strategy: "jwt" },
     callbacks: {
         async signIn({ user, account, profile }) {
-            if (!profile?.email || !account?.providerAccountId) {
+            try {
+                if (!profile?.email || !account?.providerAccountId) {
+                    return false
+                }
+                const existingUser = await queries.getUserByEmail({ email: profile.email });
+                if (!existingUser) {
+                    // If the user doesn't exist, create a new user
+                    user.id = await queries.createUser({
+                        email: profile.email,
+                        googleId: account.providerAccountId,
+                        passwordHash: null,
+                    });
+
+                    await queries.createPlan({ userId: user.id })
+                    await queries.createUserPreferences({ userId: user.id })
+                } else {
+                    user.id = existingUser.id
+                }
+                return true;
+            } catch (e) {
+                console.error(e)
                 return false
             }
-            const existingUser = await queries.getUserByEmail({email: profile.email});
-            if (!existingUser) {
-                // If the user doesn't exist, create a new user
-                user.id = await queries.createUser({
-                    email: profile.email,
-                    googleId: account.providerAccountId,
-                    passwordHash: null,
-                });
-
-                await queries.createPlan({userId: user.id})
-                await queries.createUserPreferences({userId: user.id})
-            } else {
-                user.id = existingUser.id
-            }
-            return true;
         },
         authorized({ request, auth }) {
             const { pathname } = request.nextUrl

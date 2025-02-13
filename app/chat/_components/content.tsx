@@ -37,7 +37,9 @@ export function Content() {
                         {
                             response && response.data && response.data.map((chat) => (
                                 <SidebarMenuItem key={chat.id} className={pathname.split('/').at(-1) === chat.id ? "bg-slate-200" : ""}>
-                                    <SidebarMenuButton onClick={() => router.push(`/chat/${chat.id}`)}>
+                                    <SidebarMenuButton onClick={() =>
+                                        router.push(`/chat/${chat.id}`)
+                                    }>
                                         <span>{chat.title}</span>
                                     </SidebarMenuButton>
                                     <SidebarMenuAction>
@@ -58,7 +60,7 @@ export function Content() {
 export function Options({ id }: { id: string }) {
     const queryClient = useQueryClient()
     const { mutate } = useMutation({
-        mutationFn: ({ id }: { id: string }) => fetch("/api/chat", { method: "DELETE", body: JSON.stringify({ id }) }),
+        mutationFn: ({ id }: { id: string }) => fetch(`/api/chat/${id}`, { method: "DELETE" }),
         onSuccess: () => queryClient.invalidateQueries({ queryKey: ['chats'] }),
     })
     return (
@@ -67,10 +69,6 @@ export function Options({ id }: { id: string }) {
                 <Ellipsis size={16} />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-                <DropdownMenuItem>
-                    <p className="text-sm">Share</p>
-                    <DropdownMenuShortcut><Share size={14} /></DropdownMenuShortcut>
-                </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => mutate({ id })}>
                     <p className="text-sm">Delete</p>
                     <DropdownMenuShortcut><Delete size={14} /></DropdownMenuShortcut>

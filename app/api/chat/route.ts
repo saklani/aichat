@@ -88,6 +88,7 @@ export async function POST(request: NextRequest) {
         const result = streamText({
             model: openai(model),
             messages,
+            maxSteps: 4,
             onFinish: async ({ text }) => {
                 await queries.createMessage({
                     content: text,
@@ -95,7 +96,7 @@ export async function POST(request: NextRequest) {
                     chatId: id,
                     id: randomUUID()
                 });
-            }
+            },
         });
 
         return result.toDataStreamResponse();

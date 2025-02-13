@@ -4,13 +4,13 @@ import { Footer } from "./footer"
 import { Header } from "./header"
 
 export async function AppSidebar() {
-  
+
   return (
     <Sidebar>
       <Header />
-      <SidebarSeparator/>
+      <SidebarSeparator />
       <Content />
-      <SidebarSeparator/>
+      <SidebarSeparator />
       <Footer />
     </Sidebar>
   )

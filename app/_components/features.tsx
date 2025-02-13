@@ -9,7 +9,7 @@ export function Features() {
             </CardHeader>
             <CardContent>
                 <p className="text-sm text-gray-700">
-                    Retain full control of your data with a fully open-source platform. No lock-in, no hidden code.
+                    Retain full control of your data with a fully open-source platform.
                 </p>
             </CardContent>
         </Card>

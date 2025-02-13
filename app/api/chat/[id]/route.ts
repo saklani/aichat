@@ -28,3 +28,20 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
         };
     });
 }
+
+
+export async function DELETE(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    return withAuth(async (userId) => {
+        const id = (await params).id
+        if (!id) {
+            return { error: "Invalid request data", status: 400 }
+        }
+        await queries.deleteChat({ id, userId });
+    
+        return {
+            data: { success: true },
+            status: 200
+        };
+    });
+}
+
