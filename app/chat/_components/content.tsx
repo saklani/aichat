@@ -20,7 +20,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Delete, Ellipsis, Share } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { GetChats } from "@/lib/client/types"
-import { Skeleton } from "@/components/ui/skeleton"
 
 export function Content() {
 
@@ -68,6 +67,10 @@ function ChatItem({ id, title }: { id: string; title: string; }) {
                         <Ellipsis size={14} />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
+                        <DropdownMenuItem disabled>
+                            <p className="text-2xs">Share</p>
+                            <DropdownMenuShortcut><Share size={14} /></DropdownMenuShortcut>
+                        </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => mutate({ id })}>
                             <p className="text-2xs text-red-400">Delete</p>
                             <DropdownMenuShortcut><Delete size={14} className="text-red-400" /></DropdownMenuShortcut>

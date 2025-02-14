@@ -3,16 +3,16 @@ import { Textarea } from "@/components/ui/textarea"
 import { GetMessages, GetMessagesResponse, GetUserPreferences } from "@/lib/client/types"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useChat } from "ai/react"
-import { Sparkles } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { Markdown } from "./markdown"
 import { SwitchModels } from "./models"
 import { toast } from "sonner"
+import { DataDropdown } from "./data-dropdown"
 
 function UserMessage({ content }: { content: string }) {
     return (
         <div className="flex justify-end w-full">
-            <div className="text-sm max-w-[500px] border py-2 px-4 rounded-full">
+            <div className="text-sm bg-foreground/90 text-background  max-w-[500px] border py-2 px-4 rounded-full">
                 <p>{content}</p>
             </div>
         </div>
@@ -71,7 +71,7 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
                         </div>
                     ))}
             </div>
-            <div className="bg-background fixed bottom-0 z-1 border border-input pt-0 rounded-lg p-1 pt-0  w-[calc(100%-24px)] max-w-3xl ">
+            <div className="bg-background fixed bottom-0 z-1 border border-input pt-0 rounded-lg p-1 pt-0 lg:w-[calc(100%-24px)] w-[500px] max-w-3xl ">
                 <form onSubmit={handleSubmit}>
                     <Textarea
                         className="w-full resize-none h-[72px]"
@@ -89,6 +89,7 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
                 </form>
                 <div className="flex h-[32px] px-3 gap-[2px]">
                     <SwitchModels />
+                    <DataDropdown/>
                 </div>
             </div>
         </div>
