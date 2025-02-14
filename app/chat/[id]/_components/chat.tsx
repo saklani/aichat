@@ -12,7 +12,7 @@ import { toast } from "sonner"
 function UserMessage({ content }: { content: string }) {
     return (
         <div className="flex justify-end w-full">
-            <div className="text-sm max-w-[500px] border py-2 px-4 rounded-xl">
+            <div className="text-sm max-w-[500px] border py-2 px-4 rounded-full">
                 <p>{content}</p>
             </div>
         </div>
@@ -22,8 +22,8 @@ function UserMessage({ content }: { content: string }) {
 function AIMessage({ content }: { action?: string; content: string; }) {
     return (
         <div className="flex w-full py-[24px] gap-[8px]">
-            <div className="flex border p-[8px] h-[40px] w-[40px] rounded-[99px] items-center"><Sparkles size={24} strokeWidth={0.5} /></div>
-            <div className="flex flex-col w-full p-[4px]">
+            <div className="flex border p-[8px] h-[40px] w-[40px] rounded-full items-center"><Sparkles size={24} strokeWidth={0.5} /></div>
+            <div className="flex flex-col w-full py-2 px-6">
                 <Markdown>{content}</Markdown>
             </div>
         </div>
@@ -62,37 +62,35 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
     });
 
     return (
-        <div className="flex justify-center h-screen">
-            <div className="flex flex-col px-4 max-w-3xl items-stretch w-full">
-                <div className="flex flex-col overflow-y-scroll py-[50px] h-[calc(100vh-109px)]">
+        <div className="flex flex-1 justify-center w-full">
+            <div className="flex flex-col flex-1 w-full">
+                <div className="flex flex-col h-[calc(100vh-180px)] overflow-y-auto py-[50px] px-2">
                     {messages.length === 0 ?
                         <h1 className="text-2xl">What can I help with?</h1> :
                         messages.map(m => (
-                            <div key={m.id} className="whitespace-pre-wrap">
+                            <div key={m.id}>
                                 {m.role === 'user' ? <UserMessage content={m.content} /> : <AIMessage content={m.content} />}
                             </div>
                         ))}
                 </div>
-                <div className="w-full h-[108px]">
-                    <div className="border-t border-x border-input w-full p-[4px] pt-0 rounded-t-lg group">
-                        <form onSubmit={handleSubmit}>
-                            <Textarea
-                                className="w-full resize-none h-[72px]"
-                                value={input}
-                                placeholder="Ask anything"
-                                onChange={handleInputChange}
-                                onKeyDown={(e) => {
-                                    if (e.key === "Enter" && e.shiftKey == false) {
-                                        e.preventDefault();
-                                        //@ts-expect-error comvert to form element
-                                        (e.target.form as HTMLFormElement).requestSubmit();
-                                    }
-                                }}
-                            />
-                        </form>
-                        <div className="flex h-[32px] px-3 gap-[2px]">
-                            <SwitchModels />
-                        </div>
+                <div className="border border-input w-full p-[4px] pt-0 rounded-lg group">
+                    <form onSubmit={handleSubmit}>
+                        <Textarea
+                            className="w-full resize-none h-[72px]"
+                            value={input}
+                            placeholder="Ask anything"
+                            onChange={handleInputChange}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter" && e.shiftKey == false) {
+                                    e.preventDefault();
+                                    //@ts-expect-error comvert to form element
+                                    (e.target.form as HTMLFormElement).requestSubmit();
+                                }
+                            }}
+                        />
+                    </form>
+                    <div className="flex h-[32px] px-3 gap-[2px]">
+                        <SwitchModels />
                     </div>
                 </div>
             </div>
