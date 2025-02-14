@@ -2,8 +2,8 @@ import Link from 'next/link';
 import React, { memo } from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
-import {cn} from "@/lib/utils"
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { cn } from "@/lib/utils"
 
 const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
@@ -14,13 +14,12 @@ const components: Partial<Components> = {
       //@ts-ignore
       <SyntaxHighlighter
         {...rest}
-        customStyle={{ "padding": "8px", "fontSize": "12px", "borderRadius": "3px", backgroundColor: "", border: "solid", borderWidth: "1px", borderColor: "lightgray"}}
         PreTag="div"
         children={String(children).replace(/\n$/, '')}
         language={match.at(1)}
       />
     ) : (
-      <code {...rest} className={cn(className, "text-sm")}>
+      <code {...rest} className={cn(className, "text-[14px] bg-gray-500 text-foreground rounded-lg py-[1px] px-2")}>
         {children}
       </code>
     )

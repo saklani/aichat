@@ -1,4 +1,3 @@
-import { signOut } from "@/auth";
 import { withAuth } from "@/lib/server/api/middleware";
 import { GetUserResponseSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
@@ -6,7 +5,7 @@ import { queries } from "@/lib/server/db";
 /**
  * POST /api/file
  */
-export async function GET() {
+export async function POST() {
     return withAuth(async (userId) => {
         const user = await queries.getUser({ id: userId });
 
