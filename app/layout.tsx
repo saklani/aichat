@@ -10,8 +10,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "AI Search",
-  description: "AI Search",
+  title: "Sable",
+  description: "AI chats in one place",
 };
 
 export default function RootLayout({

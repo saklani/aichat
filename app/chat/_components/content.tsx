@@ -20,6 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Delete, Ellipsis, Share } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
 import { GetChats } from "@/lib/client/types"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export function Content() {
     const router = useRouter()
@@ -38,17 +39,14 @@ export function Content() {
                             response && response.data && response.data.map((chat) => (
                                 <SidebarMenuItem key={chat.id} className={pathname.split('/').at(-1) === chat.id ? "bg-sidebar-select" : ""}>
                                     <SidebarMenuButton 
-                                    onClick={() =>
-                                        router.push(`/chat/${chat.id}`)
-                                    }>
+                                    onClick={() => router.push(`/chat/${chat.id}`)}>
                                         <span>{chat.title}</span>
                                     </SidebarMenuButton>
                                     <SidebarMenuAction showOnHover={true}>
                                         <Options id={chat.id} />
                                     </SidebarMenuAction>
                                 </SidebarMenuItem>
-                            )
-                            )
+                            ))
                         }
                     </SidebarMenu>
                 </SidebarGroupContent>

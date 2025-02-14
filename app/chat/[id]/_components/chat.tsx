@@ -12,7 +12,7 @@ import { toast } from "sonner"
 function UserMessage({ content }: { content: string }) {
     return (
         <div className="flex justify-end w-full">
-            <div className="text-sm max-w-[500px] border py-[4px] px-[12px] rounded">
+            <div className="text-sm max-w-[500px] border py-2 px-4 rounded-xl">
                 <p>{content}</p>
             </div>
         </div>
