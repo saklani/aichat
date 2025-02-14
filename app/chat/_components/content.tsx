@@ -33,8 +33,7 @@ export function Content() {
             <SidebarGroup>
                 <SidebarGroupContent>
                     <SidebarMenu className="overflow-y-scroll">
-                        {response && response.data && response.data.map((chat) => (<ChatItem key={chat.id} id={chat.id} title={chat.title} />))
-                        }
+                        {response && response.data && response.data.map((chat) => (<ChatItem key={chat.id} id={chat.id} title={chat.title} />))}
                     </SidebarMenu>
                 </SidebarGroupContent>
             </SidebarGroup>

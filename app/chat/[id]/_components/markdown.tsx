@@ -9,15 +9,15 @@ const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
   code: ({ className, node, children, ...rest }) => {
     const match = /language-(\w+)/.exec(className || '')
-    console.log(match)
     return match ? (
       //@ts-ignore
       <SyntaxHighlighter
         {...rest}
         PreTag="div"
-        children={String(children).replace(/\n$/, '')}
         language={match.at(1)}
-      />
+      >
+        {String(children).replace(/\n$/, '')}
+      </SyntaxHighlighter>
     ) : (
       <code {...rest} className={cn(className, "text-[14px] bg-gray-500 text-foreground rounded-lg py-[1px] px-2")}>
         {children}
