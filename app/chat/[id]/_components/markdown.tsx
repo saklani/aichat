@@ -2,25 +2,46 @@ import Link from 'next/link';
 import React, { memo } from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
+import {cn} from "@/lib/utils"
+
 const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
+  code: ({ className, node, children, ...rest }) => {
+    const match = /language-(\w+)/.exec(className || '')
+    console.log(match)
+    return match ? (
+      //@ts-ignore
+      <SyntaxHighlighter
+        {...rest}
+        customStyle={{ "padding": "8px", "fontSize": "12px", "borderRadius": "3px", backgroundColor: "", border: "solid", borderWidth: "1px", borderColor: "lightgray"}}
+        PreTag="div"
+        children={String(children).replace(/\n$/, '')}
+        language={match.at(1)}
+      />
+    ) : (
+      <code {...rest} className={cn(className, "text-sm")}>
+        {children}
+      </code>
+    )
+  },
   ol: ({ node, children, ...props }) => {
     return (
-      <ol className="list-decimal list-outside ml-4 text-sm" {...props}>
+      <ol className="list-decimal list-outside mx-4 text-sm my-1 p-1" {...props}>
         {children}
       </ol>
     );
   },
   li: ({ node, children, ...props }) => {
     return (
-      <li className="py-1" {...props}>
+      <li className="mx-2 my-3" {...props}>
         {children}
       </li>
     );
   },
   ul: ({ node, children, ...props }) => {
     return (
-      <ul className="list-decimal list-outside ml-4" {...props}>
+      <ul className="list-decimal list-outside mx-4 text-sm my-1 p-1" {...props}>
         {children}
       </ul>
     );
@@ -47,42 +68,42 @@ const components: Partial<Components> = {
   },
   h1: ({ node, children, ...props }) => {
     return (
-      <h1 className="text-3xl font-semibold mt-6 mb-2" {...props}>
+      <h1 className="text-3xl font-semibold mt-5 mb-2" {...props}>
         {children}
       </h1>
     );
   },
   h2: ({ node, children, ...props }) => {
     return (
-      <h2 className="text-2xl font-semibold mt-6 mb-2" {...props}>
+      <h2 className="text-2xl font-semibold mt-5 mb-2" {...props}>
         {children}
       </h2>
     );
   },
   h3: ({ node, children, ...props }) => {
     return (
-      <h3 className="text-xl font-semibold mt-6 mb-2" {...props}>
+      <h3 className="text-xl font-semibold mt-4 mb-2" {...props}>
         {children}
       </h3>
     );
   },
   h4: ({ node, children, ...props }) => {
     return (
-      <h4 className="text-lg font-semibold mt-6 mb-2" {...props}>
+      <h4 className="text-lg font-semibold mt-4 mb-2" {...props}>
         {children}
       </h4>
     );
   },
   h5: ({ node, children, ...props }) => {
     return (
-      <h5 className="text-base font-semibold mt-6 mb-2" {...props}>
+      <h5 className="text-base font-semibold mt-3 mb-2" {...props}>
         {children}
       </h5>
     );
   },
   h6: ({ node, children, ...props }) => {
     return (
-      <h6 className="text-sm font-semibold mt-6 mb-2" {...props}>
+      <h6 className="text-sm font-semibold mt-3 mb-3" {...props}>
         {children}
       </h6>
     );

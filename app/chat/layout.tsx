@@ -7,7 +7,7 @@ export default function Layout({ children }: Readonly<{ children: React.ReactNod
         <SidebarProvider>
             <div className="flex w-screen h-screen">
                 <AppSidebar />
-                <div className="flex flex-col w-full items-center">
+                <div className="flex flex-col items-stretch w-full">
                     {children}
                 </div>
             </div>

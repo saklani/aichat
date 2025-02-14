@@ -1,14 +1,10 @@
+import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
-import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export function ChatHeader() {
     return (
-        <div className="flex gap-3 p-2 items-center border-b w-full">
+        <div className="sticky bg-background top-0 z-10 flex gap-3 p-2 items-center border-b w-full justify-between">
             <SidebarTrigger />
-            <TabsList>
-                <TabsTrigger value="chat">Chat</TabsTrigger>
-                <TabsTrigger value="files" disabled>Files</TabsTrigger>
-            </TabsList>
         </div>
     )
 }

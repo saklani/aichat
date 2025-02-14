@@ -22,7 +22,6 @@ function UserMessage({ content }: { content: string }) {
 function AIMessage({ content }: { action?: string; content: string; }) {
     return (
         <div className="flex w-full py-[24px] gap-[8px]">
-            <div className="flex border p-[8px] h-[40px] w-[40px] rounded-full items-center"><Sparkles size={24} strokeWidth={0.5} /></div>
             <div className="flex flex-col w-full py-2 px-6">
                 <Markdown>{content}</Markdown>
             </div>
@@ -62,36 +61,34 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
     });
 
     return (
-        <div className="flex flex-1 justify-center w-full">
-            <div className="flex flex-col flex-1 w-full">
-                <div className="flex flex-col h-[calc(100vh-180px)] overflow-y-auto py-[50px] px-2">
-                    {messages.length === 0 ?
-                        <h1 className="text-2xl">What can I help with?</h1> :
-                        messages.map(m => (
-                            <div key={m.id}>
-                                {m.role === 'user' ? <UserMessage content={m.content} /> : <AIMessage content={m.content} />}
-                            </div>
-                        ))}
-                </div>
-                <div className="border border-input w-full p-[4px] pt-0 rounded-lg group">
-                    <form onSubmit={handleSubmit}>
-                        <Textarea
-                            className="w-full resize-none h-[72px]"
-                            value={input}
-                            placeholder="Ask anything"
-                            onChange={handleInputChange}
-                            onKeyDown={(e) => {
-                                if (e.key === "Enter" && e.shiftKey == false) {
-                                    e.preventDefault();
-                                    //@ts-expect-error comvert to form element
-                                    (e.target.form as HTMLFormElement).requestSubmit();
-                                }
-                            }}
-                        />
-                    </form>
-                    <div className="flex h-[32px] px-3 gap-[2px]">
-                        <SwitchModels />
-                    </div>
+        <div className="flex flex-col flex-1 w-full items-center">
+            <div className="flex flex-col overflow-y-auto pt-3 pb-[96px] px-2 w-[calc(100%-24px)] max-w-3xl ">
+                {messages.length === 0 ?
+                    <h1 className="text-2xl">What can I help with?</h1> :
+                    messages.map(m => (
+                        <div key={m.id}>
+                            {m.role === 'user' ? <UserMessage content={m.content} /> : <AIMessage content={m.content} />}
+                        </div>
+                    ))}
+            </div>
+            <div className="bg-background fixed bottom-0 z-1 border border-input pt-0 rounded-lg p-1 pt-0  w-[calc(100%-24px)] max-w-3xl ">
+                <form onSubmit={handleSubmit}>
+                    <Textarea
+                        className="w-full resize-none h-[72px]"
+                        value={input}
+                        placeholder="Ask anything"
+                        onChange={handleInputChange}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" && e.shiftKey == false) {
+                                e.preventDefault();
+                                //@ts-expect-error comvert to form element
+                                (e.target.form as HTMLFormElement).requestSubmit();
+                            }
+                        }}
+                    />
+                </form>
+                <div className="flex h-[32px] px-3 gap-[2px]">
+                    <SwitchModels />
                 </div>
             </div>
         </div>
