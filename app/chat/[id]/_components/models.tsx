@@ -1,24 +1,12 @@
 "use client"
 
-import { Check, ChevronsUpDown } from "lucide-react"
-import * as React from "react"
 import { Button } from "@/components/ui/button"
-import {
-  Command,
-  CommandGroup,
-  CommandItem,
-  CommandList
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { GetUserPreferences } from "@/lib/client/types"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import * as React from "react"
 
-const models = [
+const openaiModels = [
   {
     value: "gpt-4o-mini",
     label: "GPT-4o-mini",
@@ -40,7 +28,6 @@ export function SwitchModels() {
   if (!response?.data) {
     return <></>
   }
-
   return <ModelComboBox defaultModel={response?.data.defaultModel} />
 }
 
@@ -50,51 +37,29 @@ function ModelComboBox({ defaultModel }: { defaultModel: string }) {
     mutationFn: (defaultModel: string) => fetch("/api/user/preferences", { method: "PUT", body: JSON.stringify({ defaultModel }) })
   })
 
-  const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState(defaultModel)
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-[150px] justify-between"
-        >
-          {value
-            ? models.find((framework) => framework.value === value)?.label
-            : "Select a model"}
-          <ChevronsUpDown className="opacity-50" />
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button className="w-[90px]" variant={"outline"}>
+          {value}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[250px] p-0">
-        <Command>
-          <CommandList>
-            <CommandGroup>
-              {models.map((framework) => (
-                <CommandItem
-                  key={framework.value}
-                  value={framework.value}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
-                    setOpen(false)
-                    mutate(currentValue)
-                  }}
-                >
-                  {framework.label}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      value === framework.value ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent side="top" className="w-[200px]">
+        <DropdownMenuLabel>Open AI</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        {openaiModels.map(model =>
+          <DropdownMenuItem
+            key={model.value}
+            className={model.value === value ? "bg-foreground/30": ""}
+            onClick={
+              () => {
+                mutate(model.value)
+                setValue(model.value)
+              }
+            }>{model.value}</DropdownMenuItem>)}
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

@@ -26,7 +26,7 @@ function FileUpload() {
 
 function ConnectGoogleDrive() {
     return (
-        <DropdownMenuItem onClick={() => { }}>
+        <DropdownMenuItem onClick={() => { }} disabled>
             <p>Select from Google Drive</p>
         </DropdownMenuItem>
     )

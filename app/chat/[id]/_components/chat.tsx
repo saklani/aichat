@@ -87,7 +87,7 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
                         }}
                     />
                 </form>
-                <div className="flex h-[32px] px-3 gap-[2px]">
+                <div className="flex h-[32px] px-3 gap-1">
                     <SwitchModels />
                     <DataDropdown/>
                 </div>

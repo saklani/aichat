@@ -6,14 +6,14 @@ export async function ChatHeader({id}: {id: string}) {
     return (
         <div className="sticky bg-header top-0 z-10 flex gap-3 p-2 items-center border-b w-full justify-between">
             <SidebarTrigger />
-            <form action={
+            {/* <form action={
                 async () => {
                     "use server"
                     redirect(`/chat/${id}/manage`)
                 }
             }>
-                <Button variant={"ghost"}>Manage</Button>
-            </form>
+                <Button variant={"ghost"} disabled>Manage</Button>
+            </form> */}
         </div>
     )
 }
