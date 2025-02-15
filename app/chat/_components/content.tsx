@@ -43,7 +43,6 @@ export function Content() {
 
 
 function ChatItem({ id, title }: { id: string; title: string; }) {
-
     const pathname = usePathname()
     const router = useRouter()
     const queryClient = useQueryClient()

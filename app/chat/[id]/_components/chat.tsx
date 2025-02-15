@@ -8,8 +8,9 @@ import { Markdown } from "./markdown"
 import { SwitchModels } from "./models"
 import { toast } from "sonner"
 import { DataDropdown } from "./data-dropdown"
+import { memo } from "react"
 
-function UserMessage({ content }: { content: string }) {
+const UserMessage = memo(function ({ content }: { content: string }) {
     return (
         <div className="flex justify-end w-full">
             <div className="text-sm bg-foreground/90 text-background  max-w-[500px] border py-2 px-4 rounded-full">
@@ -17,9 +18,9 @@ function UserMessage({ content }: { content: string }) {
             </div>
         </div>
     )
-}
+})
 
-function AIMessage({ content }: { action?: string; content: string; }) {
+const AIMessage = memo(function ({ content }: { action?: string; content: string; }) {
     return (
         <div className="flex w-full py-[24px] gap-[8px]">
             <div className="flex flex-col w-full py-2 px-6">
@@ -27,7 +28,7 @@ function AIMessage({ content }: { action?: string; content: string; }) {
             </div>
         </div>
     )
-}
+})
 
 export function Chat({ id }: { id: string }) {
     const { data: response1 } = useQuery<GetMessagesResponse>({ queryKey: ["chat", id], queryFn: () => fetch(`/api/chat/${id}/messages`).then(res => res.json()) })
@@ -89,7 +90,7 @@ export function UnmemoizedChat({ id, initialMessages, model }: { id: string, ini
                 </form>
                 <div className="flex h-[32px] px-3 gap-1">
                     <SwitchModels />
-                    <DataDropdown/>
+                    <DataDropdown id={id}/>
                 </div>
             </div>
         </div>

@@ -31,18 +31,24 @@ export function SwitchModels() {
   return <ModelComboBox defaultModel={response?.data.defaultModel} />
 }
 
-function ModelComboBox({ defaultModel }: { defaultModel: string }) {
+const ModelComboBox = React.memo(function ({ defaultModel }: { defaultModel: string }) {
   const { mutate } = useMutation({
     mutationKey: ["preference"],
     mutationFn: (defaultModel: string) => fetch("/api/user/preferences", { method: "PUT", body: JSON.stringify({ defaultModel }) })
   })
 
   const [value, setValue] = React.useState(defaultModel)
+  const handleModelChange = React.useCallback((modelValue: string) => {
+    if (modelValue !== value) {
+      mutate(modelValue)
+      setValue(modelValue)
+    }
+  }, [value, mutate])
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="w-[90px]" variant={"outline"}>
+        <Button className="w-[120px]" variant={"outline"}>
           {value}
         </Button>
       </DropdownMenuTrigger>
@@ -52,14 +58,12 @@ function ModelComboBox({ defaultModel }: { defaultModel: string }) {
         {openaiModels.map(model =>
           <DropdownMenuItem
             key={model.value}
-            className={model.value === value ? "bg-foreground/30": ""}
-            onClick={
-              () => {
-                mutate(model.value)
-                setValue(model.value)
-              }
-            }>{model.value}</DropdownMenuItem>)}
+            className={model.value === value ? "bg-foreground/30" : ""}
+            onClick={() => handleModelChange(model.value)}>
+            {model.value}
+          </DropdownMenuItem>)
+        }
       </DropdownMenuContent>
     </DropdownMenu>
   )
-}
+})
