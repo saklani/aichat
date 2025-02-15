@@ -20,16 +20,14 @@ function FileUpload() {
                 className="hidden"
             />
         </DropdownMenuItem>
-
-
     )
 }
 
 
-function ManageData() {
+function ConnectGoogleDrive() {
     return (
         <DropdownMenuItem onClick={() => { }}>
-            <p>Manage data chat</p>
+            <p>Select from Google Drive</p>
         </DropdownMenuItem>
     )
 }
@@ -37,7 +35,7 @@ function ManageData() {
 export function DataDropdown() {
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger asChild disabled>
+            <DropdownMenuTrigger asChild>
                 <Button variant={"outline"} size={"icon"}>
                     <File />
                     <span className="sr-only">File options</span>
@@ -45,7 +43,7 @@ export function DataDropdown() {
             </DropdownMenuTrigger>
             <DropdownMenuContent side="top" className="w-[200px]">
                 <FileUpload />
-                <ManageData />
+                <ConnectGoogleDrive />
             </DropdownMenuContent>
         </DropdownMenu>
     )
