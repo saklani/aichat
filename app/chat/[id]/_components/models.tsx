@@ -67,3 +67,5 @@ const ModelComboBox = React.memo(function ({ defaultModel }: { defaultModel: str
     </DropdownMenu>
   )
 })
+
+ModelComboBox.displayName = "ModelComboBox"
