@@ -100,3 +100,27 @@ export const GetObjectResponseSchema = z.object({
     createdAt: z.date(),
     updatedAt: z.date(),
 });
+
+
+export const CreateCollectionRequestSchema = z.object({
+    id: z.string().uuid(),
+    name: z.string(),
+    fileIds: z.array(z.string()),
+    userId: z.string(),
+})
+
+export const GetCollectionResponseSchema = z.object({
+    id: z.string(),
+    name: z.string(),
+    fileIds: z.array(z.string()),
+    userId: z.string(),
+    createdAt: z.date(),
+    updatedAt: z.date(),
+})
+
+export const UpdateCollectionRequestSchema = z.object({
+    name: z.string(),
+    fileIds: z.array(z.string()),
+})
+
+export const GetCollectionsResponseSchema = z.array(GetCollectionResponseSchema)

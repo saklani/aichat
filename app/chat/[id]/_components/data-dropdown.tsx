@@ -1,11 +1,10 @@
 "use client"
 
 import { Button } from "@/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useMutation } from "@tanstack/react-query";
 import { File } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { useState } from "react";
 
 function FileUpload({ mutate }: { mutate: ({ body }: { body: FormData }) => void }) {
@@ -15,14 +14,14 @@ function FileUpload({ mutate }: { mutate: ({ body }: { body: FormData }) => void
             <Input
                 id={"input-file"}
                 type="file"
-                onChange={(event) => {
-                    if (event?.target?.files && event?.target?.files[0]) {
-                        console.log(event.target.files[0].name)
-                        const body = new FormData()
-                        body.append("file", event.target.files[0])
-                        mutate({ body: body })
-                    }
-                }}
+                onChange={
+                    (event) => {
+                        if (event?.target?.files && event?.target?.files[0]) {
+                            const body = new FormData()
+                            body.append("file", event.target.files[0])
+                            mutate({ body: body })
+                        }
+                    }}
                 className="hidden"
             />
         </div>
@@ -38,14 +37,14 @@ function ConnectGoogleDrive() {
     )
 }
 
-export function DataDropdown({id}: {id: string}) {
+export function DataDropdown({ id }: { id: string }) {
     const [open, setOpen] = useState(false)
     const { mutate, status } = useMutation({
         mutationKey: ["object-post"],
         mutationFn: async ({ body }: { body: FormData }) => {
             setOpen(false)
             body.append("chat-id", id)
-            await fetch("/api/store/object", { method: "POST", body })
+            await fetch("/api/stores/object", { method: "POST", body })
         }
     })
 

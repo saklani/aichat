@@ -10,11 +10,6 @@ import { randomUUID } from "node:crypto";
  */
 export async function POST(request: NextRequest) {
     return withAuth(async (userId) => {
-        const user = await queries.getUser({ id: userId });
-        if (!user) {
-            return { error: "User not found", status: 404 };
-        }
-
         const formData = await request.formData();
         const file = formData.get('file') as File;
         if (!file) {
