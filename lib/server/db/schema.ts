@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
 import { sql } from 'drizzle-orm/sql'
-import { index, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
+import { customType, index, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
 
 // Type definitions
 type UserRole = 'admin' | 'user'
@@ -135,6 +135,29 @@ export const collection = sqliteTable('collections', {
 }, (table) => [
     index('collection_user_id_idx').on(table.userId),
 ])
+
+
+const float32Array = customType<{
+    data: number[];
+    config: { dimensions: number };
+    configRequired: true;
+    driverData: Buffer;
+}>({
+    dataType(config) {
+        return `F32_BLOB(${config.dimensions})`;
+    },
+    fromDriver(value: Buffer) {
+        return Array.from(new Float32Array(value.buffer));
+    },
+    toDriver(value: number[]) {
+        return sql`vector32(${JSON.stringify(value)})`;
+    },
+});
+
+export const vectorTable = sqliteTable("vector_table", {
+    id: integer("id").primaryKey(),
+    vector: float32Array("vector", { dimensions: 3 }),
+});
 
 // Type exports
 export type User = typeof user.$inferSelect

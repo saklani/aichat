@@ -13,18 +13,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { memo } from "react";
 
-export function DeleteAccount() {
+export const DeleteAccount = memo(function () {
     return (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col items-start gap-2">
             <h1 className="title">Danger Zone</h1>
             <p className="text-sm">Delete account and all associated data</p>
             <DeleteAlert />
         </div>
     )
-}
+})
 
-export function DeleteAlert() {
+DeleteAccount.displayName = "DeleteAccount"
+
+const DeleteAlert = memo(function () {
     const router = useRouter()
     const { mutate } = useMutation({
         mutationFn: () => fetch("/api/user", { method: "DELETE" }),
@@ -36,7 +39,7 @@ export function DeleteAlert() {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button className="w-[200px] mt-4" variant={"destructive"}>Delete Account</Button>
+                <Button className="mt-4" variant={"destructive"}>Delete Account</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
@@ -53,4 +56,6 @@ export function DeleteAlert() {
             </AlertDialogContent>
         </AlertDialog>
     )
-}
+})
+
+DeleteAlert.displayName = "DeleteAlert"

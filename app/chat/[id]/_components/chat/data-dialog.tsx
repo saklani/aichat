@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { GetObjectsResponse } from "@/lib/client/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { File, Loader2, Upload } from "lucide-react";
+import React from "react";
 import { toast } from "sonner";
 
 interface FileUploadProps {
@@ -54,7 +55,7 @@ function FileList({ id }: { id: string }) {
     })
 
     return (
-        <div className="flex flex-col items-center gap-2 h-[50vh] overflow-y-auto border p-2">
+        <div className="flex flex-col items-center gap-2 h-[40vh] overflow-y-auto border p-2">
            {isLoading ? <Loader2 className="animate-spin mt-12" />
             : response?.data && response.data.length > 0 ? response.data.map((file) => (
                 <div key={file.id} className="flex flex-col gap-2 w-full">
@@ -67,11 +68,8 @@ function FileList({ id }: { id: string }) {
     )
 }
 
-interface DataDropdownProps {
-    id: string;
-}
 
-export function DataDialog({ id }: DataDropdownProps) {
+function NonMemoizedDataDialog({ id }: DataDropdownProps) {
     const queryClient = useQueryClient()
     const { mutate, status, } = useMutation({
         mutationKey: ["object-post", id],
@@ -120,3 +118,11 @@ export function DataDialog({ id }: DataDropdownProps) {
     );
 }
 
+interface DataDropdownProps {
+    id: string;
+}
+
+
+export const DataDialog = React.memo(({ id }: DataDropdownProps) => <NonMemoizedDataDialog id={id} />)
+
+DataDialog.displayName = "DataDialog"

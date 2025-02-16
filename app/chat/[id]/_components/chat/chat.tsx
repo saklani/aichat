@@ -3,10 +3,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { GetMessages } from "@/lib/client/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChat } from "ai/react";
-import { usePathname } from "next/navigation";
 import { toast } from "sonner";
-
-import { useChatData } from '../../hooks/useChatData'; // Adjust the import path if necessary
+import { useChatData } from '../../hooks/useChatData';
 import { AIMessage } from "./ai-message";
 import { DataDialog } from "./data-dialog";
 import { SwitchModels } from "./models";
@@ -16,7 +14,7 @@ export function Chat({ id }: { id: string }) {
     const { messages, preferences, isLoading, isError } = useChatData(id);
 
     if (isLoading) return <></>;
-    if (isError || !preferences) return <div>Error loading chat data.</div>;
+    if (isError || !preferences) return <div className="text-destructive">Error loading chat data.</div>;
 
     return (
         <NonMemoizedChat
@@ -28,13 +26,12 @@ export function Chat({ id }: { id: string }) {
 }
 
 export function NonMemoizedChat({ id, initialMessages, model }: { id: string, initialMessages: GetMessages, model: string }) {
-    const pathname = usePathname()
     const queryClient = useQueryClient()
 
     const { messages, input, handleInputChange, handleSubmit } = useChat({
         id,
         initialMessages,
-        onResponse: async () => queryClient.invalidateQueries({ queryKey: ["chats"] }),
+        onResponse: () => queryClient.invalidateQueries({ queryKey: ["chats"] }),
         onError: (error) => {
             console.error(error)
             toast(JSON.parse(error.message)["error"])
