@@ -8,36 +8,30 @@ import { execute } from "./utils";
  * Creates a default free plan for new users
 */
 export async function createUserPlan({ userId }: Pick<schema.Plan, "userId">) {
-    return execute(`create plan of user ${userId}`, async () => {
-        await db.insert(schema.plans).values({
-            userId,
-            type: "free" as const,
-            messageUsage: 0,
-            messageLimit: 200,
-            storageUsage: 0,
-            storageLimit: 104857600, // 100MB
-            startDate: new Date(),
-            isActive: true
-        })
-    })
+    return execute(`create plan of user ${userId}`, () => db.insert(schema.plans).values({
+        userId,
+        type: "free" as const,
+        messageUsage: 0,
+        messageLimit: 200,
+        storageUsage: 0,
+        storageLimit: 104857600, // 100MB
+        startDate: new Date(),
+        isActive: true
+    }).returning().then(res => res.at(0)))
 }
 
 export async function updatePlan({ userId, ...rest }: Pick<schema.Plan, "userId" | "type" | "messageLimit" | "storageLimit">) {
-    return execute(`update plan of user ${userId}`, async () => {
-        await db.update(schema.plans).set(rest).where(eq(schema.users.id, userId))
-    })
+    return execute(`update plan of user ${userId}`, () => db.update(schema.plans).set(rest).where(eq(schema.users.id, userId)).returning().then(res => res.at(0)))
 }
 
 export async function deletePlan({ userId }: Pick<schema.Plan, "id" | "userId">) {
-    return execute(`delete plan of user ${userId}`, async () => {
-        await db.delete(schema.plans).where(eq(schema.plans.userId, userId))
-    })
+    return execute(`delete plan of user ${userId}`, () => db.delete(schema.plans).where(eq(schema.plans.userId, userId)))
 }
 
 export async function getUserPlan({ userId }: Pick<schema.Plan, "userId">) {
     return execute(
         `get plan of user ${userId}`,
-        async () => db.query.plans.findFirst({ where: eq(schema.plans.userId, userId) })
+        () => db.query.plans.findFirst({ where: eq(schema.plans.userId, userId) })
     )
 }
 

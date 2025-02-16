@@ -5,32 +5,23 @@ import { execute } from "./utils";
 
 
 export async function createObject({ id, ...rest }: Omit<schema.Object, "createdAt" | "status" | "updatedAt" | "url">) {
-    return execute(`create object: ${id}`, async () => {
-        await db.insert(schema.objects).values({ id, ...rest })
-        return id
-    })
+    return execute(`create object: ${id}`, () => db.insert(schema.objects).values({ id, ...rest }).returning().then(res => res.at(0)))
 }
 
 export async function updateObject({ id, ...rest }: Pick<schema.Object, "id"> & Partial<schema.Object>) {
-    return execute(`update object: ${id}`, async () => (await db.update(schema.objects).set({ ...rest }).where(eq(schema.objects.id, id)).returning()).at(0))
+    return execute(`update object: ${id}`, () => db.update(schema.objects).set({ ...rest }).where(eq(schema.objects.id, id)).returning().then(res => res.at(0)))
 }
 
 export async function deleteObject({ id, userId }: Pick<schema.Object, "id" | "userId">) {
-    return execute(`delete object ${id} of user ${userId}`, async () => {
-        await db.delete(schema.objects).where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId)))
-    })
+    return execute(`delete object ${id} of user ${userId}`, () => db.delete(schema.objects).where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId))))
 }
 
 export async function getObject({ id, userId }: Pick<schema.Object, "id" | "userId">) {
-    return execute(`get object ${id} of user ${userId}`, async () => {
-        return db.select().from(schema.objects).where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId)))
-    })
+    return execute(`get object ${id} of user ${userId}`, () => db.select().from(schema.objects).where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId))))
 }
 
 export async function getObjectsByUserId({ userId }: Pick<schema.Object, "userId">) {
-    return execute(`get all object of user ${userId}`, async () => {
-        return db.select().from(schema.objects).where(eq(schema.objects.userId, userId)).orderBy(desc(schema.objects.createdAt))
-    })
+    return execute(`get all object of user ${userId}`, () => db.select().from(schema.objects).where(eq(schema.objects.userId, userId)).orderBy(desc(schema.objects.createdAt)))
 }
 
 // TODO: Make less confusing

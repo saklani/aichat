@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Back } from "./_components/back";
-import { Plan } from "./_components/plan";
+import { Usage } from "./_components/usage";
 import { User } from "./_components/user";
 import { History } from "./_components/history";
 import { DeleteAccount } from "./_components/delete-account";
@@ -17,7 +17,7 @@ export default function Page() {
                 <div className="flex flex-col md:flex-row gap-4 w-full">
                     <div className="flex flex-col md:w-1/4 w-full gap-6">
                         <User />
-                        <Plan />
+                        <Usage />
                     </div>
                     <Tabs defaultValue="account" className="md:w-3/4 w-full">
                         <TabsList className="grid grid-cols-2 w-full max-w-[300px]">

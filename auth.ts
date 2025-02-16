@@ -11,16 +11,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         async signIn({ user, account, profile }) {
             try {
                 if (!profile?.email || !account?.providerAccountId) {
+                    console.error("Missing profile or account")
                     return false
                 }
                 const existingUser = await queries.getUserByEmail({ email: profile.email });
                 if (!existingUser) {
                     // If the user doesn't exist, create a new user
-                    user.id = await queries.createUser({
+                    const dbUser = await queries.createUser({
                         email: profile.email,
                         googleId: account.providerAccountId,
                         passwordHash: null,
                     });
+                    if (!dbUser) {
+                        console.error("Failed to create user")
+                        return false
+                    }
+                    user.id = dbUser.id
 
                     await queries.createUserPlan({ userId: user.id })
                     await queries.createUserPreferences({ userId: user.id })

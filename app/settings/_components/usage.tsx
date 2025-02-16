@@ -6,20 +6,21 @@ import { Progress } from "@/components/ui/progress"
 import type { GetPlan } from "@/lib/client/types"
 import { useQuery } from "@tanstack/react-query"
 
-export function Plan() {
+export function Usage() {
     const { data: response } = useQuery<GetPlan>({
         queryKey: ["plan"],
         queryFn: () => fetch("/api/plan").then(res => res.json())
     })
 
-    const usage = response?.data.messageUsage ?? 0
-    const limit = response?.data.messageLimit ?? 0
+   
+    const usage = response?.data?.messageUsage ?? 0
+    const limit = response?.data?.messageLimit ?? 0
     const date = response?.data?.endDate ? new Date(response.data.endDate) : null
     return (
         <Card className="w-full">
             <CardHeader className="flex-row justify-between">
                 <CardTitle>Usage</CardTitle>
-                <Badge className="flex justify-center items-center h-[20px] w-[45px]" variant={"outline"}>{response?.data.type}</Badge>
+                <Badge className="flex justify-center items-center h-[20px] w-[45px]" variant={"outline"}>{response?.data?.type}</Badge>
 
             </CardHeader>
             <CardContent className="flex flex-col gap-2 items-start mt-2">

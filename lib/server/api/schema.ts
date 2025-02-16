@@ -17,7 +17,7 @@ export const PutUserPreferenceRequestSchema = z.object({
 });
 
 export const GetPlanResponseSchema = z.object({
-    id: z.number(),
+    id: z.string(),
     userId: z.string(),
     type: z.enum(["free", "pro", "enterprise"]),
     messageUsage: z.number().int().min(0),
@@ -25,7 +25,7 @@ export const GetPlanResponseSchema = z.object({
     storageUsage: z.number().int().min(0),
     storageLimit: z.number().int().min(0),
     startDate: z.date(),
-    endDate: z.date().optional().nullable(),
+    endDate: z.date(),
     isActive: z.boolean(),
     createdAt: z.date(),
     updatedAt: z.date()

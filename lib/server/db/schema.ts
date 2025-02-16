@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { boolean, index, integer, json, pgTable, serial, text, timestamp, uniqueIndex, vector } from 'drizzle-orm/pg-core'
+import { boolean, index, integer, json, pgTable, serial, text, timestamp, uniqueIndex, uuid, vector } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm/sql'
 
 // Type definitions
@@ -12,7 +12,7 @@ type ModelStatus = 'active' | 'deprecated' | 'maintenance'
 type ModelName = "gpt-4o-mini" | "gpt-4o" | "gpt-o1-mini"
 
 export const users = pgTable('users', {
-    id: text('id').notNull().primaryKey(),
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
     email: text('email').notNull().unique(),
     name: text('name'),
     passwordHash: text('password_hash'),
@@ -31,7 +31,7 @@ export const userPreferences = pgTable('user_preferences', {
 
 // Chat and Messages
 export const chats = pgTable('chats', {
-    id: text('id').notNull().primaryKey(),
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
     title: text('title').notNull(),
     userId: text('user_id')
         .notNull()
@@ -53,8 +53,8 @@ export const chats = pgTable('chats', {
         ]
 )
 
-export const messages = pgTable('messages', {
-    id: text('id').notNull().primaryKey(),
+export const messages = pgTable('messages', { 
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
     chatId: text('chat_id')
         .notNull()
         .references(() => chats.id, { onDelete: 'cascade' }),
@@ -71,7 +71,7 @@ export const messages = pgTable('messages', {
 
 // Models and Configuration
 export const models = pgTable('model', {
-    id: text('id').notNull().primaryKey(),
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
     name: text('name').$type<ModelName>().notNull(),
     provider: text('provider').$type<ModelProvider>().notNull(),
     url: text('url'),
@@ -86,7 +86,7 @@ export const models = pgTable('model', {
 
 // File Objects
 export const objects = pgTable('objects', {
-    id: text('id').notNull().primaryKey(),
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
     name: text('name').notNull(),
     type: text('type'), // MIME type
     size: integer('size'), // in bytes
@@ -102,7 +102,7 @@ export const objects = pgTable('objects', {
 
 // Subscription and Usage
 export const plans = pgTable('plans', {
-    id: text('id').notNull().primaryKey().default(sql`(gen_random_uuid())`),
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
     userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
@@ -123,7 +123,7 @@ export const plans = pgTable('plans', {
 
 
 export const collections = pgTable('collections', {
-    id: text('id').notNull().primaryKey().$defaultFn(() => randomUUID()),
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
     userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),

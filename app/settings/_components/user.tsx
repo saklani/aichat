@@ -3,7 +3,6 @@ import {
     Avatar,
     AvatarFallback
 } from "@/components/ui/avatar";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { GetUser } from "@/lib/client/types";
 import { useQuery } from "@tanstack/react-query";
 
