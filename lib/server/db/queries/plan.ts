@@ -9,7 +9,7 @@ import { execute } from "./utils";
 */
 export async function createUserPlan({ userId }: Pick<schema.Plan, "userId">) {
     return execute(`create plan of user ${userId}`, async () => {
-        await db.insert(schema.plan).values({
+        await db.insert(schema.plans).values({
             userId,
             type: "free" as const,
             messageUsage: 0,
@@ -24,20 +24,20 @@ export async function createUserPlan({ userId }: Pick<schema.Plan, "userId">) {
 
 export async function updatePlan({ userId, ...rest }: Pick<schema.Plan, "userId" | "type" | "messageLimit" | "storageLimit">) {
     return execute(`update plan of user ${userId}`, async () => {
-        await db.update(schema.plan).set(rest).where(eq(schema.user.id, userId))
+        await db.update(schema.plans).set(rest).where(eq(schema.users.id, userId))
     })
 }
 
 export async function deletePlan({ userId }: Pick<schema.Plan, "id" | "userId">) {
     return execute(`delete plan of user ${userId}`, async () => {
-        await db.delete(schema.plan).where(eq(schema.plan.userId, userId))
+        await db.delete(schema.plans).where(eq(schema.plans.userId, userId))
     })
 }
 
 export async function getUserPlan({ userId }: Pick<schema.Plan, "userId">) {
     return execute(
         `get plan of user ${userId}`,
-        async () => db.query.plan.findFirst({ where: eq(schema.plan.userId, userId) })
+        async () => db.query.plans.findFirst({ where: eq(schema.plans.userId, userId) })
     )
 }
 
@@ -46,24 +46,24 @@ export async function IncrementUsage({ chatId, userId }: { chatId: string; userI
     return execute(
         `check and increment`,
         async () => {
-            await db.update(schema.chat).set({ lastMessageAt: new Date() }).where(eq(schema.chat.id, chatId))
-            await db.update(schema.plan).set({ messageUsage: sql`${schema.plan.messageUsage} + 1` })
+            await db.update(schema.chats).set({ lastMessageAt: new Date() }).where(eq(schema.chats.id, chatId))
+            await db.update(schema.plans).set({ messageUsage: sql`${schema.plans.messageUsage} + 1` })
         });
 }
 
 export async function resetPlan() {
     return execute(
         `reseting plans`,
-        () => db.update(schema.plan).set({
+        () => db.update(schema.plans).set({
             startDate: sql`(unixepoch())`,
             endDate: sql`(unixepoch() + 28 * 24 * 60 * 60)`
-        }).where(lt(schema.plan.endDate, sql`(unixepoch())`))
+        }).where(lt(schema.plans.endDate, sql`(unixepoch())`))
     )
 }
 
 
 export async function getUserStorageLimit({ userId }: Pick<schema.Plan, "userId">) {
     return execute(`get user ${userId}`, async () => {
-        return await db.query.plan.findFirst({ where: eq(schema.plan.userId, userId), columns: { storageLimit: true } })
+        return await db.query.plans.findFirst({ where: eq(schema.plans.userId, userId), columns: { storageLimit: true } })
     })
 }

@@ -15,6 +15,27 @@
       "when": 1739738040888,
       "tag": "0001_milky_karnak",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1739742487218,
+      "tag": "0002_sparkling_weapon_omega",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1739742851266,
+      "tag": "0003_left_the_anarchist",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1739742987147,
+      "tag": "0004_even_whizzer",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto'
-import { boolean, index, integer, json, pgTable, text, timestamp, uniqueIndex, vector } from 'drizzle-orm/pg-core'
+import { boolean, index, integer, json, pgTable, serial, text, timestamp, uniqueIndex, vector } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm/sql'
 
 // Type definitions
@@ -11,7 +11,7 @@ type ModelProvider = 'anthropic' | 'openai' | 'google' | 'custom'
 type ModelStatus = 'active' | 'deprecated' | 'maintenance'
 type ModelName = "gpt-4o-mini" | "gpt-4o" | "gpt-o1-mini"
 
-export const user = pgTable('users', {
+export const users = pgTable('users', {
     id: text('id').notNull().primaryKey(),
     email: text('email').notNull().unique(),
     name: text('name'),
@@ -25,20 +25,20 @@ export const user = pgTable('users', {
 export const userPreferences = pgTable('user_preferences', {
     userId: text('user_id')
         .notNull()
-        .references(() => user.id, { onDelete: 'cascade' }),
+        .references(() => users.id, { onDelete: 'cascade' }),
     defaultModel: text('default_model').$type<ModelName>().notNull().default('gpt-4o-mini'),
 });
 
 // Chat and Messages
-export const chat = pgTable('chats', {
+export const chats = pgTable('chats', {
     id: text('id').notNull().primaryKey(),
     title: text('title').notNull(),
     userId: text('user_id')
         .notNull()
-        .references(() => user.id, { onDelete: 'cascade' }),
+        .references(() => users.id, { onDelete: 'cascade' }),
     modelId: text('model_id')
-        .references(() => model.id),
-    collectionId: text("collection_id").notNull().references(() => collection.id),
+        .references(() => models.id),
+    collectionId: text("collection_id").notNull().references(() => collections.id),
     systemPrompt: text('system_prompt'),
     lastMessageAt: timestamp('last_message_at'),
     messageCount: integer('message_count').notNull().default(0),
@@ -53,16 +53,16 @@ export const chat = pgTable('chats', {
         ]
 )
 
-export const message = pgTable('messages', {
+export const messages = pgTable('messages', {
     id: text('id').notNull().primaryKey(),
     chatId: text('chat_id')
         .notNull()
-        .references(() => chat.id, { onDelete: 'cascade' }),
+        .references(() => chats.id, { onDelete: 'cascade' }),
     content: text('content').notNull(),
     role: text('role').$type<MessageRole>().notNull().default('user'),
     tokens: integer('tokens'),
     modelId: text('model_id')
-        .references(() => model.id),
+        .references(() => models.id),
     metadata: text('metadata'), // JSON string for additional data
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
 }, (table) => [
@@ -70,7 +70,7 @@ export const message = pgTable('messages', {
 ])
 
 // Models and Configuration
-export const model = pgTable('model', {
+export const models = pgTable('model', {
     id: text('id').notNull().primaryKey(),
     name: text('name').$type<ModelName>().notNull(),
     provider: text('provider').$type<ModelProvider>().notNull(),
@@ -85,7 +85,7 @@ export const model = pgTable('model', {
 })
 
 // File Objects
-export const object = pgTable('objects', {
+export const objects = pgTable('objects', {
     id: text('id').notNull().primaryKey(),
     name: text('name').notNull(),
     type: text('type'), // MIME type
@@ -94,18 +94,18 @@ export const object = pgTable('objects', {
     status: text('status').$type<ObjectStatus>().notNull().default('created'),
     userId: text('user_id')
         .notNull()
-        .references(() => user.id, { onDelete: 'cascade' }),
+        .references(() => users.id, { onDelete: 'cascade' }),
     metadata: text('metadata'), // JSON string for additional data
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
     updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
 }, (table) => [index('object_user_id_idx').on(table.userId)])
 
 // Subscription and Usage
-export const plan = pgTable('plans', {
+export const plans = pgTable('plans', {
     id: text('id').notNull().primaryKey().default(sql`(gen_random_uuid())`),
     userId: text('user_id')
         .notNull()
-        .references(() => user.id, { onDelete: 'cascade' }),
+        .references(() => users.id, { onDelete: 'cascade' }),
     type: text('type').$type<PlanType>().notNull().default('free'),
     messageUsage: integer('message_usage').notNull().default(0),
     messageLimit: integer('message_limit').notNull().default(200),
@@ -122,11 +122,11 @@ export const plan = pgTable('plans', {
 ])
 
 
-export const collection = pgTable('collections', {
+export const collections = pgTable('collections', {
     id: text('id').notNull().primaryKey().$defaultFn(() => randomUUID()),
     userId: text('user_id')
         .notNull()
-        .references(() => user.id, { onDelete: 'cascade' }),
+        .references(() => users.id, { onDelete: 'cascade' }),
     name: text("name"),
     fileIds: json("file_ids").$type<string[]>(),
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
@@ -136,8 +136,9 @@ export const collection = pgTable('collections', {
 ])
 
 
-export const embedding = pgTable("embeddings", {
-    id: text("id").primaryKey(),
+export const embeddings = pgTable("embeddings", {
+    id: serial("id").primaryKey(),
+    objectId: text("object_id").notNull().references(() => objects.id, { onDelete: 'cascade' }),
     vector: vector("vector", { dimensions: 1536 }).notNull(),
     content: text('content').notNull(),
 },
@@ -149,12 +150,12 @@ export const embedding = pgTable("embeddings", {
 );
 
 // Type exports
-export type User = typeof user.$inferSelect
+export type User = typeof users.$inferSelect
 export type UserPreferences = typeof userPreferences.$inferSelect
-export type Chat = typeof chat.$inferSelect
-export type Message = typeof message.$inferSelect
-export type Model = typeof model.$inferSelect
-export type Object = typeof object.$inferSelect
-export type Plan = typeof plan.$inferSelect
-export type Collection = typeof collection.$inferSelect
-export type Embedding = typeof embedding.$inferSelect
+export type Chat = typeof chats.$inferSelect
+export type Message = typeof messages.$inferSelect
+export type Model = typeof models.$inferSelect
+export type Object = typeof objects.$inferSelect
+export type Plan = typeof plans.$inferSelect
+export type Collection = typeof collections.$inferSelect
+export type Embedding = typeof embeddings.$inferSelect

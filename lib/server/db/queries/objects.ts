@@ -6,40 +6,40 @@ import { execute } from "./utils";
 
 export async function createObject({ id, ...rest }: Omit<schema.Object, "createdAt" | "status" | "updatedAt" | "url">) {
     return execute(`create object: ${id}`, async () => {
-        await db.insert(schema.object).values({ id, ...rest })
+        await db.insert(schema.objects).values({ id, ...rest })
         return id
     })
 }
 
 export async function updateObject({ id, ...rest }: Pick<schema.Object, "id"> & Partial<schema.Object>) {
-    return execute(`update object: ${id}`, async () => (await db.update(schema.object).set({ ...rest }).where(eq(schema.object.id, id)).returning()).at(0))
+    return execute(`update object: ${id}`, async () => (await db.update(schema.objects).set({ ...rest }).where(eq(schema.objects.id, id)).returning()).at(0))
 }
 
 export async function deleteObject({ id, userId }: Pick<schema.Object, "id" | "userId">) {
     return execute(`delete object ${id} of user ${userId}`, async () => {
-        await db.delete(schema.object).where(and(eq(schema.object.id, id), eq(schema.object.userId, userId)))
+        await db.delete(schema.objects).where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId)))
     })
 }
 
 export async function getObject({ id, userId }: Pick<schema.Object, "id" | "userId">) {
     return execute(`get object ${id} of user ${userId}`, async () => {
-        return db.select().from(schema.object).where(and(eq(schema.object.id, id), eq(schema.object.userId, userId)))
+        return db.select().from(schema.objects).where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId)))
     })
 }
 
 export async function getObjectsByUserId({ userId }: Pick<schema.Object, "userId">) {
     return execute(`get all object of user ${userId}`, async () => {
-        return db.select().from(schema.object).where(eq(schema.object.userId, userId)).orderBy(desc(schema.object.createdAt))
+        return db.select().from(schema.objects).where(eq(schema.objects.userId, userId)).orderBy(desc(schema.objects.createdAt))
     })
 }
 
 // TODO: Make less confusing
 export async function getObjectsByCollectionId({ id, userId }: Pick<schema.Collection, "id" | "userId">) {
     return execute(`get all object of collection ${id}`, async () => {
-        const collection = await db.query.collection.findFirst({ where: and(eq(schema.collection.id, id), eq(schema.collection.userId, userId)) })
+        const collection = await db.query.collections.findFirst({ where: and(eq(schema.collections.id, id), eq(schema.collections.userId, userId)) })
         if (!collection) {
             return []
         }
-        return db.select().from(schema.object).where(inArray(schema.object.id, collection.fileIds ?? [])).orderBy(desc(schema.object.createdAt))
+        return db.select().from(schema.objects).where(inArray(schema.objects.id, collection.fileIds ?? [])).orderBy(desc(schema.objects.createdAt))
     })
 }

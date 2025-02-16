@@ -32,7 +32,7 @@ async function embedFile(id: string, file: File): Promise<ApiError | null> {
 
     for (const embedding of embeddings) {
         await queries.createEmbedding({
-            id,
+            objectId:id,
             ...embedding,
         });
     }
