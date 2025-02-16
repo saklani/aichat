@@ -5,10 +5,7 @@ import { execute } from "./utils";
 
 
 export async function createChat({ id, ...rest }: Pick<schema.Chat, "id" | "title" | "userId" | "collectionId">) {
-    return execute(`create chat: ${id}`, async () => {
-        await db.insert(schema.chat).values({ id, ...rest })
-        return id
-    })
+    return execute(`create chat: ${id}`, async () =>  db.insert(schema.chat).values({ id, ...rest }).returning().then(res => res.at(0)))
 }
 
 export async function upsertChat({ id, ...rest }: Omit<schema.Chat, "createdAt">) {

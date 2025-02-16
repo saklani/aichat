@@ -2,6 +2,7 @@ import { withAuth } from "@/lib/server/api/middleware";
 import { GetObjectResponseSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import { objects } from "@/lib/server/store/objects";
+import { generateTitleFromUserMessage } from "@/lib/utils";
 import { NextRequest } from "next/server";
 import { randomUUID } from "node:crypto";
 
@@ -59,16 +60,27 @@ export async function POST(request: NextRequest) {
             status: 'processing',
         });
 
-        const chat = await queries.getChat({ id: chatId, userId });
+        let chat = await queries.getChat({ id: chatId, userId });
         if (!chat) {
-            return { error: "No chat found", status: 400 };
-        }
-        if (!chat.collectionId) {
-            await queries.createCollection({
-                name: chat.title,
+            const title = "New chat";
+            const collection = await queries.createCollection({
+                name: title,
                 userId,
                 fileIds: [fileId],
             });
+            if (!collection) {
+                return { error: "Failed to create collection", status: 500 };
+            }
+            chat = await queries.createChat({
+                id: chatId,
+                title,
+                userId,
+                collectionId: collection.id,
+            });
+        }
+
+        if (!chat?.collectionId) {
+            return { error: "No collection found", status: 400 };
         } else {
             const collection = await queries.getCollection({ id: chat.collectionId, userId });
             if (!collection) {

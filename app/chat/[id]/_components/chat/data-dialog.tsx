@@ -40,6 +40,7 @@ function FileUpload({ mutate, status }: FileUploadProps) {
                 type="file"
                 onChange={handleFileChange}
                 disabled={status === "pending"}
+                accept=".txt,.csv,.json,.docx,.doc,.xls,.xlsx,.ppt,.pptx"
                 className="hidden"
             />
         </Button>
@@ -47,18 +48,20 @@ function FileUpload({ mutate, status }: FileUploadProps) {
 }
 
 function FileList({ id }: { id: string }) {
-    const { data: response } = useQuery<GetObjectsResponse>({
-        queryKey: ["object-get"],
+    const { data: response, isLoading } = useQuery<GetObjectsResponse>({
+        queryKey: ["object-get", id],
         queryFn: () => fetch(`/api/chat/${id}/objects`).then(res => res.json())
     })
+
     return (
-        <div className="flex flex-col gap-2 h-[50vh] overflow-y-auto border p-2">
-            {response?.data && response.data.length > 0 ? response.data.map((file) => (
-                <div key={file.id} className="flex flex-col gap-2">
+        <div className="flex flex-col items-center gap-2 h-[50vh] overflow-y-auto border p-2">
+           {isLoading ? <Loader2 className="animate-spin mt-12" />
+            : response?.data && response.data.length > 0 ? response.data.map((file) => (
+                <div key={file.id} className="flex flex-col gap-2 w-full">
                     <p className="text-sm">{file.name}</p>
                 </div>
             )) : (
-                <p className="text-sm">No files in Chat</p>
+                <p className="text-sm w-full">No files in Chat</p>
             )}
         </div>
     )
@@ -71,7 +74,7 @@ interface DataDropdownProps {
 export function DataDialog({ id }: DataDropdownProps) {
     const queryClient = useQueryClient()
     const { mutate, status, } = useMutation({
-        mutationKey: ["object-post"],
+        mutationKey: ["object-post", id],
         mutationFn: async ({ body }: { body: FormData }) => {
             try {
                 body.append("chat-id", id);
@@ -83,7 +86,8 @@ export function DataDialog({ id }: DataDropdownProps) {
                 if (!objectResponse.ok) {
                     throw new Error("Failed to upload file");
                 }
-                queryClient.invalidateQueries({ queryKey: ["object-get"] })
+                queryClient.invalidateQueries({ queryKey: ["object-get", id] })
+                queryClient.invalidateQueries({ queryKey: ["chats"] })
             } catch (err) {
                 toast.error("Failed to upload file");
                 throw err;

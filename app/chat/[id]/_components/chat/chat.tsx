@@ -44,7 +44,7 @@ export function NonMemoizedChat({ id, initialMessages, model }: { id: string, in
 
     return (
         <div className="flex flex-col flex-1 w-full items-center">
-            <div className="flex flex-col overflow-y-auto pt-3 pb-[96px] px-2 w-[calc(100%-24px)] max-w-3xl ">
+            <div className="flex flex-col overflow-y-auto pt-5 pb-[96px] px-2 w-[calc(100%-24px)] max-w-3xl ">
                 {messages.length === 0 ?
                     <h1 className="text-2xl">What can I help with?</h1> :
                     messages.map(m => (
