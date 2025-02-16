@@ -68,6 +68,7 @@ export const GetChatResponseSchema = z.object({
     title: z.string(),
     userId: z.string(),
     createdAt: z.date(),
+    collectionId: z.string().uuid(),
 });
 
 export const GetChatsRequestSchema = z.object({
@@ -101,7 +102,7 @@ export const GetObjectResponseSchema = z.object({
     updatedAt: z.date(),
 });
 
-
+export const GetObjectsResponseSchema = z.array(GetObjectResponseSchema)
 export const CreateCollectionRequestSchema = z.object({
     id: z.string().uuid(),
     name: z.string(),
@@ -119,8 +120,8 @@ export const GetCollectionResponseSchema = z.object({
 })
 
 export const UpdateCollectionRequestSchema = z.object({
-    name: z.string(),
-    fileIds: z.array(z.string()),
+    name: z.string().optional(),
+    fileIds: z.array(z.string()).optional(),
 })
 
 export const GetCollectionsResponseSchema = z.array(GetCollectionResponseSchema)

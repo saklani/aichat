@@ -11,6 +11,7 @@ import { randomUUID } from "node:crypto";
 export async function POST(request: NextRequest) {
     return withAuth(async (userId) => {
         const formData = await request.formData();
+        const chatId = formData.get('chat-id') as string;
         const file = formData.get('file') as File;
         if (!file) {
             return { error: "No file provided", status: 400 };
@@ -57,7 +58,29 @@ export async function POST(request: NextRequest) {
             url,
             status: 'processing',
         });
-        console.log(updatedObject)
+
+        const chat = await queries.getChat({ id: chatId, userId });
+        if (!chat) {
+            return { error: "No chat found", status: 400 };
+        }
+        if (!chat.collectionId) {
+            await queries.createCollection({
+                name: chat.title,
+                userId,
+                fileIds: [fileId],
+            });
+        } else {
+            const collection = await queries.getCollection({ id: chat.collectionId, userId });
+            if (!collection) {
+                return { error: "No collection found", status: 400 };
+            }
+            await queries.updateCollection({
+                id: chat.collectionId,
+                userId,
+                fileIds: [...(collection.fileIds ?? []), fileId],
+            });
+        }
+
         const validateObject = GetObjectResponseSchema.safeParse(updatedObject);
         if (!validateObject.success) {
             console.error("[Data Validation Error]", validateObject.error);
@@ -72,3 +95,4 @@ export async function POST(request: NextRequest) {
         };
     });
 }
+

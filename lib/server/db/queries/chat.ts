@@ -19,7 +19,7 @@ export async function upsertChat({ id, ...rest }: Omit<schema.Chat, "createdAt">
 
 export async function updateChat({ id, userId, ...rest }: schema.Chat) {
     return execute(`update chat ${id}`, async () => {
-        await db.update(schema.chat).set(rest).where(and(eq(schema.chat.id, id), eq(schema.user.id, userId)))
+        await db.update(schema.chat).set(rest).where(and(eq(schema.chat.id, id), eq(schema.chat.userId, userId)))
         return id
     })
 }

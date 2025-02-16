@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { withAuth } from "@/lib/server/api/middleware";
-import { createResponse, HTTP_400, HTTP_401, HTTP_429, HTTP_500 } from "@/lib/server/api/response";
+import { createResponse, HTTP_400, HTTP_401, HTTP_500 } from "@/lib/server/api/response";
 import { GetChatsResponseSchema, PostRequestSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import { generateTitleFromUserMessage } from '@/lib/utils';
@@ -109,15 +109,14 @@ export async function POST(request: NextRequest) {
             messages,
             maxSteps: 4,
             onFinish: async ({ text }) => {
-                await queries.createMessage({
-                    content: text,
-                    role: "assistant",
-                    chatId: id,
-                    id: randomUUID()
-                });
+               await queries.createMessage({
+                        content: text,
+                        role: "assistant",
+                        chatId: id,
+                        id: randomUUID()
+                    });
             },
         });
-
         return result.toDataStreamResponse();
     } catch (error) {
         console.error(error)

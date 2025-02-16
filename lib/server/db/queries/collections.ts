@@ -7,8 +7,8 @@ export async function createCollection({ ...rest }: Omit<schema.Collection,  "id
     return execute(`create collection`, async () =>  db.insert(schema.collection).values({...rest }).returning().then(res => res.at(0)))
 }
 
-export async function updateCollection({ id, userId, ...rest }: Omit<schema.Collection, "createdAt" | "updatedAt">) {
-    return execute(`update collection ${id}`, async () => db.update(schema.collection).set(rest).where(and(eq(schema.collection.id, id), eq(schema.user.id, userId))).returning().then(res => res.at(0)))
+export async function updateCollection({ id, userId, ...rest }: Partial<schema.Collection> & Pick<schema.Collection, "id" | "userId">) {
+    return execute(`update collection ${id}`, async () => db.update(schema.collection).set(rest).where(and(eq(schema.collection.id, id), eq(schema.collection.userId, userId))).returning().then(res => res.at(0)))
 }
 
 export async function deleteCollection({ id, userId }: Pick<schema.Collection, "id" | "userId">) {

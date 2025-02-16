@@ -38,7 +38,7 @@ export const chat = sqliteTable('chats', {
         .references(() => user.id, { onDelete: 'cascade' }),
     modelId: text('model_id')
         .references(() => model.id),
-    collectionId: text("collection_id").references(() => collection.id),
+    collectionId: text("collection_id").notNull().references(() => collection.id),
     systemPrompt: text('system_prompt'),
     lastMessageAt: integer('last_message_at', { mode: 'timestamp' }),
     messageCount: integer('message_count').notNull().default(0),
@@ -128,7 +128,8 @@ export const collection = sqliteTable('collections', {
         .notNull()
         .references(() => user.id, { onDelete: 'cascade' }),
     name: text("name"),
-    fileIds: text("file_ids", { mode: "json" }).$type<string[]>(),
+    fileIds: text("file_ids", { mode: "json" }).$type<string[]>()
+        .default(sql`(json_array())`),
     createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
     updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
 }, (table) => [
