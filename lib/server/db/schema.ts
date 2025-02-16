@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto'
+import { boolean, index, integer, json, pgTable, text, timestamp, uniqueIndex, vector } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm/sql'
-import { customType, index, integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
 
 // Type definitions
 type UserRole = 'admin' | 'user'
@@ -11,18 +11,18 @@ type ModelProvider = 'anthropic' | 'openai' | 'google' | 'custom'
 type ModelStatus = 'active' | 'deprecated' | 'maintenance'
 type ModelName = "gpt-4o-mini" | "gpt-4o" | "gpt-o1-mini"
 
-export const user = sqliteTable('users', {
+export const user = pgTable('users', {
     id: text('id').notNull().primaryKey(),
     email: text('email').notNull().unique(),
     name: text('name'),
     passwordHash: text('password_hash'),
     googleId: text('google_id'),
     role: text('role').$type<UserRole>().notNull().default('user'),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
 })
 
-export const userPreferences = sqliteTable('user_preferences', {
+export const userPreferences = pgTable('user_preferences', {
     userId: text('user_id')
         .notNull()
         .references(() => user.id, { onDelete: 'cascade' }),
@@ -30,7 +30,7 @@ export const userPreferences = sqliteTable('user_preferences', {
 });
 
 // Chat and Messages
-export const chat = sqliteTable('chats', {
+export const chat = pgTable('chats', {
     id: text('id').notNull().primaryKey(),
     title: text('title').notNull(),
     userId: text('user_id')
@@ -40,11 +40,11 @@ export const chat = sqliteTable('chats', {
         .references(() => model.id),
     collectionId: text("collection_id").notNull().references(() => collection.id),
     systemPrompt: text('system_prompt'),
-    lastMessageAt: integer('last_message_at', { mode: 'timestamp' }),
+    lastMessageAt: timestamp('last_message_at'),
     messageCount: integer('message_count').notNull().default(0),
-    isArchived: integer('is_archived', { mode: 'boolean' }).notNull().default(false),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`).$onUpdate(() => new Date())
+    isArchived: boolean('is_archived').notNull().default(false),
+    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`).$onUpdate(() => new Date())
 },
     (table) =>
         [
@@ -53,7 +53,7 @@ export const chat = sqliteTable('chats', {
         ]
 )
 
-export const message = sqliteTable('messages', {
+export const message = pgTable('messages', {
     id: text('id').notNull().primaryKey(),
     chatId: text('chat_id')
         .notNull()
@@ -64,13 +64,13 @@ export const message = sqliteTable('messages', {
     modelId: text('model_id')
         .references(() => model.id),
     metadata: text('metadata'), // JSON string for additional data
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
 }, (table) => [
     index('message_chat_id_idx').on(table.chatId)
 ])
 
 // Models and Configuration
-export const model = sqliteTable('model', {
+export const model = pgTable('model', {
     id: text('id').notNull().primaryKey(),
     name: text('name').$type<ModelName>().notNull(),
     provider: text('provider').$type<ModelProvider>().notNull(),
@@ -80,12 +80,12 @@ export const model = sqliteTable('model', {
     config: text('config'), // JSON string for model-specific settings
     contextWindow: integer('context_window'),
     costPer1kTokens: integer('cost_per_1k_tokens'),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
 })
 
 // File Objects
-export const object = sqliteTable('objects', {
+export const object = pgTable('objects', {
     id: text('id').notNull().primaryKey(),
     name: text('name').notNull(),
     type: text('type'), // MIME type
@@ -96,13 +96,13 @@ export const object = sqliteTable('objects', {
         .notNull()
         .references(() => user.id, { onDelete: 'cascade' }),
     metadata: text('metadata'), // JSON string for additional data
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
 }, (table) => [index('object_user_id_idx').on(table.userId)])
 
 // Subscription and Usage
-export const plan = sqliteTable('plans', {
-    id: integer('id').primaryKey({ autoIncrement: true }),
+export const plan = pgTable('plans', {
+    id: text('id').notNull().primaryKey().default(sql`(gen_random_uuid())`),
     userId: text('user_id')
         .notNull()
         .references(() => user.id, { onDelete: 'cascade' }),
@@ -111,53 +111,42 @@ export const plan = sqliteTable('plans', {
     messageLimit: integer('message_limit').notNull().default(200),
     storageUsage: integer('storage_usage').notNull().default(0), // in bytes
     storageLimit: integer('storage_limit').notNull().default(104857600), // 100MB in bytes
-    startDate: integer('start_date', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    endDate: integer('end_date', { mode: 'timestamp' }).notNull().default(sql`(unixepoch() + 28 * 24 * 60 * 60)`),
-    isActive: integer('is_active', { mode: 'boolean' }).notNull().default(true),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+    startDate: timestamp('start_date').notNull().default(sql`(now())`),
+    endDate: timestamp('end_date').notNull().default(sql`(now() + interval '28 day')`),
+    isActive: boolean('is_active').notNull().default(true),
+    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
 }, (table) => [
     index('plan_user_id_idx').on(table.userId),
     uniqueIndex('plan_user_id_unique').on(table.userId),
 ])
 
 
-export const collection = sqliteTable('collections', {
+export const collection = pgTable('collections', {
     id: text('id').notNull().primaryKey().$defaultFn(() => randomUUID()),
     userId: text('user_id')
         .notNull()
         .references(() => user.id, { onDelete: 'cascade' }),
     name: text("name"),
-    fileIds: text("file_ids", { mode: "json" }).$type<string[]>()
-        .default(sql`(json_array())`),
-    createdAt: integer('created_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
-    updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull().default(sql`(unixepoch())`),
+    fileIds: json("file_ids").$type<string[]>(),
+    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
 }, (table) => [
     index('collection_user_id_idx').on(table.userId),
 ])
 
 
-const float32Array = customType<{
-    data: number[];
-    config: { dimensions: number };
-    configRequired: true;
-    driverData: Buffer;
-}>({
-    dataType(config) {
-        return `F32_BLOB(${config.dimensions})`;
-    },
-    fromDriver(value: Buffer) {
-        return Array.from(new Float32Array(value.buffer));
-    },
-    toDriver(value: number[]) {
-        return sql`vector32(${JSON.stringify(value)})`;
-    },
-});
-
-export const vectorTable = sqliteTable("vector_table", {
-    id: integer("id").primaryKey(),
-    vector: float32Array("vector", { dimensions: 3 }),
-});
+export const embedding = pgTable("embeddings", {
+    id: text("id").primaryKey(),
+    vector: vector("vector", { dimensions: 1536 }).notNull(),
+    content: text('content').notNull(),
+},
+    (table) => [index('embeddingIndex').using(
+        'hnsw',
+        table.vector.op('vector_cosine_ops'),
+    ),
+    ]
+);
 
 // Type exports
 export type User = typeof user.$inferSelect
@@ -168,3 +157,4 @@ export type Model = typeof model.$inferSelect
 export type Object = typeof object.$inferSelect
 export type Plan = typeof plan.$inferSelect
 export type Collection = typeof collection.$inferSelect
+export type Embedding = typeof embedding.$inferSelect

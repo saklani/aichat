@@ -1,54 +1,19 @@
 {
   "version": "7",
-  "dialect": "sqlite",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
-      "version": "6",
-      "when": 1739397472112,
-      "tag": "0000_third_synch",
+      "version": "7",
+      "when": 1739689671308,
+      "tag": "0000_purple_revanche",
       "breakpoints": true
     },
     {
       "idx": 1,
-      "version": "6",
-      "when": 1739405761933,
-      "tag": "0001_secret_stature",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1739406784512,
-      "tag": "0002_flaky_electro",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1739435126130,
-      "tag": "0003_petite_vin_gonzales",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "6",
-      "when": 1739469649406,
-      "tag": "0004_violet_bedlam",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "6",
-      "when": 1739646598114,
-      "tag": "0005_slippery_agent_zero",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "6",
-      "when": 1739670969598,
-      "tag": "0006_free_roland_deschain",
+      "version": "7",
+      "when": 1739738040888,
+      "tag": "0001_milky_karnak",
       "breakpoints": true
     }
   ]

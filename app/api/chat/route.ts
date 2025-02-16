@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import { fileSearch } from "@/lib/ai/tools/file-search";
 import { withAuth } from "@/lib/server/api/middleware";
 import { createResponse, HTTP_400, HTTP_401, HTTP_500 } from "@/lib/server/api/response";
 import { GetChatsResponseSchema, PostRequestSchema } from "@/lib/server/api/schema";
@@ -55,10 +56,10 @@ export async function POST(request: NextRequest) {
         return HTTP_401;
     }
     try {
-        const userId = session.user.id        
+        const userId = session.user.id
         const limit = await LimitReached({ userId })
         if (limit) {
-            return createResponse({error: "Message limit reached", status: 429});
+            return createResponse({ error: "Message limit reached", status: 429 });
         }
 
         const body = await request.json();
@@ -109,13 +110,14 @@ export async function POST(request: NextRequest) {
             messages,
             maxSteps: 4,
             onFinish: async ({ text }) => {
-               await queries.createMessage({
-                        content: text,
-                        role: "assistant",
-                        chatId: id,
-                        id: randomUUID()
-                    });
+                await queries.createMessage({
+                    content: text,
+                    role: "assistant",
+                    chatId: id,
+                    id: randomUUID()
+                });
             },
+            tools: { fileSearch },
         });
         return result.toDataStreamResponse();
     } catch (error) {
