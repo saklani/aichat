@@ -46,5 +46,8 @@ export async function DELETE() {
             data: { success: true },
             status: 200
         };
-    }).then(async (_) => auth.api.signOut({ headers: await headers()}));
+    }).then(async (res) => {
+        await auth.api.signOut({ headers: await headers()});
+        return res
+    });
 }
