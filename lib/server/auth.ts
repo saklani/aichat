@@ -31,5 +31,13 @@ export const auth = betterAuth({
             }
         }),
     },
+    session: {
+        storeSessionInDatabase: true,
+        storeSessionInCookie: true,
+        cookieName: "session",
+        cookieOptions: {
+            secure: process.env.NODE_ENV === "production",      
+        }
+    },
     plugins: [nextCookies()]
 });
