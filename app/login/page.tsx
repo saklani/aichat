@@ -1,4 +1,3 @@
-"use client"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
 import { GoogleLogin } from "@/components/google-login";

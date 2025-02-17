@@ -25,13 +25,13 @@ export default function Page() {
                             <TabsTrigger value="history">History</TabsTrigger>
                         </TabsList>
                         <TabsContent value="account">
-                            <div className="flex flex-col p-[24px] gap-6">
+                            <div className="flex flex-col py-5 gap-6">
                                 {/* <Payment /> */}
                                 <DeleteAccount />
                             </div>
                         </TabsContent>
                         <TabsContent value="history">
-                            <div className="flex flex-col p-[24px] gap-6">
+                            <div className="flex flex-col py-5 gap-6">
                                 <History />
                             </div>
                         </TabsContent>

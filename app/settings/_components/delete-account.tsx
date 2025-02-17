@@ -19,7 +19,7 @@ export const DeleteAccount = memo(function () {
     return (
         <div className="flex flex-col items-start gap-2">
             <h1 className="title">Danger Zone</h1>
-            <p className="text-sm">Delete account and all associated data</p>
+            <p className="text-sm ml-1">Delete account and all associated data</p>
             <DeleteAlert />
         </div>
     )
@@ -39,7 +39,7 @@ const DeleteAlert = memo(function () {
     return (
         <AlertDialog>
             <AlertDialogTrigger asChild>
-                <Button className="mt-4" variant={"destructive"}>Delete Account</Button>
+                <Button className="mt-4 ml-1" variant={"destructive"}>Delete Account</Button>
             </AlertDialogTrigger>
             <AlertDialogContent>
                 <AlertDialogHeader>
