@@ -1,12 +1,15 @@
-"use client"
 import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
-export function Login() {
-    const router = useRouter()
+export async function Login() {
     return (
-        <Button variant={"outline"} onClick={() => router.push("/login")}>
-            Login
-        </Button>
+        <form action={async() => { 
+            "use server"
+            redirect("/login")
+        }}>
+            <Button variant={"outline"} type="submit">
+                Login
+            </Button>
+        </form>
     )
 }
