@@ -50,7 +50,7 @@ export function NonMemoizedChat({ id, initialMessages, model }: { id: string, in
                         </div>
                     ))}
             </div>
-            <div className="bg-background fixed bottom-0 z-1 border border-input pt-0 rounded-lg p-1 pt-0 lg:w-[calc(100%-24px)] w-[500px] max-w-3xl ">
+            <div className="bg-background fixed bottom-0 z-1 border border-input pt-0 rounded-lg p-1 pt-0 lg:w-[calc(100%-24px)] md:w-[500px] w-[300px] max-w-3xl ">
                 <form onSubmit={handleSubmit}>
                     <Textarea
                         className="w-full resize-none h-[72px]"
