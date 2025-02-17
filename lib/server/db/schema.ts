@@ -9,7 +9,7 @@ type ObjectStatus = 'created' | 'processing' | 'ready' | 'failed'
 type PlanType = 'free' | 'pro' | 'enterprise'
 type ModelProvider = 'anthropic' | 'openai' | 'google' | 'custom'
 type ModelStatus = 'active' | 'deprecated' | 'maintenance'
-type ModelName = "gpt-4o-mini" | "gpt-4o" | "gpt-o1-mini"
+type ModelName = 'gpt-4o-mini' | 'gpt-4o' | 'gpt-o1-mini'
 
 export const users = pgTable('users', {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
@@ -23,7 +23,7 @@ export const users = pgTable('users', {
 })
 
 export const userPreferences = pgTable('user_preferences', {
-    userId: text('user_id')
+    userId: uuid('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
     defaultModel: text('default_model').$type<ModelName>().notNull().default('gpt-4o-mini'),
@@ -33,12 +33,12 @@ export const userPreferences = pgTable('user_preferences', {
 export const chats = pgTable('chats', {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
     title: text('title').notNull(),
-    userId: text('user_id')
+    userId: uuid('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
-    modelId: text('model_id')
+    modelId: uuid('model_id')
         .references(() => models.id),
-    collectionId: text("collection_id").notNull().references(() => collections.id),
+    collectionId: uuid('collection_id').notNull().references(() => collections.id),
     systemPrompt: text('system_prompt'),
     lastMessageAt: timestamp('last_message_at'),
     messageCount: integer('message_count').notNull().default(0),
@@ -55,13 +55,13 @@ export const chats = pgTable('chats', {
 
 export const messages = pgTable('messages', { 
     id: uuid('id').notNull().primaryKey().defaultRandom(),
-    chatId: text('chat_id')
+    chatId: uuid('chat_id')
         .notNull()
         .references(() => chats.id, { onDelete: 'cascade' }),
     content: text('content').notNull(),
     role: text('role').$type<MessageRole>().notNull().default('user'),
     tokens: integer('tokens'),
-    modelId: text('model_id')
+    modelId: uuid('model_id')
         .references(() => models.id),
     metadata: text('metadata'), // JSON string for additional data
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
@@ -92,7 +92,7 @@ export const objects = pgTable('objects', {
     size: integer('size'), // in bytes
     url: text('url'),
     status: text('status').$type<ObjectStatus>().notNull().default('created'),
-    userId: text('user_id')
+    userId: uuid('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
     metadata: text('metadata'), // JSON string for additional data
@@ -103,7 +103,7 @@ export const objects = pgTable('objects', {
 // Subscription and Usage
 export const plans = pgTable('plans', {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
-    userId: text('user_id')
+    userId: uuid('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
     type: text('type').$type<PlanType>().notNull().default('free'),
@@ -124,11 +124,11 @@ export const plans = pgTable('plans', {
 
 export const collections = pgTable('collections', {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
-    userId: text('user_id')
+    userId: uuid('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
-    name: text("name"),
-    fileIds: json("file_ids").$type<string[]>(),
+    name: text('name'),
+    fileIds: json('file_ids').$type<string[]>(),
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
     updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
 }, (table) => [
@@ -136,10 +136,10 @@ export const collections = pgTable('collections', {
 ])
 
 
-export const embeddings = pgTable("embeddings", {
-    id: serial("id").primaryKey(),
-    objectId: text("object_id").notNull().references(() => objects.id, { onDelete: 'cascade' }),
-    vector: vector("vector", { dimensions: 1536 }).notNull(),
+export const embeddings = pgTable('embeddings', {
+    id: serial('id').primaryKey(),
+    objectId: uuid('object_id').notNull().references(() => objects.id, { onDelete: 'cascade' }),
+    vector: vector('vector', { dimensions: 1536 }).notNull(),
     content: text('content').notNull(),
 },
     (table) => [index('embeddingIndex').using(
