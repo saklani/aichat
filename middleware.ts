@@ -1,5 +1,5 @@
-import { auth } from "@/auth"
-import { NextRequest, NextResponse } from "next/server"
+import { getSessionCookie } from "better-auth";
+import { NextRequest, NextResponse } from "next/server";
 
 
 function handleRedirection(req: NextRequest,
@@ -11,19 +11,24 @@ function handleRedirection(req: NextRequest,
     return NextResponse.next()
 }
 
-export default auth((req) => {
-    if (req.nextUrl.pathname.startsWith("/chat")
-        || req.nextUrl.pathname.startsWith("/settings")
+ 
+export async function middleware(request: NextRequest) {
+	const sessionCookie = getSessionCookie(request);
+    const loggedIn = !!sessionCookie
+
+    if (request.nextUrl.pathname.startsWith("/chat")
+        || request.nextUrl.pathname.startsWith("/settings")
     ) {
-        return handleRedirection(req, "/login", !req.auth);
+        return handleRedirection(request, "/login", !loggedIn);
     }
-    if (req.nextUrl.pathname.startsWith("/login")
-        || req.nextUrl.pathname.startsWith("/register")
+    if (request.nextUrl.pathname.startsWith("/login")
+        || request.nextUrl.pathname.startsWith("/register")
     ) {
-        return handleRedirection(req, "/chat", !!req.auth);
+        return handleRedirection(request, "/chat", loggedIn);
     }
-    return NextResponse.next()
-});
+    return NextResponse.next();
+}
+ 
 
 export const config = {
     matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],

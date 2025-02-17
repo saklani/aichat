@@ -1,15 +1,16 @@
-import { signOut } from "@/auth"
+"use client"
+import { signOut } from "@/lib/client/auth"
 import { Button } from "./ui/button"
- 
+import { useRouter } from "next/navigation"
+
 export function Logout() {
+  const router = useRouter()
   return (
-    <form
-      action={async () => {
-        "use server"
-        await signOut({redirect: true, redirectTo: "/"})
-      }}
-    >
-      <Button variant={"destructive"} type="submit">Logout</Button>
-    </form>
+      <Button onClick={() => signOut({}, {
+        onSuccess(ctx) {
+            router.push("/login")
+        }
+      })} variant={"destructive"} type="submit">Logout</Button>
+   
   )
 }

@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { auth } from "@/lib/server/auth";
 import { fileSearch } from "@/lib/ai/tools/file-search";
 import { withAuth } from "@/lib/server/api/middleware";
 import { createResponse, HTTP_400, HTTP_401, HTTP_500 } from "@/lib/server/api/response";
@@ -51,7 +51,9 @@ async function LimitReached({ userId }: { userId: string }) {
  * Creates a new chat or adds a message to an existing chat
  */
 export async function POST(request: NextRequest) {
-    const session = await auth()
+    const session = await auth.api.getSession({
+        headers: request.headers    
+    })
     if (!session?.user?.id) {
         return HTTP_401;
     }

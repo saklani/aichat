@@ -7,7 +7,7 @@ export function Login() {
     const handleClick = () => router.push("/login")
 
     return (
-        <Button onClick={handleClick}>
+        <Button variant={"outline"} onClick={handleClick}>
             Login
         </Button>
     )

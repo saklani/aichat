@@ -64,6 +64,20 @@
       "when": 1739751334577,
       "tag": "0008_soft_raza",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1739781145207,
+      "tag": "0009_freezing_sharon_ventura",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1739783308103,
+      "tag": "0010_white_mentallo",
+      "breakpoints": true
     }
   ]
 }

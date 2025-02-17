@@ -1,15 +1,15 @@
-import { auth } from "@/auth"
+import { auth } from "@/lib/server/auth"
 import { NextResponse } from "next/server"
 import { createResponse, HTTP_401, HTTP_500 } from "./response"
 import { Result } from "./types"
-
+import { headers } from "next/headers"  
 
 /**
  * Middleware to check authentication and extract user ID
  */
 export async function withAuth<T>(handler: (userId: string) => Promise<Result<T>>): Promise<NextResponse> {
   try {
-    const session = await auth()
+    const session = await auth.api.getSession({ headers: await headers()})
     if (!session?.user?.id) {
       return HTTP_401
     }

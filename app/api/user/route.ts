@@ -1,8 +1,8 @@
-import { signOut } from "@/auth";
+import { auth } from "@/lib/server/auth";
 import { withAuth } from "@/lib/server/api/middleware";
 import { GetUserResponseSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
-
+import { headers } from "next/headers";
 /**
  * GET /api/user
  * Retrieves the current user's profile
@@ -39,7 +39,6 @@ export async function GET() {
  * Deletes the current user's account
  */
 export async function DELETE() {
-    await signOut()
     return withAuth(async (userId) => {
         await queries.deleteUser({ id: userId });
   
@@ -47,5 +46,5 @@ export async function DELETE() {
             data: { success: true },
             status: 200
         };
-    });
+    }).then(async (_) => auth.api.signOut({ headers: await headers()}));
 }

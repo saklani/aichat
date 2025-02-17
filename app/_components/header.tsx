@@ -1,12 +1,13 @@
-import { auth } from "@/auth";
+"use client"
+import { useSession } from "@/lib/client/auth";
 import Link from "next/link";
 import { Dashboard } from "./dashboard";
 import { GetStarted } from "./get-started";
 import { Login } from "./login";
 import React from "react";
 
-export async function Header() {
-    const session = await auth()
+export function Header() {
+    const session = useSession()
 
     return (
         <header className="bg-header w-full border-b">
@@ -15,7 +16,7 @@ export async function Header() {
                     <span className="text-lg font-semibold">Sable</span>
                 </Link>
 
-                {session ?
+                {session?.data ?
                     <Dashboard /> :
                     <div className="flex gap-2">
                         <Login />

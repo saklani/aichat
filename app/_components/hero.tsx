@@ -1,9 +1,11 @@
-import { auth } from "@/auth";
+"use client"
+
+import { useSession } from "@/lib/client/auth";
 import { Dashboard } from "./dashboard";
 import { GetStarted } from "./get-started";
 
-export async function Hero() {
-    const session = await auth()
+export function Hero() {
+    const session = useSession()
     return (
         <section className="mx-auto max-w-3xl flex flex-col items-center justify-center text-center py-16 px-4 gap-8">
             <div className="flex flex-col gap-3 max-w-xl">
@@ -14,7 +16,7 @@ export async function Hero() {
                     An open-source interface for all your AI chats and data.
                 </p>
             </div>
-            {session ? <Dashboard/>: <GetStarted/>}
+            {session?.data ? <Dashboard/>: <GetStarted/>}
         </section>
     )
 }

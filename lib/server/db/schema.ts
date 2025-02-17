@@ -1,9 +1,7 @@
-import { randomUUID } from 'crypto'
 import { boolean, index, integer, json, pgTable, serial, text, timestamp, uniqueIndex, uuid, vector } from 'drizzle-orm/pg-core'
 import { sql } from 'drizzle-orm/sql'
 
 // Type definitions
-type UserRole = 'admin' | 'user'
 type MessageRole = 'system' | 'user' | 'assistant' | 'data'
 type ObjectStatus = 'created' | 'processing' | 'ready' | 'failed'
 type PlanType = 'free' | 'pro' | 'enterprise'
@@ -11,19 +9,55 @@ type ModelProvider = 'anthropic' | 'openai' | 'google' | 'custom'
 type ModelStatus = 'active' | 'deprecated' | 'maintenance'
 type ModelName = 'gpt-4o-mini' | 'gpt-4o' | 'gpt-o1-mini'
 
-export const users = pgTable('users', {
-    id: uuid('id').notNull().primaryKey().defaultRandom(),
+export const users = pgTable("users", {
+    id: text("id").primaryKey(),
+    name: text('name').notNull(),
     email: text('email').notNull().unique(),
-    name: text('name'),
-    passwordHash: text('password_hash'),
-    googleId: text('google_id'),
-    role: text('role').$type<UserRole>().notNull().default('user'),
-    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
-    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
-})
+    emailVerified: boolean('email_verified').notNull(),
+    image: text('image'),
+    createdAt: timestamp('created_at').notNull(),
+    updatedAt: timestamp('updated_at').notNull()
+});
+
+export const sessions = pgTable("sessions", {
+    id: text("id").primaryKey(),
+    expiresAt: timestamp('expires_at').notNull(),
+    token: text('token').notNull().unique(),
+    createdAt: timestamp('created_at').notNull(),
+    updatedAt: timestamp('updated_at').notNull(),
+    ipAddress: text('ip_address'),
+    userAgent: text('user_agent'),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' })
+});
+
+export const accounts = pgTable("accounts", {
+    id: text("id").primaryKey(),
+    accountId: text('account_id').notNull(),
+    providerId: text('provider_id').notNull(),
+    userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+    accessToken: text('access_token'),
+    refreshToken: text('refresh_token'),
+    idToken: text('id_token'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at'),
+    refreshTokenExpiresAt: timestamp('refresh_token_expires_at'),
+    scope: text('scope'),
+    password: text('password'),
+    createdAt: timestamp('created_at').notNull(),
+    updatedAt: timestamp('updated_at').notNull()
+});
+
+export const verifications = pgTable("verifications", {
+    id: text("id").primaryKey(),
+    identifier: text('identifier').notNull(),
+    value: text('value').notNull(),
+    expiresAt: timestamp('expires_at').notNull(),
+    createdAt: timestamp('created_at'),
+    updatedAt: timestamp('updated_at')
+});
+
 
 export const userPreferences = pgTable('user_preferences', {
-    userId: uuid('user_id')
+    userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
     defaultModel: text('default_model').$type<ModelName>().notNull().default('gpt-4o-mini'),
@@ -33,7 +67,7 @@ export const userPreferences = pgTable('user_preferences', {
 export const chats = pgTable('chats', {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
     title: text('title').notNull(),
-    userId: uuid('user_id')
+    userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
     modelId: uuid('model_id')
@@ -53,7 +87,7 @@ export const chats = pgTable('chats', {
         ]
 )
 
-export const messages = pgTable('messages', { 
+export const messages = pgTable('messages', {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
     chatId: uuid('chat_id')
         .notNull()
@@ -81,7 +115,7 @@ export const models = pgTable('model', {
     contextWindow: integer('context_window'),
     costPer1kTokens: integer('cost_per_1k_tokens'),
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
-    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`).$onUpdate(() => new Date())
 })
 
 // File Objects
@@ -92,18 +126,18 @@ export const objects = pgTable('objects', {
     size: integer('size'), // in bytes
     url: text('url'),
     status: text('status').$type<ObjectStatus>().notNull().default('created'),
-    userId: uuid('user_id')
+    userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
     metadata: text('metadata'), // JSON string for additional data
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
-    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`).$onUpdate(() => new Date())
 }, (table) => [index('object_user_id_idx').on(table.userId)])
 
 // Subscription and Usage
 export const plans = pgTable('plans', {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
-    userId: uuid('user_id')
+    userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
     type: text('type').$type<PlanType>().notNull().default('free'),
@@ -115,7 +149,7 @@ export const plans = pgTable('plans', {
     endDate: timestamp('end_date').notNull().default(sql`(now() + interval '28 day')`),
     isActive: boolean('is_active').notNull().default(true),
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
-    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`).$onUpdate(() => new Date()),
 }, (table) => [
     index('plan_user_id_idx').on(table.userId),
     uniqueIndex('plan_user_id_unique').on(table.userId),
@@ -124,13 +158,13 @@ export const plans = pgTable('plans', {
 
 export const collections = pgTable('collections', {
     id: uuid('id').notNull().primaryKey().defaultRandom(),
-    userId: uuid('user_id')
+    userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
     name: text('name'),
     fileIds: json('file_ids').$type<string[]>(),
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
-    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`),
+    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`).$onUpdate(() => new Date()),
 }, (table) => [
     index('collection_user_id_idx').on(table.userId),
 ])

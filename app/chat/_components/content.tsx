@@ -24,7 +24,7 @@ import { useCallback, useMemo, memo } from "react"
 
 export function Content() {
 
-    const { data: response } = useQuery<GetChats>({
+    const { data: response, isLoading } = useQuery<GetChats>({
         queryKey: ["chats"],
         queryFn: () => fetch("/api/chat").then(res => res.json())
     })
@@ -35,6 +35,7 @@ export function Content() {
                 <SidebarGroupContent>
                     <SidebarMenu className="overflow-y-scroll">
                         {
+                            isLoading ? <></> :
                             response && response.data && response.data.length > 0 ?
                                 response.data.map((chat) => (<ChatItem key={chat.id} id={chat.id} title={chat.title} />)) :
                                 <div className="h-24 flex items-center justify-center w-full bg-muted/60 rounded-lg">
