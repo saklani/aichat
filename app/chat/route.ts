@@ -1,9 +1,8 @@
-"use client";
-
 import { redirect } from "next/navigation";
+import { randomUUID } from "node:crypto";
 
 export default function Page() {
-    const id = self.crypto.randomUUID();
+    const id = randomUUID();
     
     redirect(`/chat/${id}?`);
 }
