@@ -33,7 +33,7 @@ export const auth = betterAuth({
         }),
     },
     advanced: {
-        useSecureCookies: process.env.NODE_ENV === "production",
+        useSecureCookies: process.env.NODE_ENV !== "development",
     },
     plugins: [nextCookies()]
 });

@@ -12,7 +12,7 @@ export function Header() {
     const handleRegister = () => router.push("/login")
     return (
         <header className="bg-header w-full border-b">
-            <div className="flex items-center justify-between py-4 px-6">
+            <div className="flex items-center justify-between py-4 px-6 h-16">
                 <Link href="/">
                     <span className="text-lg font-semibold tracking-wider">Sable</span>
                 </Link>
