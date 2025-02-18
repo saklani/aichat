@@ -4,11 +4,11 @@ import { useRouter } from "next/navigation";
 
 export function Login() {
     const router = useRouter()
-    const handleClick = () => router.push("/login")
+
 
     return (
         <Button variant={"ghost"} onClick={handleClick}>
-            Log In
+            Log in
         </Button>
     )
 }

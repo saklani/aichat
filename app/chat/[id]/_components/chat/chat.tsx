@@ -5,10 +5,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useChat } from "ai/react";
 import { toast } from "sonner";
 import { useChatData } from '../../hooks/useChatData';
-import { AIMessage } from "./ai-message";
 import { DataDialog } from "./data-dialog";
 import { SwitchModels } from "./models";
-import { UserMessage } from "./user-message";
+import { useRef, useState, useEffect } from "react";
+import { Messages } from "./messages";
 
 export function Chat({ id }: { id: string }) {
     const { messages, preferences, isLoading, isError } = useChatData(id);
@@ -27,31 +27,56 @@ export function Chat({ id }: { id: string }) {
 
 export function NonMemoizedChat({ id, initialMessages, model }: { id: string, initialMessages: GetMessages, model: string }) {
     const queryClient = useQueryClient()
+    const [isLoading, setIsLoading] = useState(false)
+    const [isFinished, setIsFinished] = useState(true)
+    const messageRef = useRef<HTMLDivElement>(null)
+
+    const scrollToBottom = () => {
+        if (messageRef.current) {
+            messageRef.current.scrollIntoView({ behavior: "smooth" })
+        }
+    }
 
     const { messages, input, handleInputChange, handleSubmit } = useChat({
         id,
         initialMessages,
-        onResponse: () => queryClient.invalidateQueries({ queryKey: ["chats"] }),
+        onResponse: () => {
+            setIsLoading(false)
+            queryClient.invalidateQueries({ queryKey: ["chats"] })
+            scrollToBottom();
+        },
         onError: (error) => {
+            setIsLoading(false)
             console.error(error)
             toast(JSON.parse(error.message))
+        },
+        onFinish: () => {
+            setIsFinished(true)
         },
         body: { model },
     });
 
+    const handleFormSubmit = async (e: React.FormEvent) => {
+        scrollToBottom();
+        setIsLoading(true);
+        setIsFinished(false);
+        handleSubmit(e);
+    };
+
+    // Scroll to bottom when messages change
+    useEffect(() => {
+        scrollToBottom();
+    }, [messages]);
+
     return (
-        <div className="flex flex-col flex-1 w-full items-center">
-            <div className="flex flex-col overflow-y-auto pt-5 pb-[96px] px-2 w-[calc(100%-24px)] max-w-3xl ">
-                {messages.length === 0 ?
-                    <h1 className="text-2xl">What can I help with?</h1> :
-                    messages.map(m => (
-                        <div key={m.id}>
-                            {m.role === 'user' ? <UserMessage content={m.content} /> : <AIMessage content={m.content} />}
-                        </div>
-                    ))}
+        <div className="flex flex-col w-full items-center">
+            <div
+                className="flex flex-col pb-[128px] w-[calc(100%-24px)] max-w-3xl pt-[24px] px-4"
+            >
+               <Messages messages={messages} isLoading={isLoading} messageRef={messageRef} isFinished={isFinished} />
             </div>
-            <div className="bg-background fixed bottom-0 z-1 border border-input pt-0 rounded-lg p-1 pt-0 lg:w-[calc(100%-24px)] md:w-[500px] w-[300px] max-w-3xl ">
-                <form onSubmit={handleSubmit}>
+            <div className="bg-background fixed bottom-0 z-1 border border-input rounded-lg p-2 pt-0 lg:w-[calc(100%-24px)] sm:w-[500px] w-[350px] max-w-3xl mb-1 h-[1">
+                <form onSubmit={handleFormSubmit}>
                     <Textarea
                         className="w-full resize-none h-[72px]"
                         value={input}
@@ -60,7 +85,7 @@ export function NonMemoizedChat({ id, initialMessages, model }: { id: string, in
                         onKeyDown={(e) => {
                             if (e.key === "Enter" && e.shiftKey == false) {
                                 e.preventDefault();
-                                //@ts-expect-error comvert to form element
+                                //@ts-expect-error convert to form element
                                 (e.target.form as HTMLFormElement).requestSubmit();
                             }
                         }}

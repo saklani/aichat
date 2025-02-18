@@ -8,7 +8,7 @@ const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
   code: ({ node, className, children, ...rest }) => {
     return (
-      <code {...rest} className={cn(className, "text-[14px] bg-gray-500 text-foreground rounded-lg py-[1px] px-2")}>
+      <code {...rest} className={cn(className, "text-[14px] bg-gray-500 text-foreground rounded-xs py-[1px] px-2")}>
         {children}
       </code>
     );

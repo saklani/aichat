@@ -9,17 +9,6 @@ export default {
 	],
 	theme: {
 		extend: {
-			animation: {
-				slide500: "slide 300ms ease",
-				slide600: "slide 500ms ease",
-				slide700: "slide 700ms ease",
-			},
-			keyframes: {
-				slide: {
-					"0%": { transform: "translateY(-10px)", opacity: "0" },
-					"100%": { transform: "translateY(0)", opacity: "1" },
-				},
-			},
 			colors: {
 				background: 'hsl(var(--background))',
 				header: 'hsl(var(--header))',

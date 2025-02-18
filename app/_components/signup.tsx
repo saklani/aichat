@@ -4,11 +4,9 @@ import { useRouter } from "next/navigation";
 
 export function SignUp() {
     const router = useRouter()
-    const handleClick = () => router.push("/login")
+    const handleClick = () => router.push("/register")
 
     return (
-        <Button onClick={handleClick}>
-            Sign Up
-        </Button>
+       
     )
 }

@@ -1,10 +1,11 @@
 import { memo } from "react";
 import { Markdown } from "./markdown";
+import { cn } from "@/lib/utils";
 
-export const AIMessage = memo(function ({ content }: { action?: string; content: string; }) {
+export const AIMessage = memo(function ({ content }: { content: string; }) {
     return (
-        <div className="flex w-full py-[24px] gap-[8px]">
-            <div className="flex flex-col w-full py-2 px-6">
+        <div className={cn("flex w-full py-[24px] gap-[8px] flex-1 h-full")}> 
+            <div className="flex flex-col w-full py-2">
                 <Markdown>{content}</Markdown>
             </div>
         </div>

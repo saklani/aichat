@@ -1,7 +1,7 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuGroup, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { GetUserPreferences } from "@/lib/client/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import * as React from "react"
@@ -48,17 +48,18 @@ const ModelComboBox = React.memo(function ({ defaultModel }: { defaultModel: str
           {value}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent side="top" className="w-[200px]">
-        <DropdownMenuLabel>Open AI</DropdownMenuLabel>
-        <DropdownMenuSeparator />
+      <DropdownMenuContent side="top" className="w-[250px]">
+        <DropdownMenuLabel>Models</DropdownMenuLabel>
         {openaiModels.map(model =>
           <DropdownMenuItem
             key={model.value}
-            className={model.value === value ? "bg-foreground/30" : ""}
+            className={model.value === value ? "my-1 bg-foreground/30" : ""}
             onClick={() => handleModelChange(model.value)}>
-            {model.value}
+            {model.label}
           </DropdownMenuItem>)
         }
+        <DropdownMenuItem disabled>DeepSeek R1</DropdownMenuItem>
+        <DropdownMenuItem disabled>Claude 3.5 Sonnet</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
