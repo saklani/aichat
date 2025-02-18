@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export function Features() {
     return (
-        <section className="bg-background/30 border-b mx-auto max-w-3xl px-6 py-24 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
+        <section className="bg-background/30 px-6 py-24 grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-2 w-full">
             <Card>
                 <CardHeader>
                     <CardTitle>Completely Open Source</CardTitle>

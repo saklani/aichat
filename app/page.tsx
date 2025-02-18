@@ -14,9 +14,9 @@ export default function Page() {
                 <Hero />
                 {/* FEATURE CARDS */}
                 <Features />
-                {/* FOOTER */}
-                <Footer />
             </div>
+            {/* FOOTER */}
+            <Footer />
         </div>
     );
 }
