@@ -1,11 +1,8 @@
-import MillionLint from "@million/lint";
 import type { NextConfig } from "next";
 
+/** @type {import('next').NextConfig} */
 const nextConfig: NextConfig = {
   /* config options here */
-};
-
-export default MillionLint.next({
-  enabled: false,
-  rsc: true
-})(nextConfig);
+}
+ 
+module.exports = nextConfig
