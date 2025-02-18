@@ -38,7 +38,22 @@ export async function GET() {
     });
 }
 
-
+function errorHandler(error: unknown) {
+    console.error("chat", error)
+    if (error == null) {
+      return 'unknown error';
+    }
+  
+    if (typeof error === 'string') {
+      return error;
+    }
+  
+    if (error instanceof Error) {
+      return error.message;
+    }
+  
+    return JSON.stringify(error);
+  }
 
 
 async function LimitReached({ userId }: { userId: string }) {
@@ -121,7 +136,7 @@ export async function POST(request: NextRequest) {
             },
             tools: { fileSearch },
         });
-        return result.toDataStreamResponse();
+        return result.toDataStreamResponse({getErrorMessage: errorHandler});
     } catch (error) {
         console.error(error)
         return HTTP_500
