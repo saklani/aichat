@@ -15,10 +15,6 @@ const openaiModels = [
     value: "gpt-4o",
     label: "GPT-4o",
   },
-  {
-    value: "gpt-o1-mini",
-    label: "GPT-o1-mini",
-  },
 ]
 
 
