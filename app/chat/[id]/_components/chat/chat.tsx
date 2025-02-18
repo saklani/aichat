@@ -34,7 +34,7 @@ export function NonMemoizedChat({ id, initialMessages, model }: { id: string, in
         onResponse: () => queryClient.invalidateQueries({ queryKey: ["chats"] }),
         onError: (error) => {
             console.error(error)
-            toast(JSON.parse(error.message)["error"])
+            toast(JSON.parse(error.message))
         },
         body: { model },
     });
