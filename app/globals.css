@@ -34,7 +34,7 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --radius: 4px;
+    --radius: 12px;
 
     --zeus: 27 18% 10%;
     --mineral: 180 12% 55%;
@@ -60,7 +60,7 @@ body {
   }
 
   .title {
-    @apply text-4xl font-bold lg:text-5xl mb-3;
+    @apply text-4xl font-semibold lg:text-5xl mb-3;
   }
   .subtitle {
     @apply text-3xl font-semibold tracking-tight mb-2;

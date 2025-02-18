@@ -2,13 +2,13 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 
-export function Login() {
+export function SignUp() {
     const router = useRouter()
     const handleClick = () => router.push("/login")
 
     return (
-        <Button variant={"ghost"} onClick={handleClick}>
-            Log In
+        <Button onClick={handleClick}>
+            Sign Up
         </Button>
     )
 }

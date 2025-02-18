@@ -1,22 +1,20 @@
 "use client"
 
-import { useSession } from "@/lib/client/auth";
-import { Dashboard } from "./dashboard";
 import { GetStarted } from "./get-started";
+import { motion } from "framer-motion";
 
 export function Hero() {
-    const session = useSession()
     return (
-        <section className="mx-auto max-w-3xl flex flex-col items-center justify-center text-center py-16 px-4 gap-8">
-            <div className="flex flex-col gap-3 max-w-xl">
-                <h1 className="title leading-tight">
+        <section className="flex flex-col items-center justify-center text-center py-32 px-4 w-full">
+            <div className="flex flex-col max-w-xl">
+                <motion.h1 className="title leading-tight" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.2 }}>
                     Find any information you need in minutes
-                </h1>
-                <p className="muted max-w-2xl">
+                </motion.h1>
+                <motion.p className="mt-5 muted max-w-2xl text-lg" initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: 0.2 }}>
                     An open-source interface for all your AI chats and data.
-                </p>
-            </div>
-            {session?.data ? <Dashboard/>: <GetStarted/>}
+                </motion.p>
+            </div> 
+            <GetStarted />
         </section>
     )
 }

@@ -9,6 +9,17 @@ export default {
 	],
 	theme: {
 		extend: {
+			animation: {
+				slide500: "slide 300ms ease",
+				slide600: "slide 500ms ease",
+				slide700: "slide 700ms ease",
+			},
+			keyframes: {
+				slide: {
+					"0%": { transform: "translateY(-10px)", opacity: "0" },
+					"100%": { transform: "translateY(0)", opacity: "1" },
+				},
+			},
 			colors: {
 				background: 'hsl(var(--background))',
 				header: 'hsl(var(--header))',
@@ -69,7 +80,8 @@ export default {
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
+				xs: 'calc(var(--radius) - 8px)'
 			}
 		}
 	},

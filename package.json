@@ -41,7 +41,7 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.4",
     "drizzle-orm": "^0.38.4",
-    "framer-motion": "^12.0.5",
+    "framer-motion": "^12.4.4",
     "global": "^4.4.0",
     "inngest": "^3.31.7",
     "inngest-cli": "^1.4.6",
