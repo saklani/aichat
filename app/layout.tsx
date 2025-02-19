@@ -3,9 +3,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Providers from './providers';
 import { Source_Code_Pro } from 'next/font/google';
-import { injectSpeedInsights } from '@vercel/speed-insights';
- 
-injectSpeedInsights();
 
 const sourceCodePro = Source_Code_Pro({
   subsets: ['latin'],
