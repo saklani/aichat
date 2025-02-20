@@ -1,6 +1,6 @@
 "use client"
 import { Textarea } from "@/components/ui/textarea";
-import { GetMessages } from "@/lib/client/types";
+import type { GetMessages } from "@/lib/client/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChat } from "ai/react";
 import { toast } from "sonner";
@@ -66,7 +66,7 @@ export function NonMemoizedChat({ id, initialMessages, model }: { id: string, in
     // Scroll to bottom when messages change
     useEffect(() => {
         scrollToBottom();
-    }, [messages]);
+    }, [scrollToBottom, messages]);
 
     return (
         <div className="flex flex-col w-full items-center">
@@ -83,7 +83,7 @@ export function NonMemoizedChat({ id, initialMessages, model }: { id: string, in
                         placeholder="Ask anything"
                         onChange={handleInputChange}
                         onKeyDown={(e) => {
-                            if (e.key === "Enter" && e.shiftKey == false) {
+                            if (e.key === "Enter" && e.shiftKey === false) {
                                 e.preventDefault();
                                 //@ts-expect-error convert to form element
                                 (e.target.form as HTMLFormElement).requestSubmit();

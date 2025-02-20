@@ -62,7 +62,6 @@ export const PostRequestSchema = z.object({
 });
 
 
-
 export const GetChatResponseSchema = z.object({
     id: z.string().uuid(),
     title: z.string(),

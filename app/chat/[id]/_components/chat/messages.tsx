@@ -1,4 +1,4 @@
-import { Message } from "ai/react";
+import type { Message } from "ai/react";
 import { UserMessage } from "./user-message";
 import { AIMessage } from "./ai-message";
 import { cn } from "@/lib/utils";

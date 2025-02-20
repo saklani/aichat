@@ -1,6 +1,6 @@
-import { z } from "zod";
-import { GetChatResponseSchema, GetChatsResponseSchema, GetMessagesResponseSchema, GetObjectResponseSchema, GetObjectsResponseSchema, GetPlanResponseSchema, GetUserPreferenceResponseSchema, GetUserResponseSchema } from "../server/api/schema";
-import { SuccessResponse } from "../server/api/types";
+import type { z } from "zod";
+import type { GetChatResponseSchema, GetChatsResponseSchema, GetMessagesResponseSchema, GetObjectResponseSchema, GetObjectsResponseSchema, GetPlanResponseSchema, GetUserPreferenceResponseSchema, GetUserResponseSchema } from "../server/api/schema";
+import type { SuccessResponse } from "../server/api/types";
 
 export type GetUser = SuccessResponse<z.infer<typeof GetUserResponseSchema>>
 export type GetUserPreferences = SuccessResponse<z.infer<typeof GetUserPreferenceResponseSchema>>

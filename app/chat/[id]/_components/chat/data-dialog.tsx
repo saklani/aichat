@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { GetObjectsResponse } from "@/lib/client/types";
+import type { GetObjectsResponse } from "@/lib/client/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { File, Loader2, Upload } from "lucide-react";
 import React from "react";
@@ -56,14 +56,14 @@ function FileList({ id }: { id: string }) {
 
     return (
         <div className="flex flex-col items-center gap-2 h-[40vh] overflow-y-auto border p-2">
-           {isLoading ? <Loader2 className="animate-spin mt-12" />
-            : response?.data && response.data.length > 0 ? response.data.map((file) => (
-                <div key={file.id} className="flex flex-col gap-2 w-full">
-                    <p className="text-sm">{file.name}</p>
-                </div>
-            )) : (
-                <p className="text-sm w-full">No files in Chat</p>
-            )}
+            {isLoading ? <Loader2 className="animate-spin mt-12" />
+                : response?.data && response.data.length > 0 ? response.data.map((file) => (
+                    <div key={file.id} className="flex flex-col gap-2 w-full">
+                        <p className="text-sm">{file.name}</p>
+                    </div>
+                )) : (
+                    <p className="text-sm w-full">No files in Chat</p>
+                )}
         </div>
     )
 }
@@ -108,7 +108,7 @@ function NonMemoizedDataDialog({ id }: DataDropdownProps) {
             <DialogContent>
                 <DialogHeader>
                     <DialogTitle>Files in Chat</DialogTitle>
-                    <DialogDescription></DialogDescription>
+                    <DialogDescription />
                 </DialogHeader>
                 <FileUpload mutate={mutate} status={status} />
                 {/* <ConnectGoogleDrive /> */}

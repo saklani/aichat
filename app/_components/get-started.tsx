@@ -15,7 +15,7 @@ export const GetStarted = memo(() => {
   
   return (
     <motion.div variants={variants} initial="initial" animate="animate">
-      <Button size="lg" className="mt-12 animate-slide700" onClick={handleClick}>
+      <Button size="lg" className="animate-slide700" onClick={handleClick}>
         Get Started
       </Button>
     </motion.div>

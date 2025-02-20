@@ -1,5 +1,5 @@
 "use client"
-import { GetUser } from "@/lib/client/types";
+import type { GetUser } from "@/lib/client/types";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronUp, User2 } from "lucide-react";
 

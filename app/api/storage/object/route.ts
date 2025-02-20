@@ -1,9 +1,9 @@
 import { generateEmbeddings } from "@/lib/ai/embeddings";
 import { withAuth } from "@/lib/server/api/middleware";
 import { GetObjectResponseSchema } from "@/lib/server/api/schema";
-import { queries } from "@/lib/server/db";
+import { queries, type schema } from "@/lib/server/db";
 import { objects } from "@/lib/server/store/objects";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { randomUUID } from "node:crypto";
 
 // Constants
@@ -53,7 +53,7 @@ async function validateStorageLimit(userId: string, fileSize: number): Promise<A
 }
 
 // Helper functions
-async function createOrUpdateChat(chatId: string, userId: string, fileId: string): Promise<ApiError | { chat: any }> {
+async function createOrUpdateChat(chatId: string, userId: string, fileId: string): Promise<ApiError | { chat: schema.Chat }> {
     let chat = await queries.getChat({ id: chatId, userId });
 
     if (!chat) {
@@ -89,6 +89,10 @@ async function createOrUpdateChat(chatId: string, userId: string, fileId: string
             userId,
             fileIds: [...(collection.fileIds ?? []), fileId],
         });
+    }
+
+    if (!chat) {
+        return { error: "Failed to create chat", status: 500 };
     }
 
     return { chat };

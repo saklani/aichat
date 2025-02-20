@@ -8,7 +8,7 @@ import { generateTitleFromUserMessage } from '@/lib/utils';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { randomUUID } from "crypto";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 export const maxDuration = 60;
 

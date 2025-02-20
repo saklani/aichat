@@ -15,19 +15,17 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { memo } from "react";
 
-export const DeleteAccount = memo(function () {
-    return (
+export const DeleteAccount = memo(() => (
         <div className="flex flex-col items-start gap-2">
             <h1 className="title">Danger Zone</h1>
             <p className="text-sm ml-1">Delete account and all associated data</p>
             <DeleteAlert />
         </div>
-    )
-})
+    ))
 
 DeleteAccount.displayName = "DeleteAccount"
 
-const DeleteAlert = memo(function () {
+const DeleteAlert = memo(() => {
     const router = useRouter()
     const { mutate } = useMutation({
         mutationFn: () => fetch("/api/user", { method: "DELETE" }),

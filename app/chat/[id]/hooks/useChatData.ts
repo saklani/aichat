@@ -1,5 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
-import { GetMessagesResponse, GetUserPreferences } from '@/lib/client/types';
+import type { GetMessagesResponse, GetUserPreferences } from '@/lib/client/types';
 
 export function useChatData(id: string) {
     const [messagesQuery, preferencesQuery] = useQueries({

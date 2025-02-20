@@ -1,5 +1,5 @@
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { IStoreProvider } from "./store-provider-interface";
+import type { IStoreProvider } from "./store-provider-interface";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 interface S3StorageConfig {

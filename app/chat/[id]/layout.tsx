@@ -1,4 +1,4 @@
-import React from "react";
+import type React from "react";
 import { AppSidebar } from "../_components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 

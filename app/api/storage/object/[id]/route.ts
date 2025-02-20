@@ -1,7 +1,7 @@
 import { withAuth } from "@/lib/server/api/middleware";
 import { GetObjectResponseSchema } from "@/lib/server/api/schema";
 import { objects } from "@/lib/server/store/objects";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 /**
  * GET /api/objects/[id]

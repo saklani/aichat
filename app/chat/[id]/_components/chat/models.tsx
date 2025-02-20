@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuGroup, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { GetUserPreferences } from "@/lib/client/types"
+import type { GetUserPreferences } from "@/lib/client/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import * as React from "react"
 
@@ -27,7 +27,7 @@ export function SwitchModels() {
   return <ModelComboBox defaultModel={response?.data.defaultModel} />
 }
 
-const ModelComboBox = React.memo(function ({ defaultModel }: { defaultModel: string }) {
+const ModelComboBox = React.memo(({ defaultModel }: { defaultModel: string }) => {
   const { mutate } = useMutation({
     mutationKey: ["preference"],
     mutationFn: (defaultModel: string) => fetch("/api/user/preferences", { method: "PUT", body: JSON.stringify({ defaultModel }) })

@@ -19,7 +19,7 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Delete, Ellipsis, Share } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import { GetChats } from "@/lib/client/types"
+import type { GetChats } from "@/lib/client/types"
 import { useCallback, useMemo, memo } from "react"
 
 export function Content() {
@@ -49,7 +49,7 @@ export function Content() {
     )
 }
 
-const ChatItem = memo(function ({ id, title }: { id: string; title: string; }) {
+const ChatItem = memo(({ id, title }: { id: string; title: string; }) => {
     const pathname = usePathname()
     const router = useRouter()
     const queryClient = useQueryClient()

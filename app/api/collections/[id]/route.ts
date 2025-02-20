@@ -1,7 +1,7 @@
 import { withAuth } from "@/lib/server/api/middleware";
 import { GetCollectionResponseSchema, UpdateCollectionRequestSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     return withAuth(async (userId) => {
