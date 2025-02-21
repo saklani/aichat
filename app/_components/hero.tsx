@@ -26,10 +26,10 @@ export function Hero() {
         initial="initial"
         animate="animate"
       >
-        <motion.h1 className="text-3xl md:text-4xl lg:text-6xl leading-tight" variants={variants.item}>
+        <motion.h1 className="text-3xl md:text-4xl lg:text-6xl leading-tight tracking-tighter" variants={variants.item}>
           Find information fast
         </motion.h1>
-        <motion.p className="muted text-md md:text-lg lg:text-xl" variants={variants.item}>
+        <motion.p className="muted  text-md lg:text-lg" variants={variants.item}>
           An open-source interface where you can add your own models and chat with your data.
         </motion.p>
         <GetStarted />

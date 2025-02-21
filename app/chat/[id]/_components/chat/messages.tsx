@@ -1,10 +1,8 @@
-import type { Message } from "ai/react";
 import { UserMessage } from "./user-message";
 import { AIMessage } from "./ai-message";
-import { cn } from "@/lib/utils";
-import { Markdown } from "./markdown";
+import type { GetMessageWithParent as Message } from "@/lib/client/types";
 
-export function Messages({ messages, isLoading, messageRef, isFinished }: { messages: Message[], isLoading: boolean, messageRef: React.RefObject<HTMLDivElement | null>, isFinished: boolean }) {
+export function Messages({ messages, isLoading, messageRef, setParentId }: { messages: Message[], isLoading: boolean, messageRef: React.RefObject<HTMLDivElement | null>, setParentId: (parentId: string) => void }) {
     return (
         <>
             {messages.length === 0 ?
@@ -13,21 +11,24 @@ export function Messages({ messages, isLoading, messageRef, isFinished }: { mess
                     <div key={m.id}>
                         {
                             m.role === 'user' ?
-                                <UserMessage content={m.content} />
-                                : <AIMessage content={m.content} />
+                                <UserMessage message={m} />
+                                : <AIMessage id={m.id} content={m.content} setParentId={setParentId} />
                         }
 
                     </div>
                 ))}
             <div className={"flex flex-col h-full min-h-[calc(100vh-152px)]"}>
                 {
-                    messages.at(-1)?.role === 'user' ?
-                        <UserMessage content={messages.at(-1)?.content ?? ""} /> :
+                    messages.at(-1) && messages.at(-1)?.role === 'user' ?
+                        <UserMessage message={messages.at(-1)} /> :
                         <></>
                 }
                 {
                     isLoading ?
-                        <div ref={messageRef}>Thinking...</div> : <AIMessage content={messages.at(-1)?.content ?? ""} />
+                        <div ref={messageRef}>Thinking...</div> :
+                        messages.at(-1)?.role === 'assistant' ?
+                            <AIMessage id={messages.at(-1)?.id ?? ""} content={messages.at(-1)?.content ?? ""} setParentId={setParentId} />
+                            : <></>
                 }
             </div>
         </>

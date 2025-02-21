@@ -37,14 +37,20 @@ export const PutPlanResponseSchema = z.object({
     storageLimit: z.number().int().min(0)
 });
 
-export const GetMessagesResponseSchema = z.array(
-    z.object({
-        id: z.string().uuid(),
-        content: z.string(),
-        role: z.enum(["user", "assistant", "system"]),
-        chatId: z.string().optional(),
-    })
-)
+
+export const MessageResponseSchema = z.object({
+    id: z.string().uuid(),
+    content: z.string(),
+    role: z.enum(["user", "assistant", "system"]),
+    chatId: z.string().optional(),
+})
+
+export const MessageWithParentResponseSchema = MessageResponseSchema.extend({
+    parentId: z.string().uuid().optional(),
+    parent: MessageResponseSchema.optional(),
+})
+
+export const GetMessagesResponseSchema = z.array(MessageResponseSchema)
 
 export const PostMessageRequestSchema =
     z.object({
@@ -52,13 +58,15 @@ export const PostMessageRequestSchema =
         content: z.string(),
         role: z.enum(["user", "assistant", "system"]),
         chatId: z.string().optional(),
+        context: z.string().optional(),
     })
 
 
-export const PostRequestSchema = z.object({
+export const PostChatRequestSchema = z.object({
     id: z.string().uuid(),
     messages: z.array(PostMessageRequestSchema),
-    model: ModelNameEnum
+    model: ModelNameEnum,
+    currentParentId: z.string().uuid().optional(),
 });
 
 

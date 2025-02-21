@@ -74,6 +74,7 @@ export const chats = pgTable('chats', {
         .references(() => models.id),
     collectionId: uuid('collection_id').notNull().references(() => collections.id),
     systemPrompt: text('system_prompt'),
+    parentId: uuid('parent_id'),
     lastMessageAt: timestamp('last_message_at'),
     messageCount: integer('message_count').notNull().default(0),
     isArchived: boolean('is_archived').notNull().default(false),
@@ -98,6 +99,7 @@ export const messages = pgTable('messages', {
     modelId: uuid('model_id')
         .references(() => models.id),
     metadata: text('metadata'), // JSON string for additional data
+    parentId: uuid('parent_id'),
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
 }, (table) => [
     index('message_chat_id_idx').on(table.chatId)

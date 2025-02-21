@@ -1,5 +1,5 @@
 import { useQueries } from '@tanstack/react-query';
-import type { GetMessagesResponse, GetUserPreferences } from '@/lib/client/types';
+import type { GetMessageWithParent, GetUserPreferences } from '@/lib/client/types';
 
 export function useChatData(id: string) {
     const [messagesQuery, preferencesQuery] = useQueries({
@@ -7,7 +7,7 @@ export function useChatData(id: string) {
             {
                 queryKey: ["messages", id],
                 queryFn: () =>
-                    fetch(`/api/chat/${id}/messages`).then((res) => res.json()) as Promise<GetMessagesResponse>,
+                    fetch(`/api/chat/${id}/messages`).then((res) => res.json()) as Promise<GetMessageWithParent>,
             },
             {
                 queryKey: ["preferences"],

@@ -2,11 +2,12 @@ import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import "./globals.css";
 import Providers from './providers';
-import { Source_Code_Pro } from 'next/font/google';
+import { Lato } from 'next/font/google';
 
-const sourceCodePro = Source_Code_Pro({
+const lato = Lato({
   subsets: ['latin'],
-  variable: '--font-source-code-pro',
+  variable: '--font-lato',
+  weight: ['400', '700'],
 })
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`flex flex-col bg-gradient-to-b from-gray-25 to-gray-50 h-[100vh] ${sourceCodePro.variable} subpixel-antialiased`}
+        className={`flex flex-col bg-gradient-to-b from-gray-25 to-gray-50 h-[100vh] ${lato.variable} subpixel-antialiased`}
       >
         <Providers>{children}</Providers>
         <Toaster />

@@ -2,7 +2,7 @@ import { auth } from "@/lib/server/auth";
 import { fileSearch } from "@/lib/ai/tools/file-search";
 import { withAuth } from "@/lib/server/api/middleware";
 import { createResponse, HTTP_400, HTTP_401, HTTP_500 } from "@/lib/server/api/response";
-import { GetChatsResponseSchema, PostRequestSchema } from "@/lib/server/api/schema";
+import { GetChatsResponseSchema, PostChatRequestSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import { generateTitleFromUserMessage } from '@/lib/utils';
 import { openai } from '@ai-sdk/openai';
@@ -41,19 +41,19 @@ export async function GET() {
 function errorHandler(error: unknown) {
     console.error("chat", error)
     if (error == null) {
-      return 'unknown error';
+        return 'unknown error';
     }
-  
+
     if (typeof error === 'string') {
-      return error;
+        return error;
     }
-  
+
     if (error instanceof Error) {
-      return error.message;
+        return error.message;
     }
-  
+
     return JSON.stringify(error);
-  }
+}
 
 
 async function LimitReached({ userId }: { userId: string }) {
@@ -67,7 +67,7 @@ async function LimitReached({ userId }: { userId: string }) {
  */
 export async function POST(request: NextRequest) {
     const session = await auth.api.getSession({
-        headers: request.headers    
+        headers: request.headers
     })
     if (!session?.user?.id) {
         return HTTP_401;
@@ -80,7 +80,9 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-        const validatedInput = PostRequestSchema.safeParse(body);
+
+
+        const validatedInput = PostChatRequestSchema.safeParse(body);
 
         if (!validatedInput.success) {
             console.error("[Chat Creation Validation Error]", {
@@ -90,13 +92,14 @@ export async function POST(request: NextRequest) {
             return HTTP_400
         }
 
-        const { id, messages, model } = validatedInput.data;
+        const { id, messages, model, currentParentId } = validatedInput.data;
         const chat = await queries.getChat({ id, userId });
         const lastMessage = messages.at(-1);
 
         if (!lastMessage) {
             return HTTP_400
         }
+
 
         // Create new chat if it doesn't exist
         if (!chat) {
@@ -113,30 +116,42 @@ export async function POST(request: NextRequest) {
 
         // Save user message
         const messageId = randomUUID();
+        let oldMessage = null
+        if (currentParentId) {
+            oldMessage = await queries.getMessage({ id: currentParentId })
+        }
 
         await queries.IncrementUsage({ chatId: id, userId });
-        await queries.createMessage({
+        const response = await queries.createMessage({
             ...lastMessage,
             chatId: id,
-            id: messageId
+            id: messageId,
+            parentId: currentParentId || null
         });
-
+        console.log("response", response)
+  
+        if (oldMessage) {
+            messages[messages.length - 1].content = `In the context of this message ${oldMessage.content}: ${messages[messages.length - 1].content}`
+        }
         // Stream AI response
         const result = streamText({
             model: openai(model),
             messages,
             maxSteps: 4,
             onFinish: async ({ text }) => {
-                await queries.createMessage({
-                    content: text,
-                    role: "assistant",
-                    chatId: id,
-                    id: randomUUID()
-                });
+                if (text.length > 0) {
+                    await queries.createMessage({
+                        content: text,
+                        role: "assistant",
+                        chatId: id,
+                        id: randomUUID(),
+                        parentId: null
+                    });
+                }
             },
             tools: { fileSearch },
         });
-        return result.toDataStreamResponse({getErrorMessage: errorHandler});
+        return result.toDataStreamResponse({ getErrorMessage: errorHandler });
     } catch (error) {
         console.error(error)
         return HTTP_500

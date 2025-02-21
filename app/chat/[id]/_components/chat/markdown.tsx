@@ -1,14 +1,13 @@
+import { cn } from "@/lib/utils"
 import Link from 'next/link'
-import React, { memo, useMemo } from 'react'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { cn } from "@/lib/utils"
 
 const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
   code: ({ node, className, children, ...rest }) => {
     return (
-      <code {...rest} className={cn(className, "text-[14px] bg-gray-500 text-foreground rounded-xs py-[1px] px-2")}>
+      <code {...rest} className={cn(className, "text-sm bg-gray-500 text-foreground rounded-xs py-[1px] px-2")}>
         {children}
       </code>
     )
@@ -106,11 +105,12 @@ const components: Partial<Components> = {
 }
 
 const remarkPlugins = [remarkGfm]
-
 export const Markdown = ({ children }: { children: string }) => {
-  return (<ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
-    {children}
-  </ReactMarkdown>)
+  return (
+    <ReactMarkdown remarkPlugins={remarkPlugins} components={components}>
+      {children}
+    </ReactMarkdown>
+  )
 }
 
 Markdown.displayName = "Markdown"
