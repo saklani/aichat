@@ -4,19 +4,17 @@ import { GoogleLogin } from "@/components/google-login";
 
 export default function LoginPage() {
     return (
-        <div className="flex w-full h-screen justify-center items-center p-[24px]">
-            <Card className="flex flex-col items-stretch w-full max-w-[360px] justify-between">
-            <CardHeader className="mt-[16px] items-center">
-                <h1 className="subtitle">Login</h1>
-                <h2 className="muted">Sign in to your account</h2>
-            </CardHeader>
-            <CardContent className="flex flex-col gap-6 items-stretch py-6">
+        <div className="flex flex-col w-full h-screen justify-center items-center">
+            <div className="flex flex-col gap-[24px] w-full max-w-sm items-center">
+                <div className="bg-gray-100 w-[100px] h-[100px] rounded-full"></div>
+                <div className="flex flex-col gap-[8px]">
+                    <h1 className="subtitle text-center">Login</h1>
+                    <h2 className="muted text-center">Sign in to your account</h2>
+                </div>
                 <GoogleLogin />
-            </CardContent>
-            <CardFooter className="justify-center">
                 <p className="info">Don&apos;t have an account? <Link className="text-blue-700 hover:underline" href="/register">Register</Link></p>
-            </CardFooter>
-        </Card>
+
+            </div>
         </div>
     );
 }

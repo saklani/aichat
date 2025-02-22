@@ -1,8 +1,7 @@
 "use client"
 
-import { GetStarted } from "./get-started";
 import { motion } from "framer-motion";
-
+import { Section } from "./section";
 const variants = {
   container: {
     initial: { opacity: 0 },
@@ -12,28 +11,27 @@ const variants = {
     }
   },
   item: {
-    initial: { opacity: 0, y: -10 },
+    initial: { opacity: 0, y: 0 },
     animate: { opacity: 1, y: 0 }
   }
 };
 
 export function Hero() {
   return (
-    <section className="flex flex-col items-stretch px-12 py-24 w-full">
+    <Section>
       <motion.div
-        className="flex flex-col gap-8"
+        className="flex flex-col gap-8 items-center"
         variants={variants.container}
         initial="initial"
         animate="animate"
       >
-        <motion.h1 className="text-3xl md:text-4xl lg:text-6xl leading-tight tracking-tighter" variants={variants.item}>
+        <motion.h1 className="text-[clamp(2.4rem,_4vw,_4rem)] text-balance -tracking-[1px] lg:-tracking-[1.8px] leading-[1]" variants={variants.item}>
           Find information fast
         </motion.h1>
-        <motion.p className="muted  text-md lg:text-lg" variants={variants.item}>
-          An open-source interface where you can add your own models and chat with your data.
+        <motion.p className="-tracking-[0.1px] md:-tracking-[0.2px] lg:-tracking-[0.3px] xl:-tracking-[0.4px] text-wrap text-[clamp(1.1rem,_2vw,_1.4rem)] font-medium" variants={variants.item}>
+          An open-source interface for your AI chats and data.
         </motion.p>
-        <GetStarted />
       </motion.div>
-    </section>
+    </Section>
   );
 }

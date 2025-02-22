@@ -5,12 +5,12 @@ import { Loader2 } from "lucide-react"
 import * as React from "react"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 transform-gpu",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow hover:bg-primary/80",
+          "bg-primary text-primary-foreground hover:bg-white/90",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
@@ -19,13 +19,10 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         sidebar: "hover:bg-accent hover:text-accent-foreground justify-start",
-        link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
-        default: "px-4 h-[31px] min-w-[84px] rounded-xs text-sm",
-        sm: "h-[31px] px-3 text-xs",
-        lg: "h-[38px] px-5 text-md rounded-lg",
-        icon: "h-[31px] w-[30px] rounded-xs",
+        default: "h-[30px] text-sm rounded-md font-medium px-3",
+        icon: "h-[30px] w-[30px] rounded-md",
       },
     },
     defaultVariants: {
