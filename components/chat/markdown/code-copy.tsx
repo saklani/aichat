@@ -30,3 +30,5 @@ export const CodeCopy = memo(({ content }: { content: string }) => {
         </TooltipProvider>
     )
 })
+
+CodeCopy.displayName = "CodeCopy"

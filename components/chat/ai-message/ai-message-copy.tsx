@@ -31,3 +31,4 @@ export const AImessageCopy = memo(({ content }: { content: string }) => {
         </TooltipProvider>
     )
 })
+AImessageCopy.displayName = "AImessageCopy"

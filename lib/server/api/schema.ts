@@ -34,6 +34,7 @@ export const FileUploadResponseSchema = z.object({
 });
 
 
+export const GetObjectResponseSchema = ObjectSchema
 export const GetObjectsResponseSchema = z.array(ObjectSchema)
 export const CreateCollectionRequestSchema = z.object({
     id: z.string().uuid(),

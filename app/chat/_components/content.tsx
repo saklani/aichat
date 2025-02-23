@@ -19,12 +19,12 @@ import {
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Delete, Ellipsis, Share } from "lucide-react"
 import { usePathname, useRouter } from "next/navigation"
-import type { GetChats } from "@/lib/client/types"
+import type { GetChatsResponse } from "@/lib/client/types"
 import { useCallback, useMemo, memo } from "react"
 
 export function Content() {
 
-    const { data: response, isLoading } = useQuery<GetChats>({
+    const { data: response, isLoading } = useQuery<GetChatsResponse>({
         queryKey: ["chats"],
         queryFn: () => fetch("/api/chat").then(res => res.json())
     })

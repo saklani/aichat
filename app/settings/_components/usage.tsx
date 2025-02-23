@@ -3,11 +3,11 @@
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
-import type { GetPlan } from "@/lib/client/types"
+import type { GetPlanResponse } from "@/lib/client/types"
 import { useQuery } from "@tanstack/react-query"
 
 export function Usage() {
-    const { data: response } = useQuery<GetPlan>({
+    const { data: response } = useQuery<GetPlanResponse>({
         queryKey: ["plan"],
         queryFn: () => fetch("/api/plan").then(res => res.json())
     })

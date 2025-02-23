@@ -1,5 +1,5 @@
 import { withAuth } from "@/lib/server/api/middleware";
-import { GetUserPreferenceResponseSchema, GetUserResponseSchema, PutUserPreferenceRequestSchema } from "@/lib/server/api/schema";
+import { GetUserPreferenceResponseSchema, PutUserPreferenceRequestSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import type { NextRequest } from "next/server";
 

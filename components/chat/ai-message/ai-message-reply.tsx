@@ -30,3 +30,5 @@ export const AImessageReply = memo(({ id, setParentId }: { id: string, setParent
         </TooltipProvider>
     )
 })
+
+AImessageReply.displayName = "AImessageReply"

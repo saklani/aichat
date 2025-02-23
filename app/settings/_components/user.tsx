@@ -3,11 +3,11 @@ import {
     Avatar,
     AvatarFallback
 } from "@/components/ui/avatar";
-import type { GetUser } from "@/lib/client/types";
+import type { GetUserResponse } from "@/lib/client/types";
 import { useQuery } from "@tanstack/react-query";
 
 export function User() {
-    const { data: response } = useQuery<GetUser>({
+    const { data: response } = useQuery<GetUserResponse>({
         queryKey: ["user"],
         queryFn: () => fetch("/api/user").then(res => res.json()),
     });

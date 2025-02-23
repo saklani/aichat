@@ -3,7 +3,7 @@
 import type { Message } from "@/lib/client/types";
 import { useQueryClient } from "@tanstack/react-query";
 import { useChat } from "ai/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { toast } from "sonner";
 import { useChatData } from '../../hooks/useChatData';
 import { Messages } from "./messages";
@@ -30,11 +30,11 @@ export function NonMemoizedChat({ id, initialMessages, model }: { id: string, in
     const messageRef = useRef<HTMLDivElement>(null)
     const [parentId, setParentId] = useState<string | undefined>(undefined)
 
-    const scrollToBottom = () => {
+    const scrollToBottom = useCallback(() => {
         if (messageRef.current) {
             messageRef.current.scrollIntoView({ behavior: "smooth" })
         }
-    }
+    }, [messageRef])
 
     const { messages, input, handleInputChange, handleSubmit } = useChat({
         id,

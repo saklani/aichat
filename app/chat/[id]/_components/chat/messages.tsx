@@ -19,15 +19,15 @@ export function Messages({ messages, isLoading, messageRef, setParentId }: { mes
                 ))}
             <div className={"flex flex-col h-full min-h-[calc(100vh-152px)]"}>
                 {
-                    messages.at(-1) && messages.at(-1)?.role === 'user' ?
-                        <UserMessage message={messages.at(-1)} /> :
+                    messages.length > 0 && messages[messages.length - 1] && messages[messages.length - 1].role === 'user' ?
+                        <UserMessage message={messages[messages.length - 1]} /> :
                         <></>
                 }
                 {
                     isLoading ?
                         <div ref={messageRef}>Thinking...</div> :
-                        messages.at(-1)?.role === 'assistant' ?
-                            <AIMessage id={messages.at(-1)?.id ?? ""} content={messages.at(-1)?.content ?? ""} setParentId={setParentId} />
+                        messages.length > 0 && messages[messages.length - 1] && messages[messages.length - 1].role === 'assistant' ?
+                            <AIMessage id={messages[messages.length - 1].id} content={messages[messages.length - 1].content} setParentId={setParentId} />
                             : <></>
                 }
             </div>

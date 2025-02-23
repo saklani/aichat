@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { GetMessageWithParent as Message } from "@/lib/client/types"
+import type { Message } from "@/lib/client/types"
 import { MessageParent } from "@/components/chat/user-message/message-parent"
 export const UserMessage = memo(({ message }: { message: Message }) => {
  

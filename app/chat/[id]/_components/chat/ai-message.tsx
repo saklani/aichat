@@ -1,5 +1,5 @@
 import { memo } from "react"
-import { Markdown } from "../../../../../components/chat/markdown/markdown"
+import { Markdown } from "@/components/chat/markdown/markdown"
 import { AImessageCopy } from "@/components/chat/ai-message/ai-message-copy"
 import { AImessageReply } from "@/components/chat/ai-message/ai-message-reply"
 
