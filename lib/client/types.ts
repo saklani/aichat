@@ -1,17 +1,21 @@
-import type { z } from "zod";
-import type { GetChatResponseSchema, GetChatsResponseSchema, GetMessagesResponseSchema, GetObjectResponseSchema, GetObjectsResponseSchema, GetPlanResponseSchema, GetUserPreferenceResponseSchema, GetUserResponseSchema, MessageResponseSchema, MessageWithParentResponseSchema } from "../server/api/schema";
+import { z } from "zod";
+import { MessageSchema, ObjectSchema, PlanSchema, UserPreferenceSchema, UserSchema } from "../schema";
 import type { SuccessResponse } from "../server/api/types";
 
-export type GetUser = SuccessResponse<z.infer<typeof GetUserResponseSchema>>
-export type GetUserPreferences = SuccessResponse<z.infer<typeof GetUserPreferenceResponseSchema>>
-export type GetPlan = SuccessResponse<z.infer<typeof GetPlanResponseSchema>>
-export type GetChat = SuccessResponse<z.infer<typeof GetChatResponseSchema>>
-export type GetChats = SuccessResponse<z.infer<typeof GetChatsResponseSchema>>
+export type User = z.infer<typeof UserSchema>
+export type GetUserResponse = SuccessResponse<User>
 
-export type GetMessage = z.infer<typeof MessageResponseSchema>
-export type GetMessageWithParent = SuccessResponse<z.infer<typeof MessageWithParentResponseSchema>>
-export type GetMessages = z.infer<typeof GetMessagesResponseSchema>
-export type GetMessagesResponse = SuccessResponse<z.infer<typeof GetMessagesResponseSchema>>
+export type UserPreferences = z.infer<typeof UserPreferenceSchema>
+export type GetUserPreferencesResponse = SuccessResponse<UserPreferences>
 
-export type GetObjectResponse = SuccessResponse<z.infer<typeof GetObjectResponseSchema>>
-export type GetObjectsResponse = SuccessResponse<z.infer<typeof GetObjectsResponseSchema>>
+export type Plan = z.infer<typeof PlanSchema>
+export type GetPlanResponse = SuccessResponse<Plan>
+
+
+export type Message = z.infer<typeof MessageSchema>
+export type GetMessageResponse = SuccessResponse<Message>
+export type GetMessagesResponse = SuccessResponse<Message[]>
+
+export type Object = z.infer<typeof ObjectSchema>
+export type GetObjectResponse = SuccessResponse<Object>
+export type GetObjectsResponse = SuccessResponse<Object[]>

@@ -35,9 +35,10 @@ body {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
 
-    --zeus: 27 18% 10%;
-    --mineral: 180 12% 55%;
-
+    --inline-code: 0 0% 25.9%;
+    --inline-code-foreground: 0 0% 92.5%;
+    --code-header: 0 0% 10%;
+    
     --sidebar-background: 210 11% 4.5%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 0 0% 98%;

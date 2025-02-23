@@ -11,6 +11,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ id: st
         }
         const messages = await queries.getMessagesByChatId({ chatId });
         const validatedMessages = GetMessagesResponseSchema.safeParse(messages);
+
         if (!validatedMessages.success) {
             console.error("[Messages Validation Error]", {
                 userId,

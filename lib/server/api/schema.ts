@@ -1,87 +1,29 @@
 import { z } from "zod";
-
-const ModelNameEnum = z.enum(["gpt-4o-mini", "gpt-4o", "gpt-o1-mini"])
-
-export const GetUserResponseSchema = z.object({
-    id: z.string(),
-    email: z.string(),
-});
-
-export const GetUserPreferenceResponseSchema = z.object({
-    defaultModel: ModelNameEnum
-});
-
-// Move to ModelName type
-export const PutUserPreferenceRequestSchema = z.object({
-    defaultModel: ModelNameEnum
-});
-
-export const GetPlanResponseSchema = z.object({
-    id: z.string(),
-    userId: z.string(),
-    type: z.enum(["free", "pro", "enterprise"]),
-    messageUsage: z.number().int().min(0),
-    messageLimit: z.number().int().min(0),
-    storageUsage: z.number().int().min(0),
-    storageLimit: z.number().int().min(0),
-    startDate: z.date(),
-    endDate: z.date(),
-    isActive: z.boolean(),
-    createdAt: z.date(),
-    updatedAt: z.date()
-});
-
-export const PutPlanResponseSchema = z.object({
-    type: z.enum(["free", "pro", "enterprise"]),
-    messageLimit: z.number().int().min(0),
-    storageLimit: z.number().int().min(0)
-});
+import { UserSchema, UserPreferenceSchema, PlanSchema, MessageSchema, ChatSchema, ObjectSchema } from "@/lib/schema";
 
 
-export const MessageResponseSchema = z.object({
-    id: z.string().uuid(),
-    content: z.string(),
-    role: z.enum(["user", "assistant", "system"]),
-    chatId: z.string().optional(),
+
+export const GetUserResponseSchema = UserSchema.pick({ id: true, email: true })
+
+export const GetUserPreferenceResponseSchema = UserPreferenceSchema
+export const PutUserPreferenceRequestSchema = UserPreferenceSchema
+
+export const GetPlanResponseSchema = PlanSchema.pick({ id: true, userId: true, type: true, messageUsage: true, messageLimit: true, storageUsage: true, storageLimit: true, startDate: true, endDate: true, isActive: true, createdAt: true, updatedAt: true })
+export const PutPlanResponseSchema = PlanSchema.pick({ type: true, messageLimit: true, storageLimit: true })
+
+export const GetMessageResponseSchema = MessageSchema
+export const GetMessagesResponseSchema = z.array(MessageSchema)
+export const PostMessageRequestSchema = MessageSchema.pick({ content: true, role: true, chatId: true, parentId: true })
+
+export const PostChatRequestSchema = ChatSchema.pick({ id: true }).extend({
+    messages: z.array(MessageSchema.pick({ content: true, role: true })),
+    model: z.string(),
+    currentParentId: z.string().uuid().nullish()
 })
-
-export const MessageWithParentResponseSchema = MessageResponseSchema.extend({
-    parentId: z.string().uuid().optional(),
-    parent: MessageResponseSchema.optional(),
-})
-
-export const GetMessagesResponseSchema = z.array(MessageResponseSchema)
-
-export const PostMessageRequestSchema =
-    z.object({
-        id: z.string().uuid().optional(),
-        content: z.string(),
-        role: z.enum(["user", "assistant", "system"]),
-        chatId: z.string().optional(),
-        context: z.string().optional(),
-    })
-
-
-export const PostChatRequestSchema = z.object({
-    id: z.string().uuid(),
-    messages: z.array(PostMessageRequestSchema),
-    model: ModelNameEnum,
-    currentParentId: z.string().uuid().optional(),
-});
-
-
-export const GetChatResponseSchema = z.object({
-    id: z.string().uuid(),
-    title: z.string(),
-    userId: z.string(),
-    createdAt: z.date(),
-    collectionId: z.string().uuid(),
-});
-
+export const GetChatResponseSchema = ChatSchema
 export const GetChatsRequestSchema = z.object({
     cursor: z.string().uuid().optional(),
 });
-
 export const GetChatsResponseSchema = z.array(GetChatResponseSchema)
 
 
@@ -91,25 +33,8 @@ export const FileUploadResponseSchema = z.object({
     fileId: z.string(),
 });
 
-const ObjectStatusEnum = z.enum([
-    'created',
-    'processing',
-    'ready',
-    'failed'
-]);
-export const GetObjectResponseSchema = z.object({
-    id: z.string(),
-    name: z.string(),
-    type: z.string().optional(),
-    size: z.number().optional(),
-    url: z.string().url().optional(),
-    metadata: z.string().optional(),
-    status: ObjectStatusEnum,
-    createdAt: z.date(),
-    updatedAt: z.date(),
-});
 
-export const GetObjectsResponseSchema = z.array(GetObjectResponseSchema)
+export const GetObjectsResponseSchema = z.array(ObjectSchema)
 export const CreateCollectionRequestSchema = z.object({
     id: z.string().uuid(),
     name: z.string(),

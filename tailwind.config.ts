@@ -52,7 +52,9 @@
 						'4': 'hsl(var(--chart-4))',
 						'5': 'hsl(var(--chart-5))'
 					},
-					zeus: 'hsl(var(--zeus))',
+					'inline-code': 'hsl(var(--inline-code))',
+					'inline-code-foreground': 'hsl(var(--inline-code-foreground))',
+					'code-header': 'hsl(var(--code-header))',
 					mineral: 'hsl(var(--mineral))',
 					sidebar: {
 						DEFAULT: 'hsl(var(--sidebar-background))',

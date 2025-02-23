@@ -1,4 +1,4 @@
-import { GetMessage as Message } from "@/lib/client/types";
+import { Message as Message } from "@/lib/client/types";
 import { Button } from "../../ui/button";
 import { X } from "lucide-react";
 

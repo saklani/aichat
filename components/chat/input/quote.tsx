@@ -2,7 +2,7 @@ import { Message as Message } from "@/lib/client/types";
 import { Button } from "../../ui/button";
 import { X } from "lucide-react";
 
-export const MessageParent = ({ parent, setParentId }: { parent: Message, setParentId: (parentId: string) => void }) => {
+export const Quote = ({ parent, setParentId }: { parent: Message, setParentId: (parentId: string) => void }) => {
 
     const scrollToMessage = () => {
         const messageElement = document.getElementById(parent.id);
@@ -14,9 +14,11 @@ export const MessageParent = ({ parent, setParentId }: { parent: Message, setPar
             }, 1000);
         }
     }
+
     const resetParentId = () => {
         setParentId("")
     }
+
     return (
         <div className="flex items-start bg-slate-700/60 rounded-xs cursor-pointer p-2">
             <div className="text-sm text-muted-foreground w-full" onClick={scrollToMessage}>

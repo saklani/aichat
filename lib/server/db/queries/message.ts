@@ -14,7 +14,7 @@ export async function deleteMessage({ id }: Pick<schema.Message, "id">) {
 
 export async function getMessagesByChatId({ chatId }: Pick<schema.Message, "chatId">) {
     return execute(`get messages of chat ${chatId}`, async () => {
-        const parent = aliasedTable(schema.messages, "parent")
+        const parent = aliasedTable(schema.messages, "parent");
         const result: { messages: schema.Message, parent: schema.Message | null }[] = await db.select({
             messages: schema.messages,
             parent: parent
@@ -22,8 +22,7 @@ export async function getMessagesByChatId({ chatId }: Pick<schema.Message, "chat
             .leftJoin(parent, eq(parent.id, schema.messages.parentId))
             .where(eq(schema.messages.chatId, chatId))
             .orderBy(schema.messages.createdAt);
-        console.log("result", result.map(r => ({ ...r.messages, parent: r.parent })))
-        return result.map(r => ({ ...r.messages, parent: r.parent }))
+        return result.map(r => ({ ...r.messages, parent: r.parent }));
     })
 }
 

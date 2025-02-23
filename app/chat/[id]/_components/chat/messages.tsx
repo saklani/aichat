@@ -1,6 +1,6 @@
 import { UserMessage } from "./user-message";
 import { AIMessage } from "./ai-message";
-import type { GetMessageWithParent as Message } from "@/lib/client/types";
+import type { Message } from "@/lib/client/types";
 
 export function Messages({ messages, isLoading, messageRef, setParentId }: { messages: Message[], isLoading: boolean, messageRef: React.RefObject<HTMLDivElement | null>, setParentId: (parentId: string) => void }) {
     return (

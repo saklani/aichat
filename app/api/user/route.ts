@@ -3,6 +3,8 @@ import { withAuth } from "@/lib/server/api/middleware";
 import { GetUserResponseSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import { headers } from "next/headers";
+
+
 /**
  * GET /api/user
  * Retrieves the current user's profile

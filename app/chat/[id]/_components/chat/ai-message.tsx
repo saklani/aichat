@@ -1,7 +1,7 @@
 import { memo } from "react"
-import { Markdown } from "./markdown"
-import { AImessageCopy } from "@/components/chat/ai-message-copy"
-import { AImessageReply } from "@/components/chat/ai-message-reply"
+import { Markdown } from "../../../../../components/chat/markdown/markdown"
+import { AImessageCopy } from "@/components/chat/ai-message/ai-message-copy"
+import { AImessageReply } from "@/components/chat/ai-message/ai-message-reply"
 
 export const AIMessage = memo(({ id, content, setParentId }: { id: string, content: string, setParentId: (parentId: string) => void }) => (
     <div className={"flex flex-col w-full py-[24px] gap-[8px] flex-1 h-full rounded-xs"}>

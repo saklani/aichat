@@ -18,7 +18,7 @@ const openaiModels = [
 ]
 
 
-export function SwitchModels() {
+export function ModelSwitcher() {
   const { data: response } = useQuery<GetUserPreferencesResponse>({ queryKey: ["preferences"], queryFn: () => fetch("/api/user/preferences").then(res => res.json()) })
 
   if (!response?.data) {

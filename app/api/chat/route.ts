@@ -81,13 +81,13 @@ export async function POST(request: NextRequest) {
 
         const body = await request.json();
 
-
+        console.log(body)
         const validatedInput = PostChatRequestSchema.safeParse(body);
 
         if (!validatedInput.success) {
             console.error("[Chat Creation Validation Error]", {
                 userId,
-                errors: validatedInput.error.flatten()
+                errors: validatedInput.error.message
             });
             return HTTP_400
         }

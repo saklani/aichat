@@ -2,12 +2,18 @@ import { cn } from "@/lib/utils"
 import Link from 'next/link'
 import ReactMarkdown, { type Components } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
+import { CodeBlock } from "./code-block"
 
 const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
   code: ({ node, className, children, ...rest }) => {
+    const match = /language-(\w+)/.exec(className || '')
+    if (match) {
+      const code = String(children).replace(/\n$/, '')
+      return <CodeBlock code={code} language={match[1]} />
+    }
     return (
-      <code {...rest} className={cn(className, "text-sm bg-gray-500 text-foreground rounded-xs py-[1px] px-2")}>
+      <code {...rest} className={cn(className, "text-xs bg-inline-code text-inline-code-foreground rounded-md px-[3px] py-[2px]")}>
         {children}
       </code>
     )

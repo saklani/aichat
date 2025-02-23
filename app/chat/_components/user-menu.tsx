@@ -1,10 +1,10 @@
 "use client"
-import type { GetUser } from "@/lib/client/types";
+import type { GetUserResponse } from "@/lib/client/types";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronUp, User2 } from "lucide-react";
 
 export function UserMenu() {
-    const { data: response } = useQuery<GetUser>({
+    const { data: response } = useQuery<GetUserResponse>({
         queryKey: ["user"],
         queryFn: () => fetch("/api/user").then(res => res.json())
     })
