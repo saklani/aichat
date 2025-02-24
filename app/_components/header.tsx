@@ -7,7 +7,7 @@ export function Header() {
     const session = useSession()
     return (
         <header className="bg-header w-full border-b">
-            <div className="flex items-center justify-between py-4 px-6 h-16">
+            <div className="flex items-center justify-between py-4 px-6 h-14">
                 <Link href="/">
                     <span className="text-lg font-semibold tracking-wider">Sable</span>
                 </Link>
@@ -29,7 +29,7 @@ function Login() {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <a href="/login" className="flex items-center justify-center text-sm font-medium hover:bg-accent hover:text-accent-foreground px-3 w-[83px] h-[30px] rounded-md">
+                    <a href="/login" className="flex items-center justify-center text-sm font-medium hover:bg-accent hover:text-accent-foreground px-3 w-[83px] h-[28px] rounded-md">
                         <span>Login</span>
                     </a>
                 </TooltipTrigger>
@@ -46,7 +46,7 @@ function Register() {
         <TooltipProvider>
             <Tooltip>
                 <TooltipTrigger asChild>
-                    <a href="/register" className="flex items-center justify-center bg-primary text-primary-foreground hover:bg-white/90 min-w-[83px] h-[30px] rounded-md">
+                    <a href="/register" className="flex items-center justify-center bg-primary text-primary-foreground hover:bg-white/90 min-w-[83px] h-[28px] rounded-md">
                         <span className=" text-sm font-medium">Sign up</span>
                     </a>
                 </TooltipTrigger>
