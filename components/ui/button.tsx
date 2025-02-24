@@ -21,8 +21,8 @@ const buttonVariants = cva(
         sidebar: "hover:bg-accent hover:text-accent-foreground justify-start",
       },
       size: {
-        default: "h-[30px] text-sm rounded-md font-medium px-3",
-        icon: "h-[30px] w-[30px] rounded-md",
+        default: "h-[28px] text-sm rounded-md font-medium px-3",
+        icon: "h-[28px] w-[28px] rounded-md",
       },
     },
     defaultVariants: {
