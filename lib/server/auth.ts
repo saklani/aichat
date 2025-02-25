@@ -1,3 +1,4 @@
+import "server-only"
 import { db, queries } from "@/lib/server/db";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -32,7 +33,7 @@ export const auth = betterAuth({
         }),
     },
     advanced: {
-        useSecureCookies: process.env.NODE_ENV === "production",
+        useSecureCookies: process.env.NODE_ENV !== "development",
     },
     plugins: [nextCookies()]
 });

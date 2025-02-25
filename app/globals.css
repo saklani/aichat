@@ -14,12 +14,12 @@ body {
     --footer: 240 10% 3.9%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
+    --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
+    --primary: 0 0% 79%;
+    --primary-foreground: 0 0% 19%;
+    --secondary: 0 0% 79%;
+    --secondary-foreground: 0 0% 99%;
     --muted: 240 3.7% 15.9%;
     --muted-foreground: 240 5% 64.9%;
     --accent: 240 3.7% 15.9%;
@@ -34,16 +34,17 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
-    --radius: 4px;
 
-    --zeus: 27 18% 10%;
-    --mineral: 180 12% 55%;
-
+    --inline-code: 0 0% 25.9%;
+    --inline-code-foreground: 0 0% 92.5%;
+    --code-header: 0 0% 10%;
+    --quote: 0 0% 25.9%;
+    --quote-foreground: 240 5% 64.9%;
     --sidebar-background: 210 11% 4.5%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 0 0% 98%;
     --sidebar-primary-foreground: 240 5.9% 10%;
-    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent: 0 0% 10%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
@@ -59,11 +60,11 @@ body {
     @apply bg-background text-foreground;
   }
 
-  .title {
-    @apply text-4xl font-bold lg:text-5xl mb-3;
+  h1 {
+    @apply font-semibold text-[clamp(2.4rem,_4vw,_4rem)] text-balance -tracking-[1px] lg:-tracking-[1.8px] leading-[1];
   }
   .subtitle {
-    @apply text-3xl font-semibold tracking-tight mb-2;
+    @apply -tracking-[0.1px] md:-tracking-[0.2px] lg:-tracking-[0.3px] xl:-tracking-[0.4px] text-wrap text-[clamp(1.1rem,_2vw,_1.4rem)] font-medium;
   }
   .info {
     @apply text-[12.003px] text-muted-foreground;
@@ -71,5 +72,16 @@ body {
 
   .muted {
     @apply text-sm text-muted-foreground;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import type { NextRequest } from "next/server";
 import { withAuth } from "@/lib/server/api/middleware";
 import { queries } from "@/lib/server/db";
 import { GetPlanResponseSchema, PutPlanResponseSchema } from "@/lib/server/api/schema";

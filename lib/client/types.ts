@@ -1,15 +1,25 @@
 import { z } from "zod";
-import { GetChatResponseSchema, GetChatsResponseSchema, GetMessagesResponseSchema, GetObjectResponseSchema, GetObjectsResponseSchema, GetPlanResponseSchema, GetUserPreferenceResponseSchema, GetUserResponseSchema } from "../server/api/schema";
-import { SuccessResponse } from "../server/api/types";
+import { MessageSchema, ObjectSchema, PlanSchema, UserPreferenceSchema, UserSchema, ChatSchema } from "../schema";
+import type { SuccessResponse } from "../server/api/types";
 
-export type GetUser = SuccessResponse<z.infer<typeof GetUserResponseSchema>>
-export type GetUserPreferences = SuccessResponse<z.infer<typeof GetUserPreferenceResponseSchema>>
-export type GetPlan = SuccessResponse<z.infer<typeof GetPlanResponseSchema>>
-export type GetChat = SuccessResponse<z.infer<typeof GetChatResponseSchema>>
-export type GetChats = SuccessResponse<z.infer<typeof GetChatsResponseSchema>>
+export type User = z.infer<typeof UserSchema>
+export type GetUserResponse = SuccessResponse<User>
 
-export type GetMessages = z.infer<typeof GetMessagesResponseSchema>
-export type GetMessagesResponse = SuccessResponse<z.infer<typeof GetMessagesResponseSchema>>
+export type UserPreferences = z.infer<typeof UserPreferenceSchema>
+export type GetUserPreferencesResponse = SuccessResponse<UserPreferences>
 
-export type GetObjectResponse = SuccessResponse<z.infer<typeof GetObjectResponseSchema>>
-export type GetObjectsResponse = SuccessResponse<z.infer<typeof GetObjectsResponseSchema>>
+export type Plan = z.infer<typeof PlanSchema>
+export type GetPlanResponse = SuccessResponse<Plan>
+
+
+export type Message = z.infer<typeof MessageSchema>
+export type GetMessageResponse = SuccessResponse<Message>
+export type GetMessagesResponse = SuccessResponse<Message[]>
+
+export type Object = z.infer<typeof ObjectSchema>
+export type GetObjectResponse = SuccessResponse<Object>
+export type GetObjectsResponse = SuccessResponse<Object[]>
+
+export type Chat = z.infer<typeof ChatSchema>
+export type GetChatResponse = SuccessResponse<Chat>
+export type GetChatsResponse = SuccessResponse<Chat[]>

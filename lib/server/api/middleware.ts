@@ -1,7 +1,7 @@
 import { auth } from "@/lib/server/auth"
-import { NextResponse } from "next/server"
+import type { NextResponse } from "next/server"
 import { createResponse, HTTP_401, HTTP_500 } from "./response"
-import { Result } from "./types"
+import type { Result } from "./types"
 import { headers } from "next/headers"  
 
 /**

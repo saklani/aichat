@@ -52,7 +52,11 @@ export default {
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
 				},
-				zeus: 'hsl(var(--zeus))',
+				'inline-code': 'hsl(var(--inline-code))',
+				'inline-code-foreground': 'hsl(var(--inline-code-foreground))',
+				'code-header': 'hsl(var(--code-header))',
+				quote: 'hsl(var(--quote))',
+				'quote-foreground': 'hsl(var(--quote-foreground))',
 				mineral: 'hsl(var(--mineral))',
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -65,11 +69,6 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))',
 					select: 'hsl(var(--sidebar-select))'
 				}
-			},
-			borderRadius: {
-				lg: 'var(--radius)',
-				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
 			}
 		}
 	},
