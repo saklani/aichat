@@ -1,6 +1,6 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import Link from "next/link"
-import { GoogleLogin } from "@/components/google-login"
+import { GoogleLogin } from "@/components/auth/google-login"
 
 export default function RegisterPage() {
     return (

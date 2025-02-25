@@ -1,4 +1,4 @@
-import { Chat } from "./_components/chat/chat"
+import { Chat } from "@/components/chat/chat"
 
 export default async function Page({ params }: {
     params: Promise<{ id: string }>

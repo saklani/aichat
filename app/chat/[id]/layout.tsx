@@ -1,5 +1,5 @@
 import type React from "react";
-import { AppSidebar } from "../_components/app-sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {

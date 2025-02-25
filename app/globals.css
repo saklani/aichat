@@ -38,7 +38,8 @@ body {
     --inline-code: 0 0% 25.9%;
     --inline-code-foreground: 0 0% 92.5%;
     --code-header: 0 0% 10%;
-    
+    --quote: 0 0% 25.9%;
+    --quote-foreground: 240 5% 64.9%;
     --sidebar-background: 210 11% 4.5%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 0 0% 98%;
@@ -71,5 +72,16 @@ body {
 
   .muted {
     @apply text-sm text-muted-foreground;
+  }
+}
+
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }

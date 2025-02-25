@@ -1,9 +1,9 @@
 
-import { Features } from "./_components/features";
-import { Footer } from "./_components/footer";
-import { Header } from "./_components/header";
-import { Hero } from "./_components/hero";
-
+import { Features } from "@/components/landing-page/features";
+import { Footer } from "@/components/landing-page/footer";
+import { Header } from "@/components/landing-page/header";
+import { Hero } from "@/components/landing-page/hero";
+import { ExampleImage } from "@/components/landing-page/example-image";
 export default function Page() {
     return (
         <div className={"flex flex-col items-center"}>
@@ -12,9 +12,7 @@ export default function Page() {
             <div className="flex flex-col items-center justify-center w-full h-full max-w-[968px]">
                 {/* HERO SECTION */}
                 <Hero />
-                <div className="h-[400px] w-full bg-gray-700/20 rounded-lg">
-
-                </div>
+                <ExampleImage />
                 {/* FEATURE CARDS */}
                 <Features />
             </div>

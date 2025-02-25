@@ -80,8 +80,6 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json();
-
-        console.log(body)
         const validatedInput = PostChatRequestSchema.safeParse(body);
 
         if (!validatedInput.success) {
@@ -128,7 +126,6 @@ export async function POST(request: NextRequest) {
             id: messageId,
             parentId: currentParentId || null
         });
-        console.log("response", response)
   
         if (oldMessage) {
             messages[messages.length - 1].content = `In the context of this message ${oldMessage.content}: ${messages[messages.length - 1].content}`
@@ -139,9 +136,9 @@ export async function POST(request: NextRequest) {
             messages,
             maxSteps: 4,
             onFinish: async ({ text }) => {
-                if (text.length > 0) {
+                if (text.trim().length > 0) {
                     await queries.createMessage({
-                        content: text,
+                        content: text.trim(),
                         role: "assistant",
                         chatId: id,
                         id: randomUUID(),

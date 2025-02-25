@@ -1,10 +1,9 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Back } from "./_components/back";
-import { Usage } from "./_components/usage";
-import { User } from "./_components/user";
-import { History } from "./_components/history";
-import { DeleteAccount } from "./_components/delete-account";
-import { Logout } from "@/components/logout";
+import { Back } from "@/components/common/back";
+import { Usage } from "@/components/account/usage";
+import { User } from "@/components/account/user";
+import { History } from "@/components/account/history";
+import { DeleteAccount } from "@/components/account/delete-account";
+import { Logout } from "@/components/auth/logout";
 
 export default function Page() {
     return (
@@ -14,28 +13,14 @@ export default function Page() {
                     <Back />
                     <Logout />
                 </header>
-                <div className="flex flex-col md:flex-row gap-4 w-full">
-                    <div className="flex flex-col md:w-1/4 w-full gap-6">
+                <div className="flex flex-col items-center gap-4 w-full py-3">
+                    <div className="flex flex-col py-5 gap-6 w-full max-w-xl">
                         <User />
                         <Usage />
+                        <History />
+                        <DeleteAccount />
                     </div>
-                    <Tabs defaultValue="account" className="md:w-3/4 w-full">
-                        <TabsList className="grid grid-cols-2 w-full max-w-[300px]">
-                            <TabsTrigger value="account">Account</TabsTrigger>
-                            <TabsTrigger value="history">History</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="account">
-                            <div className="flex flex-col py-5 gap-6">
-                                {/* <Payment /> */}
-                                <DeleteAccount />
-                            </div>
-                        </TabsContent>
-                        <TabsContent value="history">
-                            <div className="flex flex-col py-5 gap-6">
-                                <History />
-                            </div>
-                        </TabsContent>
-                    </Tabs>
+
                 </div>
             </div>
         </div>
