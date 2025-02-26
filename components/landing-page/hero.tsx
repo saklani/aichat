@@ -26,7 +26,7 @@ export function Hero() {
         animate="animate"
       >
         <motion.h1 className="text-[clamp(2.4rem,_4vw,_4rem)] text-balance -tracking-[1px] lg:-tracking-[1.8px] leading-[1] text-center" variants={variants.item}>
-          All AI chats in one place
+          All your AI chats in one place
         </motion.h1>
         <motion.p className="-tracking-[0.1px] md:-tracking-[0.2px] lg:-tracking-[0.3px] xl:-tracking-[0.4px] text-wrap text-[clamp(1.1rem,_2vw,_1.4rem)] font-medium text-center" variants={variants.item}>
           An open-source interface for all your AI chats and data.

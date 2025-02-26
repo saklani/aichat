@@ -15,21 +15,21 @@ function SeeTheCode() {
 export function Features() {
     return (
         <Section>
-            <div className="flex flex-col w-full gap-6">
+            <div className="flex flex-col w-full gap-6 pt-12">
                 <div className="flex flex-col w-full gap-2">
-                    <p className="scroll-mt-20 text-balance text-[clamp(1.5rem,_3vw,_1.8rem)] font-semibold leading-[1.2] -tracking-[0.5px] lg:text-center">
+                    <p className="scroll-mt-20 text-balance text-[clamp(1.5rem,_3vw,_1.8rem)] font-semibold leading-[1.2] -tracking-[0.5px] text-center">
                         A centralized hub for all your AI chats
                     </p>
                     <p className="text-[clamp(0.9375rem,_2vw,_1.0625rem)] text-muted-foreground leading-relaxed w-full text-center">
                         No more jumping between different chat apps
                     </p>
                 </div>
-                <div className="flex h-[203.69px] w-full">
-                    <Image src="https://sable-assets-public.s3.us-east-1.amazonaws.com/a-centralized-hub-for-all-your-ai-chats.png" alt="Sample" width={968} height={547} />
+                <div className="flex w-full">
+                    <Image src="https://sable-assets-public.s3.us-east-1.amazonaws.com/a-centralized-hub-for-all-your-ai-chats.png" alt="Sample" width={0} height={0} sizes="100vw" className="w-full h-full object-cover" />
                 </div>
             </div>
             <div className="flex flex-col w-full gap-6 items-center justify-between">
-                <p className="scroll-mt-20 text-balance text-[clamp(1.5rem,_3vw,_1.8rem)] font-semibold leading-[1.2] -tracking-[0.5px] w-full lg:text-center">
+                <p className="scroll-mt-20 text-balance text-[clamp(1.5rem,_3vw,_1.8rem)] font-semibold leading-[1.2] -tracking-[0.5px] w-full text-center">
                     Connect to multiple data sources
                 </p>
                 <div className="flex bg-popover rounded-xl py-5 px-4 max-w-md items-center justify-between gap-7 border-[0.5px]">
@@ -44,13 +44,13 @@ export function Features() {
                 </div>
 
             </div>
-            <div className="flex flex-col w-full gap-6 items-center">
+            <div className="flex flex-col w-full gap-6 items-center ">
                 <div className="flex flex-col w-full gap-2">
-                    <p className="scroll-mt-20 text-balance text-[clamp(1.5rem,_3vw,_1.8rem)] font-semibold leading-[1.2] -tracking-[0.5px] lg:text-center">
+                    <p className="scroll-mt-20 text-balance text-[clamp(1.5rem,_3vw,_1.8rem)] font-semibold leading-[1.2] -tracking-[0.5px] text-center">
                         Retain control with an open-source platform
                     </p>
                     <p className="text-[clamp(0.9375rem,_2vw,_1.0625rem)] text-muted-foreground leading-relaxed w-full text-center">
-                        Code should be open source and accessible to everyone
+                        Code is open source and accessible to everyone
                     </p>
                 </div>
                 <div className="bg-popover group relative flex flex-col items-center w-full max-w-xs scroll-m-1 gap-4 rounded-xl border-[0.5px] px-4 py-8 shadow-sm z-[3] transition-all group-hover/posts:shadow">
