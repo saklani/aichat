@@ -29,7 +29,7 @@ export function SearchButton() {
             <TooltipProvider>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <Button variant="ghost" size="icon" onClick={handleOpen}>
+                        <Button variant="ghost" size="icon" onClick={handleOpen} disabled>
                             <Search strokeWidth={0.9} />
                         </Button>
                     </TooltipTrigger>
