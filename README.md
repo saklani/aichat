@@ -19,6 +19,7 @@ Here are the basic features currently being built
 2. Conversation Management
 - [x] Export conversations
 - [ ] Search
+- [ ] Move to a websocket version
 
 3. Data source connectors
 - [ ] Google Drive
