@@ -17,7 +17,7 @@ Here are the basic features currently being built
 - [ ] Some clean way to support local LLMs(?)
 
 2. Conversation Management
-- [ ] Export conversations
+- [x] Export conversations
 - [ ] Search
 
 3. Data source connectors
