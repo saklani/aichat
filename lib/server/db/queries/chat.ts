@@ -5,7 +5,7 @@ import { execute } from "./utils";
 
 
 export async function createChat({ id, ...rest }: Pick<schema.Chat, "id" | "title" | "userId" | "collectionId">) {
-    return execute(`create chat: ${id}`, async () =>  db.insert(schema.chats).values({ id, ...rest }).returning().then(res => res.at(0)))
+    return execute(`create chat: ${id}`, async () => db.insert(schema.chats).values({ id, ...rest }).returning().then(res => res.at(0)))
 }
 
 export async function upsertChat({ id, ...rest }: Omit<schema.Chat, "createdAt">) {
@@ -34,7 +34,7 @@ export async function getChat({ id, userId }: Pick<schema.Chat, "id" | "userId">
     )
 }
 
-export async function getChatsByUserId({ userId, cursor }: Pick<schema.Chat, "userId"> & {  cursor?: string }) {
+export async function getChatsByUserId({ userId, cursor }: Pick<schema.Chat, "userId"> & { cursor?: string }) {
     return execute(
         `get all chat of user ${userId}`,
         () => db.query.chats.findMany({ where: and(eq(schema.chats.userId, userId), cursor ? gt(schema.chats.id, cursor) : undefined), orderBy: desc(schema.chats.lastMessageAt) })
@@ -42,9 +42,25 @@ export async function getChatsByUserId({ userId, cursor }: Pick<schema.Chat, "us
 }
 
 
-export async function getChatsWithMessagesByUserId({ userId, cursor }: Pick<schema.Chat, "userId"> & {  cursor?: string }) {
+export async function getChatsExport({ userId }: Pick<schema.Chat, "userId">) {
     return execute(
         `get all chat of user with messages ${userId}`,
-        () => db.query.chats.findMany({ where: and(eq(schema.chats.userId, userId), cursor ? gt(schema.chats.id, cursor) : undefined), orderBy: desc(schema.chats.lastMessageAt) })
+        async () => {
+            const chats = await db.select().from(schema.chats).where(eq(schema.chats.userId, userId)).leftJoin(schema.messages, eq(schema.messages.chatId, schema.chats.id)).orderBy(desc(schema.chats.lastMessageAt))
+            const aggregatedChats: Record<string, schema.Chat & { messages: schema.Message[] }> = {}
+            for (const { chats: chat, messages } of chats) {
+                if (aggregatedChats[chat.id] === undefined) {
+                    aggregatedChats[chat.id] = {
+                        ...chat,
+                        messages: []
+                    }
+                }
+                if (messages) {
+                    aggregatedChats[chat.id].messages.push(messages)
+                }
+            }
+            return Object.values(aggregatedChats)
+        }
     )
+
 }

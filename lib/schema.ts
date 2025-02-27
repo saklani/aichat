@@ -46,6 +46,10 @@ export const ChatSchema = z.object({
     collectionId: z.string().uuid().nullish(),
 })
 
+export const ChatExportSchema = ChatSchema.extend({
+    messages: z.array(MessageSchema)
+})
+
 const ObjectStatusEnum = z.enum([
     'created',
     'processing',

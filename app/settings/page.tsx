@@ -1,7 +1,7 @@
 import { Back } from "@/components/common/back";
 import { Usage } from "@/components/account/usage";
 import { User } from "@/components/account/user";
-import { History } from "@/components/account/history";
+import { History } from "@/components/account/export-chat";
 import { DeleteAccount } from "@/components/account/delete-account";
 import { Logout } from "@/components/auth/logout";
 

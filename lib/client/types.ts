@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { MessageSchema, ObjectSchema, PlanSchema, UserPreferenceSchema, UserSchema, ChatSchema } from "../schema";
+import { MessageSchema, ObjectSchema, PlanSchema, UserPreferenceSchema, UserSchema, ChatSchema, ChatExportSchema } from "../schema";
 import type { SuccessResponse } from "../server/api/types";
 
 export type User = z.infer<typeof UserSchema>
@@ -23,3 +23,6 @@ export type GetObjectsResponse = SuccessResponse<Object[]>
 export type Chat = z.infer<typeof ChatSchema>
 export type GetChatResponse = SuccessResponse<Chat>
 export type GetChatsResponse = SuccessResponse<Chat[]>
+
+export type ChatExport = z.infer<typeof ChatExportSchema>
+export type GetChatExportsResponse = SuccessResponse<ChatExport[]>

@@ -1,24 +1,24 @@
 import { withAuth } from "@/lib/server/api/middleware";
 import { queries } from "@/lib/server/db";
-import { GetChatResponseSchema } from "@/lib/server/api/schema";
-import { NextRequest, NextResponse } from "next/server";
+import { GetChatExportResponseSchema } from "@/lib/server/api/schema";
+import { NextRequest } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function GET(_: NextRequest) {
     return withAuth(async (userId) => {
-        const chats = await queries.getChatsByUserId({ userId })
-        const validatedPlan = GetChatResponseSchema.safeParse(chats);
-        if (!validatedPlan.success) {
-            console.error("[Plan Validation Error]", {
+        const chats = await queries.getChatsExport({ userId })
+        const validatedChats = GetChatExportResponseSchema.safeParse(chats);
+        if (!validatedChats.success) {
+            console.error("[Chats Validation Error]", {
                 userId,
-                errors: validatedPlan.error.toString()
+                errors: validatedChats.error.toString()
             });
             return {
-                error: "Invalid plan data format",
+                error: "Invalid chat data format",
                 status: 500
             };
         }
 
-        return { data: validatedPlan.data, status: 200 };
+        return { data: validatedChats.data, status: 200 };
     })
     
 }

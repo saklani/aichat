@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { UserSchema, UserPreferenceSchema, PlanSchema, MessageSchema, ChatSchema, ObjectSchema } from "@/lib/schema";
+import { UserSchema, UserPreferenceSchema, PlanSchema, MessageSchema, ChatSchema, ObjectSchema, ChatExportSchema } from "@/lib/schema";
 
 
 
@@ -25,7 +25,7 @@ export const GetChatsRequestSchema = z.object({
     cursor: z.string().uuid().optional(),
 });
 export const GetChatsResponseSchema = z.array(GetChatResponseSchema)
-
+export const GetChatExportResponseSchema = z.array(ChatExportSchema)
 
 // Schema for file upload response
 export const FileUploadResponseSchema = z.object({

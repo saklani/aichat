@@ -70,8 +70,6 @@ export const chats = pgTable('chats', {
     userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
-    modelId: uuid('model_id')
-        .references(() => models.id),
     collectionId: uuid('collection_id').notNull().references(() => collections.id),
     systemPrompt: text('system_prompt'),
     parentId: uuid('parent_id'),
