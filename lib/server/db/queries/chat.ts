@@ -40,3 +40,11 @@ export async function getChatsByUserId({ userId, cursor }: Pick<schema.Chat, "us
         () => db.query.chats.findMany({ where: and(eq(schema.chats.userId, userId), cursor ? gt(schema.chats.id, cursor) : undefined), orderBy: desc(schema.chats.lastMessageAt) })
     )
 }
+
+
+export async function getChatsWithMessagesByUserId({ userId, cursor }: Pick<schema.Chat, "userId"> & {  cursor?: string }) {
+    return execute(
+        `get all chat of user with messages ${userId}`,
+        () => db.query.chats.findMany({ where: and(eq(schema.chats.userId, userId), cursor ? gt(schema.chats.id, cursor) : undefined), orderBy: desc(schema.chats.lastMessageAt) })
+    )
+}
