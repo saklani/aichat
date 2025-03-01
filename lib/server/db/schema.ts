@@ -55,7 +55,6 @@ export const verifications = pgTable("verifications", {
     updatedAt: timestamp('updated_at')
 });
 
-
 export const userPreferences = pgTable('user_preferences', {
     userId: text('user_id')
         .notNull()
@@ -83,6 +82,8 @@ export const chats = pgTable('chats', {
         [
             index('chat_user_id_idx').on(table.userId),
             index('chat_last_message_idx').on(table.lastMessageAt),
+            index('chat_title_idx').using('gin', sql`to_tsvector('english', ${table.title})`),
+            index('chat_title_trgm_idx').using('gin', table.title, sql`${table.title} gin_trgm_ops`)
         ]
 )
 
@@ -100,7 +101,9 @@ export const messages = pgTable('messages', {
     parentId: uuid('parent_id'),
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
 }, (table) => [
-    index('message_chat_id_idx').on(table.chatId)
+    index('message_chat_id_idx').on(table.chatId),
+    index('message_content_idx').using('gin', sql`to_tsvector('english', ${table.content})`),
+    index('message_content_trgm_idx').using('gin', table.content, sql`${table.content} gin_trgm_ops`),
 ])
 
 // Models and Configuration

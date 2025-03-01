@@ -1,5 +1,5 @@
 import { eq } from 'drizzle-orm';
-import { schema } from '..';
+import * as schema from '../schema';
 import { db } from "../db";
 import { execute } from "./utils";
 
