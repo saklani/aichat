@@ -6,14 +6,7 @@ import type { NextRequest } from "next/server";
 export async function GET(_: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     return withAuth(async (userId) => {
         const id = (await params).id;
-        const chat = await queries.getChat({ id, userId });
-        if (!chat) {
-            return {
-                error: "Chat not found",
-                status: 404
-            }
-        }
-        const objects = await queries.getObjectsByCollectionId({ id: chat.collectionId, userId });
+        const objects = await queries.getObjectsByChatId({ id, userId });
         const validatedObjects = GetObjectsResponseSchema.safeParse(objects);
         if (!validatedObjects.success) {
             return {

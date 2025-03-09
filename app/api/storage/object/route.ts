@@ -57,37 +57,18 @@ async function createOrUpdateChat(chatId: string, userId: string, fileId: string
     let chat = await queries.getChat({ id: chatId, userId });
 
     if (!chat) {
-        const title = "New chat";
-        const collection = await queries.createCollection({
-            name: title,
+        chat = await queries.createChat({
+            id: chatId,
+            title: "New chat",
             userId,
             fileIds: [fileId],
         });
 
-        if (!collection) {
-            return { error: "Failed to create collection", status: 500 };
-        }
-
-        chat = await queries.createChat({
-            id: chatId,
-            title,
-            userId,
-            collectionId: collection.id,
-        });
     } else {
-        if (!chat.collectionId) {
-            return { error: "No collection found", status: 400 };
-        }
-
-        const collection = await queries.getCollection({ id: chat.collectionId, userId });
-        if (!collection) {
-            return { error: "No collection found", status: 400 };
-        }
-
-        await queries.updateCollection({
-            id: chat.collectionId,
+        await queries.updateChat({
+            id: chat.id,
             userId,
-            fileIds: [...(collection.fileIds ?? []), fileId],
+            fileIds: [...(chat.fileIds ?? []), fileId],
         });
     }
 
@@ -126,6 +107,7 @@ export async function POST(request: NextRequest) {
             size: file.size,
             metadata: "",
             userId,
+            url: null,
         });
 
         const url = await objects.upload({

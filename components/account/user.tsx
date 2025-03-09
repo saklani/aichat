@@ -11,7 +11,6 @@ export function User() {
         queryKey: ["user"],
         queryFn: () => fetch("/api/user").then(res => res.json()),
     });
-
     return (
         <div className="flex flex-col items-center gap-2 py-3 w-full">
             <Avatar className="w-[60px] h-[60px] border">

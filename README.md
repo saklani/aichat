@@ -1,6 +1,6 @@
 # Sable
 
-Your open-source interface for AI chats
+An open-source interface for AI chats
 
 ## Features
 

@@ -35,7 +35,7 @@ export function Content() {
             <SidebarGroup>
                 <SidebarGroupLabel>Chats</SidebarGroupLabel>
                 <SidebarGroupContent>
-                    <SidebarMenu className="overflow-y-scroll">
+                    <SidebarMenu>
                         {
                             isLoading ? <></> :
                                 response && response.data && response.data.length > 0 ?

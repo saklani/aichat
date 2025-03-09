@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm';
 import * as schema from '../schema';
-import { db } from "..";
+import { db } from "../db";
 import { execute } from "./utils";
 
 export async function getUser({ id }: Pick<schema.User, "id">) {

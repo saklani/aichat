@@ -2,14 +2,19 @@ import { z } from "zod";
 
 const ModelNameEnum = z.enum(["gpt-4o-mini", "gpt-4o", "gpt-o1-mini"])
 
-export const UserSchema = z.object({
-    id: z.string(),
-    email: z.string(),
-})
+const UserSchema = z.object({ id: z.string(), email: z.string() });
+export const GetUserResponseSchema = UserSchema
+export type GetUserResponse = z.infer<typeof GetUserResponseSchema>
 
-export const UserPreferenceSchema = z.object({
-    defaultModel: ModelNameEnum
-})
+const UserPreferenceSchema = z.object({ defaultModel: ModelNameEnum });
+export const GetUserPreferenceResponseSchema = UserPreferenceSchema.pick({ defaultModel: true })
+export type GetUserPreferenceResponse = z.infer<typeof GetUserPreferenceResponseSchema>
+export const PutUserPreferenceRequestSchema = UserPreferenceSchema.pick({ defaultModel: true })
+export type PutUserPreferenceRequest = z.infer<typeof PutUserPreferenceRequestSchema>
+export const PutUserPreferenceResponseSchema = UserPreferenceSchema.pick({ defaultModel: true })
+export type PutUserPreferenceResponse = z.infer<typeof PutUserPreferenceResponseSchema>
+
+
 
 export const PlanSchema = z.object({
     id: z.string(),
@@ -24,19 +29,19 @@ export const PlanSchema = z.object({
     isActive: z.boolean(),
     createdAt: z.date(),
     updatedAt: z.date()
-})
+});
 
 export const BaseMessageSchema = z.object({
     id: z.string().uuid(),
     content: z.string(),
     role: z.enum(["user", "assistant", "system", "data"]),
     chatId: z.string().optional(),
-})
+});
 
 export const MessageSchema = BaseMessageSchema.extend({
     parentId: z.string().uuid().nullish(),
     parent: BaseMessageSchema.nullish(),
-})
+});
 
 export const ChatSchema = z.object({
     id: z.string().uuid(),
@@ -44,11 +49,11 @@ export const ChatSchema = z.object({
     userId: z.string(),
     createdAt: z.date(),
     collectionId: z.string().uuid().nullish(),
-})
+});
 
 export const ChatExportSchema = ChatSchema.extend({
     messages: z.array(MessageSchema)
-})
+});
 
 const ObjectStatusEnum = z.enum([
     'created',

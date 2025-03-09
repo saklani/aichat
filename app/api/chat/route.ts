@@ -104,12 +104,8 @@ export async function POST(request: NextRequest) {
             const title = await generateTitleFromUserMessage({
                 message: lastMessage.content
             });
-            const collection = await queries.createCollection({ name: title, userId, fileIds: [] });
 
-            if (!collection) {
-                return HTTP_500
-            }
-            await queries.createChat({ id, title, userId, collectionId: collection.id });
+            await queries.createChat({ id, title, userId, fileIds: [] });
         }
 
         // Save user message

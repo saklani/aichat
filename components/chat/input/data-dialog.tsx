@@ -32,9 +32,7 @@ function FileUpload({ mutate, status }: FileUploadProps) {
     };
 
     return (
-        <Button status={status} variant={"outline"} size={"icon"} onClick={() => {
-            document.getElementById("input-file")?.click();
-        }}>
+        <Button className="bg-muted" status={status} variant={"outline"} size={"icon"} onClick={() => document.getElementById("input-file")?.click()}>
             <Upload className="w-4 h-4" />
             <Input
                 id="input-file"
@@ -97,6 +95,7 @@ function NonMemoizedDataDialog({ id }: DataDropdownProps) {
         <Dialog>
             <DialogTrigger asChild>
                 <Button
+                    className="bg-muted"
                     variant="outline"
                     size="icon"
                     disabled={status === "pending"}

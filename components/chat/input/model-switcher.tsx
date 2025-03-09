@@ -6,7 +6,12 @@ import type { GetUserPreferencesResponse } from "@/lib/client/types"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import * as React from "react"
 
-const openaiModels = [
+type Model = {
+  value: string;
+  label: string;
+}
+
+const models: Model[] = [
   {
     value: "gpt-4o-mini",
     label: "GPT-4o-mini",
@@ -24,38 +29,39 @@ export function ModelSwitcher() {
   if (!response?.data) {
     return <></>
   }
-  return <ModelComboBox defaultModel={response?.data.defaultModel} />
+  return <ModelComboBox defaultModel={models.find(model => model.value === response?.data.defaultModel) || models[0]} />
 }
 
-const ModelComboBox = React.memo(({ defaultModel }: { defaultModel: string }) => {
+const ModelComboBox = React.memo(({ defaultModel }: { defaultModel: Model }) => {
   const { mutate } = useMutation({
     mutationKey: ["preference"],
     mutationFn: (defaultModel: string) => fetch("/api/user/preferences", { method: "PUT", body: JSON.stringify({ defaultModel }) })
   })
 
-  const [value, setValue] = React.useState(defaultModel)
-  const handleModelChange = React.useCallback((modelValue: string) => {
-    if (modelValue !== value) {
-      mutate(modelValue)
-      setValue(modelValue)
+  const [model, setModel] = React.useState(defaultModel)
+  const handleModelChange = React.useCallback((newModel: Model) => {
+    if (newModel.value !== model.value) {
+      mutate(newModel.value);
+      setModel(newModel);
     }
-  }, [value, mutate])
+  }, [model, mutate]);
+
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button className="w-[120px]" variant={"outline"}>
-          {value}
+        <Button className="bg-muted w-[120px]" variant={"outline"}>
+          {model.label}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top" className="w-[250px]">
         <DropdownMenuLabel>Models</DropdownMenuLabel>
-        {openaiModels.map(model =>
+        {models.map(newModel =>
           <DropdownMenuItem
-            key={model.value}
-            className={model.value === value ? "my-1 bg-foreground/30" : ""}
-            onClick={() => handleModelChange(model.value)}>
-            {model.label}
+            key={newModel.value}
+            className={newModel.value === model.value ? "my-1 bg-foreground/30" : ""}
+            onClick={() => handleModelChange(newModel)}>
+            {newModel.label}
           </DropdownMenuItem>)
         }
         <DropdownMenuItem disabled>DeepSeek R1</DropdownMenuItem>

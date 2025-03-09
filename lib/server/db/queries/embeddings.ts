@@ -1,4 +1,4 @@
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { db } from "../db";
 import * as schema from "../schema";
 import { execute } from "./utils";
@@ -17,15 +17,4 @@ export async function deleteEmbedding({ id }: Pick<schema.Embedding, "id">) {
 
 export async function getEmbedding({ id }: Pick<schema.Embedding, "id">) {
     return execute(`get embedding ${id}`, () => db.select().from(schema.embeddings).where(eq(schema.embeddings.id, id)))
-}
-
-// TODO: Make less confusing
-export async function getEmbeddingsByCollectionId({ id, userId }: Pick<schema.Collection, "id" | "userId">) {
-    return execute(`get all embedding of collection ${id}`, async () => {
-        const collection = await db.query.collections.findFirst({ where: and(eq(schema.collections.id, id), eq(schema.collections.userId, userId)) })
-        if (!collection) {
-            return []
-        }
-        return db.select().from(schema.embeddings).where(inArray(schema.embeddings.objectId, collection.fileIds ?? []))
-    })
 }

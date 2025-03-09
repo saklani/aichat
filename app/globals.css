@@ -3,20 +3,20 @@
 @tailwind utilities;
 
 body {
-  font-family: var(--font-inter);
+  font-family: var(--font-inter), var(--font-playfair);
 }
 
 @layer base {
   :root {
-    --background: 210 11% 4.5%;
+    --background: 0 0% 0%;
     --foreground: 60 7% 90%;
-    --header: 240 10% 3.9%;
+    --header: 0 0% 0%;
     --footer: 240 10% 3.9%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 10%;
     --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 79%;
+    --primary: 0 0% 89%;
     --primary-foreground: 0 0% 19%;
     --secondary: 0 0% 79%;
     --secondary-foreground: 0 0% 99%;
@@ -34,6 +34,7 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --textarea: 0 0% 10%;
 
     --inline-code: 0 0% 25.9%;
     --inline-code-foreground: 0 0% 92.5%;

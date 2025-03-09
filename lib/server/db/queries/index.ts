@@ -1,5 +1,4 @@
 export * from "./chat"
-export * from "./collections"
 export * from "./embeddings"
 export * from "./message"
 export * from "./objects"
