@@ -24,6 +24,8 @@ export async function GET(req: NextRequest) {
             ...(fuzzyThreshold && { fuzzyThreshold: parseFloat(fuzzyThreshold) }),
         });
 
+        console.log(chats);
+
         return {
             data: chats,
             status: 200,
