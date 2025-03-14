@@ -20,4 +20,3 @@ export async function withAuth<T>(handler: (userId: string) => Promise<Result<T>
     return HTTP_500
   }
 }
-

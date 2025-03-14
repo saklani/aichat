@@ -20,9 +20,9 @@ function FileUpload({ mutate, status }: FileUploadProps) {
         if (!file) return;
 
         // Add file validation
-        const maxSize = 50 * 1024 * 1024; // 50MB
+        const maxSize = 1024 * 1024 * 10; 
         if (file.size > maxSize) {
-            toast.error("File size must be less than 50MB");
+            toast.error("File size must be less than 10MB");
             return;
         }
 
@@ -31,10 +31,12 @@ function FileUpload({ mutate, status }: FileUploadProps) {
         mutate({ body });
     };
 
+    const handleClick = () => {
+        document.getElementById("input-file")?.click();
+    }
+
     return (
-        <Button status={status} variant={"outline"} size={"icon"} onClick={() => {
-            document.getElementById("input-file")?.click();
-        }}>
+        <Button className="bg-muted" variant={"outline"} size={"icon"} onClick={handleClick}>
             <Upload className="w-4 h-4" />
             <Input
                 id="input-file"
@@ -97,6 +99,7 @@ function NonMemoizedDataDialog({ id }: DataDropdownProps) {
         <Dialog>
             <DialogTrigger asChild>
                 <Button
+                    className="bg-muted"
                     variant="outline"
                     size="icon"
                     disabled={status === "pending"}

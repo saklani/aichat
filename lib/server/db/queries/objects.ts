@@ -4,8 +4,12 @@ import * as schema from "../schema";
 import { execute } from "./utils";
 
 
-export async function createObject({ id, ...rest }: Omit<schema.Object, "createdAt" | "status" | "updatedAt" | "url">) {
-    return execute(`create object: ${id}`, () => db.insert(schema.objects).values({ id, ...rest }).returning().then(res => res.at(0)))
+export async function createObject({ id, ...rest }: Omit<schema.Object, "createdAt" | "status" | "updatedAt">) {
+    return execute(`create object: ${id}`, 
+        () => db.insert(schema.objects)
+        .values({ id, ...rest })
+        .returning()
+        .then(res => res.at(0)))
 }
 
 export async function updateObject({ id, ...rest }: Pick<schema.Object, "id"> & Partial<schema.Object>) {
@@ -13,24 +17,38 @@ export async function updateObject({ id, ...rest }: Pick<schema.Object, "id"> & 
 }
 
 export async function deleteObject({ id, userId }: Pick<schema.Object, "id" | "userId">) {
-    return execute(`delete object ${id} of user ${userId}`, () => db.delete(schema.objects).where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId))))
+    return execute(`delete object ${id} of user ${userId}`, 
+        () => db.delete(schema.objects)
+        .where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId)))
+        .returning().then(res => res.at(0)))
 }
-
+    
 export async function getObject({ id, userId }: Pick<schema.Object, "id" | "userId">) {
-    return execute(`get object ${id} of user ${userId}`, () => db.select().from(schema.objects).where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId))))
+    return execute(`get object ${id} of user ${userId}`, 
+        () => db.select()
+        .from(schema.objects)
+        .where(and(eq(schema.objects.id, id), eq(schema.objects.userId, userId)))
+        .then(res => res.at(0)))
 }
 
-export async function getObjectsByUserId({ userId }: Pick<schema.Object, "userId">) {
-    return execute(`get all object of user ${userId}`, () => db.select().from(schema.objects).where(eq(schema.objects.userId, userId)).orderBy(desc(schema.objects.createdAt)))
+export async function getObjectsByUserId({ userId, pageSize = 25, page = 1 }: Pick<schema.Object, "userId"> & { pageSize?: number, page?: number }) {
+    return execute(`get all object of user ${userId}`, 
+        () => db.select()
+        .from(schema.objects)
+        .where(eq(schema.objects.userId, userId))
+        .orderBy(desc(schema.objects.createdAt))
+        .limit(pageSize)
+        .offset((page - 1) * pageSize)
+    )
 }
 
-// TODO: Make less confusing
-export async function getObjectsByCollectionId({ id, userId }: Pick<schema.Collection, "id" | "userId">) {
+
+export async function getObjectsByChatId({ id, userId }: Pick<schema.Chat, "id" | "userId">) {
     return execute(`get all object of collection ${id}`, async () => {
-        const collection = await db.query.collections.findFirst({ where: and(eq(schema.collections.id, id), eq(schema.collections.userId, userId)) })
-        if (!collection) {
+        const chat = await db.query.chats.findFirst({ where: and(eq(schema.chats.id, id), eq(schema.chats.userId, userId)) })
+        if (!chat) {
             return []
         }
-        return db.select().from(schema.objects).where(inArray(schema.objects.id, collection.fileIds ?? [])).orderBy(desc(schema.objects.createdAt))
+        return db.select().from(schema.objects).where(inArray(schema.objects.id, chat.fileIds ?? [])).orderBy(desc(schema.objects.createdAt))
     })
 }

@@ -1,6 +1,6 @@
 # Sable
 
-Your open-source interface for AI chats
+An open-source interface for AI chats
 
 ## Features
 
@@ -17,8 +17,9 @@ Here are the basic features currently being built
 - [ ] Some clean way to support local LLMs(?)
 
 2. Conversation Management
-- [ ] Export/import conversations
+- [x] Export conversations
 - [ ] Search
+- [ ] Move to a websocket version
 
 3. Data source connectors
 - [ ] Google Drive

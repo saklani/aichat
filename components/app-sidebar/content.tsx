@@ -35,14 +35,15 @@ export function Content() {
             <SidebarGroup>
                 <SidebarGroupLabel>Chats</SidebarGroupLabel>
                 <SidebarGroupContent>
-                    <SidebarMenu className="overflow-y-scroll">
+                    <SidebarMenu>
                         {
                             isLoading ? <></> :
-                            response && response.data && response.data.length > 0 ?
-                                response.data.map((chat) => (<ChatItem key={chat.id} id={chat.id} title={chat.title} />)) :
-                                <div className="h-24 flex items-center justify-center w-full bg-muted/60 rounded-lg">
-                                    <p className="text-2xs">No chats yet</p>
-                                </div>
+                                response && response.data && response.data.length > 0 ?
+                                    response.data.map((chat) => (
+                                        <ChatItem key={chat.id} id={chat.id} title={chat.title} />)) :
+                                    <div className="h-24 flex items-center justify-center w-full bg-muted/60 rounded-lg">
+                                        <p className="text-2xs">No chats yet</p>
+                                    </div>
                         }
                     </SidebarMenu>
                 </SidebarGroupContent>

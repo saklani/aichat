@@ -55,8 +55,8 @@ export const verifications = pgTable("verifications", {
     updatedAt: timestamp('updated_at')
 });
 
-
 export const userPreferences = pgTable('user_preferences', {
+    id: uuid('id').notNull().primaryKey().defaultRandom(),
     userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
@@ -70,9 +70,7 @@ export const chats = pgTable('chats', {
     userId: text('user_id')
         .notNull()
         .references(() => users.id, { onDelete: 'cascade' }),
-    modelId: uuid('model_id')
-        .references(() => models.id),
-    collectionId: uuid('collection_id').notNull().references(() => collections.id),
+    fileIds: json('file_ids').$type<string[]>(),
     systemPrompt: text('system_prompt'),
     parentId: uuid('parent_id'),
     lastMessageAt: timestamp('last_message_at'),
@@ -96,13 +94,11 @@ export const messages = pgTable('messages', {
     content: text('content').notNull(),
     role: text('role').$type<MessageRole>().notNull().default('user'),
     tokens: integer('tokens'),
-    modelId: uuid('model_id')
-        .references(() => models.id),
     metadata: text('metadata'), // JSON string for additional data
     parentId: uuid('parent_id'),
     createdAt: timestamp('created_at').notNull().default(sql`(now())`),
 }, (table) => [
-    index('message_chat_id_idx').on(table.chatId)
+    index('message_chat_id_idx').on(table.chatId),
 ])
 
 // Models and Configuration
@@ -158,19 +154,6 @@ export const plans = pgTable('plans', {
 ])
 
 
-export const collections = pgTable('collections', {
-    id: uuid('id').notNull().primaryKey().defaultRandom(),
-    userId: text('user_id')
-        .notNull()
-        .references(() => users.id, { onDelete: 'cascade' }),
-    name: text('name'),
-    fileIds: json('file_ids').$type<string[]>(),
-    createdAt: timestamp('created_at').notNull().default(sql`(now())`),
-    updatedAt: timestamp('updated_at').notNull().default(sql`(now())`).$onUpdate(() => new Date()),
-}, (table) => [
-    index('collection_user_id_idx').on(table.userId),
-])
-
 
 export const embeddings = pgTable('embeddings', {
     id: serial('id').primaryKey(),
@@ -193,5 +176,4 @@ export type Message = typeof messages.$inferSelect
 export type Model = typeof models.$inferSelect
 export type Object = typeof objects.$inferSelect
 export type Plan = typeof plans.$inferSelect
-export type Collection = typeof collections.$inferSelect
 export type Embedding = typeof embeddings.$inferSelect

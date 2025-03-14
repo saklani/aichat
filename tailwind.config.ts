@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 
 export default {
-	darkMode: ["class"],
 	content: [
 		"./pages/**/*.{js,ts,jsx,tsx,mdx}",
 		"./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,6 +8,10 @@ export default {
 	],
 	theme: {
 		extend: {
+			fontFamily: {
+				playfair: ['var(--font-playfair)', 'serif'],
+				inter: ['var(--font-inter)', 'sans-serif'],
+			},
 			colors: {
 				background: 'hsl(var(--background))',
 				header: 'hsl(var(--header))',
@@ -52,6 +55,7 @@ export default {
 					'4': 'hsl(var(--chart-4))',
 					'5': 'hsl(var(--chart-5))'
 				},
+				textarea: 'hsl(var(--textarea))',
 				'inline-code': 'hsl(var(--inline-code))',
 				'inline-code-foreground': 'hsl(var(--inline-code-foreground))',
 				'code-header': 'hsl(var(--code-header))',

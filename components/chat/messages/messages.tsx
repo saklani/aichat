@@ -22,9 +22,10 @@ export function Messages({ messages, isLoading, messageRef, setParentId }: { mes
 
                     </div>
                 ))}
-            <div id="last-message" ref={lastMessageRef} className={"flex flex-col h-full min-h-[calc(100vh-152px)]"}>
+            {messages.length > 0 && (
+                <div id="last-message" ref={lastMessageRef} className={"flex flex-col h-full min-h-[calc(100vh-152px)]"}>
                 {
-                    messages.length > 0 && messages[messages.length - 1] && messages[messages.length - 1].role === 'user' ?
+                   messages[messages.length - 1] && messages[messages.length - 1].role === 'user' ?
                         <UserMessage message={messages[messages.length - 1]} /> :
                         <></>
                 }
@@ -36,6 +37,7 @@ export function Messages({ messages, isLoading, messageRef, setParentId }: { mes
                             : <></>
                 }
             </div>
+            )}
         </>
     )
 }

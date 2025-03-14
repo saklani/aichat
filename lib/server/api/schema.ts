@@ -1,12 +1,6 @@
 import { z } from "zod";
-import { UserSchema, UserPreferenceSchema, PlanSchema, MessageSchema, ChatSchema, ObjectSchema } from "@/lib/schema";
+import { PlanSchema, MessageSchema, ChatSchema, ObjectSchema } from "@/lib/schema";
 
-
-
-export const GetUserResponseSchema = UserSchema.pick({ id: true, email: true })
-
-export const GetUserPreferenceResponseSchema = UserPreferenceSchema
-export const PutUserPreferenceRequestSchema = UserPreferenceSchema
 
 export const GetPlanResponseSchema = PlanSchema.pick({ id: true, userId: true, type: true, messageUsage: true, messageLimit: true, storageUsage: true, storageLimit: true, startDate: true, endDate: true, isActive: true, createdAt: true, updatedAt: true })
 export const PutPlanResponseSchema = PlanSchema.pick({ type: true, messageLimit: true, storageLimit: true })

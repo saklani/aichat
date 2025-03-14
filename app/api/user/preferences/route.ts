@@ -1,36 +1,28 @@
+import { GetUserPreferenceResponseSchema, PutUserPreferenceRequestSchema, PutUserPreferenceResponseSchema } from "@/lib/schema";
 import { withAuth } from "@/lib/server/api/middleware";
-import { GetUserPreferenceResponseSchema, PutUserPreferenceRequestSchema } from "@/lib/server/api/schema";
 import { queries } from "@/lib/server/db";
 import type { NextRequest } from "next/server";
 
 /**
- * PUT /api/user/preferences
+ * GET /api/user/preferences
  * Get user preferences
  */
 export async function GET() {
     return withAuth(async (userId) => {
         const preferences = await queries.getUserPreferences({ userId });
         if (!preferences) {
-            return {
-                error: "Preferences not found",
-                status: 404
-            };
+            return { error: "Preferences not found", status: 404 };
         }
-
-        const validatedUserPreferences = GetUserPreferenceResponseSchema.safeParse(preferences);
-        if (!validatedUserPreferences.success) {
-            console.error("[Data Validation Error]", validatedUserPreferences.error);
-            return {
-                error: "Invalid user preferences data format",
-                status: 500
-            };
+        const validatedPreferences = GetUserPreferenceResponseSchema.safeParse(preferences);
+        if (!validatedPreferences.success) {
+            console.error("[Data Validation Error]", validatedPreferences.error);
+            return { error: "Invalid user data format", status: 500 };
         }
-        return {
-            data: validatedUserPreferences.data,
-            status: 200
-        };
+        return { data: validatedPreferences.data, status: 200 };
     });
 }
+
+
 /**
  * PUT /api/user/preferences
  * Update the users preferences
@@ -50,10 +42,19 @@ export async function PUT(request: NextRequest) {
 
         const { defaultModel } = validatedInput.data
 
+        const updatedPreferences = await queries.updateUserPreferences({ userId, defaultModel });
+        if (!updatedPreferences) {
+            return { error: "Failed to update preferences", status: 500 };
+        }
 
-        await queries.updateUserPreferences({ userId, defaultModel });
+        const validatedPreferences = PutUserPreferenceResponseSchema.safeParse(updatedPreferences);
+        if (!validatedPreferences.success) {
+            console.error("[Data Validation Error]", validatedPreferences.error);
+            return { error: "Invalid user data format", status: 500 };
+        }
+
         return {
-            data: { success: true },
+            data: validatedPreferences.data,
             status: 200
         };
     });

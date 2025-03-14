@@ -1,9 +1,8 @@
-import { auth } from "@/lib/server/auth";
 import { withAuth } from "@/lib/server/api/middleware";
-import { GetUserResponseSchema } from "@/lib/server/api/schema";
+import { GetUserResponseSchema } from "@/lib/schema";
+import { auth } from "@/lib/server/auth";
 import { queries } from "@/lib/server/db";
 import { headers } from "next/headers";
-
 
 /**
  * GET /api/user
@@ -12,18 +11,21 @@ import { headers } from "next/headers";
 export async function GET() {
     return withAuth(async (userId) => {
         const user = await queries.getUser({ id: userId });
-
         if (!user) {
+            console.error("[User Not Found]", {
+                userId,
+            });
             return {
                 error: "User not found",
                 status: 404
             };
         }
-
-        // Validate user data against schema
         const validatedUser = GetUserResponseSchema.safeParse(user);
         if (!validatedUser.success) {
-            console.error("[Data Validation Error]", validatedUser.error);
+            console.error("[User Validation Error]", {
+                userId,
+                errors: validatedUser.error.toString()
+            });
             return {
                 error: "Invalid user data format",
                 status: 500
@@ -43,7 +45,6 @@ export async function GET() {
 export async function DELETE() {
     return withAuth(async (userId) => {
         await queries.deleteUser({ id: userId });
-  
         return {
             data: { success: true },
             status: 200

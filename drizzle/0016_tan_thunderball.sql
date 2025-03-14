@@ -1,0 +1,2 @@
+CREATE INDEX "chat_title_trgm_idx" ON "chats" USING gin ("title","title" gin_trgm_ops);--> statement-breakpoint
+CREATE INDEX "message_content_trgm_idx" ON "messages" USING gin ("content","content" gin_trgm_ops);
