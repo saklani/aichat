@@ -14,15 +14,7 @@ interface FileUploadProps {
     status: "idle" | "pending" | "success" | "error";
 }
 
-function formatBytes(bytes: number) {
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return '0 Byte';
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-    return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
-}
-
 function FileUpload({ mutate, status }: FileUploadProps) {
-
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
@@ -68,9 +60,8 @@ function FileList({ id }: { id: string }) {
         <div className="flex flex-col items-center gap-2 h-[40vh] overflow-y-auto border p-2">
             {isLoading ? <Loader2 className="animate-spin mt-12" />
                 : response?.data && response.data.length > 0 ? response.data.map((file) => (
-                    <div key={file.id} className="bg-muted flex flex-col p-2 gap-2 rounded-md w-full">
-                        <p className="text-sm font-semibold">{file.name}</p>
-                        <p className="text-xs">{formatBytes(file.size ?? 0)}</p>
+                    <div key={file.id} className="flex flex-col gap-2 w-full">
+                        <p className="text-sm">{file.name}</p>
                     </div>
                 )) : (
                     <p className="text-sm w-full">No files in Chat</p>

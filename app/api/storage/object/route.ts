@@ -36,7 +36,7 @@ async function embedFile(id: string, file: File): Promise<ApiError | null> {
             ...embedding,
         });
     }
-
+    
     return null;
 }
 
