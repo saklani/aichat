@@ -14,15 +14,23 @@ interface FileUploadProps {
     status: "idle" | "pending" | "success" | "error";
 }
 
+function formatBytes(bytes: number) {
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    if (bytes === 0) return '0 Byte';
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+    return (bytes / Math.pow(1024, i)).toFixed(2) + ' ' + sizes[i];
+}
+
 function FileUpload({ mutate, status }: FileUploadProps) {
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         if (!file) return;
 
         // Add file validation
-        const maxSize = 50 * 1024 * 1024; // 50MB
+        const maxSize = 1024 * 1024 * 10; 
         if (file.size > maxSize) {
-            toast.error("File size must be less than 50MB");
+            toast.error("File size must be less than 10MB");
             return;
         }
 
@@ -31,8 +39,12 @@ function FileUpload({ mutate, status }: FileUploadProps) {
         mutate({ body });
     };
 
+    const handleClick = () => {
+        document.getElementById("input-file")?.click();
+    }
+
     return (
-        <Button className="bg-muted" status={status} variant={"outline"} size={"icon"} onClick={() => document.getElementById("input-file")?.click()}>
+        <Button className="bg-muted" variant={"outline"} size={"icon"} onClick={handleClick}>
             <Upload className="w-4 h-4" />
             <Input
                 id="input-file"
@@ -56,8 +68,9 @@ function FileList({ id }: { id: string }) {
         <div className="flex flex-col items-center gap-2 h-[40vh] overflow-y-auto border p-2">
             {isLoading ? <Loader2 className="animate-spin mt-12" />
                 : response?.data && response.data.length > 0 ? response.data.map((file) => (
-                    <div key={file.id} className="flex flex-col gap-2 w-full">
-                        <p className="text-sm">{file.name}</p>
+                    <div key={file.id} className="bg-muted flex flex-col p-2 gap-2 rounded-md w-full">
+                        <p className="text-sm font-semibold">{file.name}</p>
+                        <p className="text-xs">{formatBytes(file.size ?? 0)}</p>
                     </div>
                 )) : (
                     <p className="text-sm w-full">No files in Chat</p>

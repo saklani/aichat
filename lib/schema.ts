@@ -15,7 +15,6 @@ export const PutUserPreferenceResponseSchema = UserPreferenceSchema.pick({ defau
 export type PutUserPreferenceResponse = z.infer<typeof PutUserPreferenceResponseSchema>
 
 
-
 export const PlanSchema = z.object({
     id: z.string(),
     userId: z.string(),
