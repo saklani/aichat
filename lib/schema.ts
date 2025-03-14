@@ -2,11 +2,11 @@ import { z } from "zod";
 
 const ModelNameEnum = z.enum(["gpt-4o-mini", "gpt-4o", "gpt-o1-mini"])
 
-const UserSchema = z.object({ id: z.string(), email: z.string() });
+export const UserSchema = z.object({ id: z.string(), email: z.string() });
 export const GetUserResponseSchema = UserSchema
 export type GetUserResponse = z.infer<typeof GetUserResponseSchema>
 
-const UserPreferenceSchema = z.object({ defaultModel: ModelNameEnum });
+export const UserPreferenceSchema = z.object({ defaultModel: ModelNameEnum });
 export const GetUserPreferenceResponseSchema = UserPreferenceSchema.pick({ defaultModel: true })
 export type GetUserPreferenceResponse = z.infer<typeof GetUserPreferenceResponseSchema>
 export const PutUserPreferenceRequestSchema = UserPreferenceSchema.pick({ defaultModel: true })

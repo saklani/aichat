@@ -13,7 +13,7 @@ export async function upsertChat({ id, ...rest }: Omit<schema.Chat, "createdAt">
 }
 
 export async function updateChat({ id, userId, ...rest }: Partial<schema.Chat>) {
-    return execute(`update chat ${id}`, async () => db.update(schema.chats).set(rest).where(and(eq(schema.chats.id, id), eq(schema.chats.userId, userId))).returning().then(res => res.at(0)))
+    return execute(`update chat ${id}`, async () => db.update(schema.chats).set(rest).where(and(eq(schema.chats.id, id ?? ""), eq(schema.chats.userId, userId ?? ""))).returning().then(res => res.at(0)))
 }
 
 export async function deleteChat({ id, userId }: Pick<schema.Chat, "id" | "userId">) {
