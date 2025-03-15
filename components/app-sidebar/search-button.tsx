@@ -46,6 +46,8 @@ export function SearchButton() {
         mutate({ query })
     }
 
+    console.log(response)
+
     return (
         <div className="flex gap-2">
             <TooltipProvider>
@@ -67,7 +69,6 @@ export function SearchButton() {
                 <CommandGroup>
                     <CommandItem onSelect={handleNewChat}>New Chat</CommandItem>
                 </CommandGroup>
-                <CommandGroup>
                     <CommandList className="gap-2 p-2">
                         {
                             response?.data?.map((chat) => (
@@ -77,7 +78,6 @@ export function SearchButton() {
                             ))
                         }
                     </CommandList>
-                </CommandGroup>
             </CommandDialog>
         </div>
     )

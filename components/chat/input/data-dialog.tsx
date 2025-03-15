@@ -73,7 +73,7 @@ function FileList({ id }: { id: string }) {
 
 function NonMemoizedDataDialog({ id }: DataDropdownProps) {
     const queryClient = useQueryClient()
-    const { mutate, status, } = useMutation({
+    const { mutate, status } = useMutation({
         mutationKey: ["object-post", id],
         mutationFn: async ({ body }: { body: FormData }) => {
             try {
