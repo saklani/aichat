@@ -19,7 +19,7 @@ export async function Header() {
                 <Separator className="mt-5 mb-4" />
                 <div className="flex gap-2">
                     <NewChatButton />
-                    <SearchButton />  
+                    {/* <SearchButton />   */}
                 </div>
             </SidebarGroup>
         </SidebarHeader >
