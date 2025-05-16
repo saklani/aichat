@@ -41,6 +41,7 @@ function FileUpload({ mutate, status }: FileUploadProps) {
             <Input
                 id="input-file"
                 type="file"
+                    
                 onChange={handleFileChange}
                 disabled={status === "pending"}
                 accept=".txt,.csv,.json,.docx,.doc,.xls,.xlsx,.ppt,.pptx"

@@ -4,6 +4,7 @@
 
 body {
   font-family: var(--font-inter), var(--font-playfair);
+  scrollbar-gutter: stable;
 }
 
 @layer base {
