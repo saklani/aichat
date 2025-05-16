@@ -5,7 +5,7 @@ import { SidebarGroup, SidebarGroupLabel, SidebarHeader } from "@/components/ui/
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { SearchButton } from "./search-button";
+import { randomUUID } from "node:crypto";
 
 export async function Header() {
     return (
@@ -33,7 +33,8 @@ function NewChatButton() {
             <Tooltip>
                 <form className="w-full" action={async () => {
                     "use server"
-                    redirect("/chat")
+                    const id = randomUUID();
+                    redirect(`/chat/${id}`)
                 }}>
                     <TooltipTrigger asChild>
                         <Button className="gap-2 w-full" type="submit">
